@@ -5,7 +5,8 @@ import { apiRoutes, apiUrl } from "../../apiConfig";
 import instance from "../../axios/axios";
 import Toaster from "../utils/Toaster/Toaster";
 import { setTokens } from "../../features/User/userSlice";
-import {useAppDispatch} from '../../app/hooks';
+import { useAppDispatch } from "../../app/hooks";
+import { useNavigate } from "react-router-dom";
 
 interface ILoginState {
 	email: string;
@@ -17,6 +18,7 @@ interface ILoginState {
 }
 const Login = () => {
 	var dispatch = useAppDispatch();
+	var navigate = useNavigate();
 	const [loading, setIsLoading] = useState<boolean>(true);
 	const [isValid, setIsValid] = useState<boolean>(false);
 	const [model, setModel] = useState<ILoginState>({
@@ -91,9 +93,11 @@ const Login = () => {
 								refreshToken: response.data.refreshToken,
 							})
 						);
+						//TODO ADD GetCurrentUser
+
+						navigate("/portal/user/dashboard", { replace: true });
 					}
 				})
-				//TODO ADD GetCurrentUser
 				.catch(function (error) {
 					if (error.response) {
 						var errors =

@@ -1,11 +1,12 @@
 import './App.css';
 import { Routes,Route} from 'react-router-dom';
 import Landing from './components/Landing';
+import ClientPortal from './components/pages/ClientPortal';
 function App() {
   return (
     <div className="App">
      <Routes>
-				{/*<Route path="/portal/user/*" element={ <ClientPortal /> } />*/}
+				<Route path="/portal/user/*" element={ <ClientPortal /> } />
 				<Route path="/*" element={ <Landing /> } />
 			</Routes>
     </div>
