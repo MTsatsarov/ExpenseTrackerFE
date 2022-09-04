@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { apiRoutes, apiUrl } from "../../apiConfig";
 import instance from "../../axios/axios";
 import Toaster from "../utils/Toaster/Toaster";
+import { setTokens } from "../../features/User/userSlice";
+import {useAppDispatch} from '../../app/hooks';
+
 interface ILoginState {
 	email: string;
 	password: string;
@@ -13,6 +16,7 @@ interface ILoginState {
 	isPasswordValid: boolean;
 }
 const Login = () => {
+	var dispatch = useAppDispatch();
 	const [loading, setIsLoading] = useState<boolean>(true);
 	const [isValid, setIsValid] = useState<boolean>(false);
 	const [model, setModel] = useState<ILoginState>({
@@ -81,9 +85,15 @@ const Login = () => {
 				})
 				.then((response) => {
 					if (response.status === 200 || response.status === 201) {
-						console.log(response.data);
+						dispatch(
+							setTokens({
+								token: response.data.token,
+								refreshToken: response.data.refreshToken,
+							})
+						);
 					}
 				})
+				//TODO ADD GetCurrentUser
 				.catch(function (error) {
 					if (error.response) {
 						var errors =
