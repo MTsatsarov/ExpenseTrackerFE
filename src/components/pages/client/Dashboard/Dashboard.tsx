@@ -8,43 +8,57 @@ const Dashboard = () => {
 		<Box
 			sx={{
 				display: "flex",
-				flexDirection: "column",
 				background: "#1C272C",
-				alignItems: "flex-end",
 				justifyContent: "space-evenly",
+				width: "100%",
 				height: "100%",
-				p: 5,
 			}}
 		>
+			<Box sx={{ width: "10%", display: "flex", flexWrap: "wrap" }}></Box>
 			<Box
 				sx={{
 					display: "flex",
-					height: "100%",
-					width: "90%",
-					justifyContent:"space-around",
-					mb:15
+					flexDirection: "column",
+					background: "#1C272C",
+					alignItems: "flex-end",
+					flexWrap: "wrap",
+					width: "80%",
 				}}
 			>
-				<Box sx={{ width: "49%", height: "50%" }}>
-					<ExpensesByDay />
+				<Box
+					sx={{
+						display: "flex",
+						width: "100%",
+						justifyContent: "space-around",
+						flexWrap: "wrap",
+						mb: 12,
+					}}
+				>
+					<Box
+						sx={{
+							width: "49%",
+							height: "50%",
+						}}
+					>
+						<ExpensesByDay />
+					</Box>
+					<Box sx={{ width: "49%", height: "50%" }}>
+						<ExpensesCountByMonths />
+					</Box>
 				</Box>
-				<Box sx={{ width: "49%", height: "50%" }}>
-					<ExpensesCountByMonths />
-				</Box>
-			</Box>
 
-			<Box
-				sx={{
-					display: "flex",
-					height: "100%",
-					width: "90%",
-					justifyContent: "space-evenly",
-				}}
-			>
-				<Box sx={{ width: "50%", height: "50%" }}>
-					<ExpensesByStore />
+				<Box
+					sx={{
+						display: "flex",
+						width: "100%",
+						justifyContent: "space-evenly",
+					}}
+				>
+					<Box sx={{ width: "50%", height: "50%" }}>
+						<ExpensesByStore />
+					</Box>
+					<Box sx={{ width: "50%", height: "50%" }}>neshto si 2 </Box>
 				</Box>
-				<Box sx={{ width: "50%", height: "50%" }}>neshto si 2 </Box>
 			</Box>
 		</Box>
 	);

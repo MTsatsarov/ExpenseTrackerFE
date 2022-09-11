@@ -1,7 +1,10 @@
-import { Drawer, styled, Divider } from "@mui/material";
+import { Drawer, styled, Divider, Fab } from "@mui/material";
 import { Box } from "@mui/system";
 import ClientRoutes from "./client/ClientRoutes";
 import ClientPortalNav from "./client/ClientPortalNav";
+import AddIcon from "@mui/icons-material/Add";
+import { useState } from "react";
+import CreateTransactionModal from "../utils/CreateTransactionModal/CreateTransactionModal";
 const ClientPortal = () => {
 	const DrawerHeader = styled("div")(() => ({
 		display: "flex",
@@ -9,7 +12,13 @@ const ClientPortal = () => {
 		padding: "5px",
 		justifyContent: "flex-start",
 	}));
+	const [displayModal, setDisplayModel] = useState<boolean>(false);
 
+	const onCLick = () => {
+		{
+			setDisplayModel(!displayModal);
+		}
+	};
 	return (
 		<Box
 			sx={{
@@ -19,6 +28,7 @@ const ClientPortal = () => {
 				flexDirection: "row",
 				flexWrap: "no-wrap",
 				width: "100%",
+				height: "100%",
 			}}
 		>
 			<Box
@@ -26,7 +36,6 @@ const ClientPortal = () => {
 					display: "flex",
 					flexDirection: "column",
 					flexWrap: "wrap",
-					background: "blue",
 					width: "10%",
 				}}
 			>
@@ -51,8 +60,25 @@ const ClientPortal = () => {
 					<ClientPortalNav />
 				</Drawer>
 			</Box>
-			<Box sx={{ width: "90%" }}>
+			<Box sx={{ width: "90%", height: "100%" }}>
+				{displayModal ? (
+					<CreateTransactionModal
+						showModal={displayModal}
+						handleClose={onCLick}
+					/>
+				) : (
+					""
+				)}
+
 				<ClientRoutes />
+				<Fab
+					sx={{ position: "absolute", top: "80%", left: "96%" }}
+					color="primary"
+					aria-label="add"
+					onClick={onCLick}
+				>
+					<AddIcon />
+				</Fab>
 			</Box>
 		</Box>
 	);

@@ -124,7 +124,7 @@ const Login = () => {
 				flexDirection: "column",
 			}}
 		>
-			<Typography variant="h2">Login Form</Typography>
+			<Typography  variant="h2">Login Form</Typography>
 			<Fade in={true} appear>
 				<form
 					onSubmit={(e) => onSubmit(e)}

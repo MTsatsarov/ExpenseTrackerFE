@@ -28,12 +28,12 @@ const ExpensesByDay = () => {
 			legend: {
 				position: "top" as const,
 				padding: "0px",
-				backgroundColor: "white",
 			},
 			title: {
 				display: true,
 				text: "Moqt test ",
 			},
+			color: "white",
 		},
 	};
 
@@ -77,6 +77,8 @@ const ExpensesByDay = () => {
 			{
 				label: "Dataset 1",
 				data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+				borderColor: "rgb(255, 255, 255)",
+				backgroundColor: "rgba(255, 255, 255, 1)",
 			},
 		],
 	};
