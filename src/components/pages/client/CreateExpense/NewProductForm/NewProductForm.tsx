@@ -1,5 +1,5 @@
 import { IProductList } from "../../../../utils/CreateTransactionModal/CreateTransactionModal"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
 	Box,
 	Button,
@@ -7,7 +7,6 @@ import {
 	TextField
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import BackspaceIcon from "@mui/icons-material/Backspace";
 interface NewProductFormInterface {
 	addProduct: Function
 }
@@ -20,6 +19,21 @@ const NewProductForm = (props: NewProductFormInterface) => {
 		total: 0,
 
 	})
+
+	const [valid, setValid] = useState<boolean>(false)
+
+	useEffect(() => {
+		return () => {
+			setNewProduct(prevState => ({
+				...prevState,
+				name: '',
+				quantity: 0,
+				price: 0,
+				total: 0,
+			}))
+		}
+	}, [])
+
 	const onNewProductChange = (e: any) => {
 		var name = newProduct.name
 		var quantity = newProduct.quantity
@@ -44,11 +58,19 @@ const NewProductForm = (props: NewProductFormInterface) => {
 			price: price,
 			total: total,
 		}))
+		setIsValid();
 	}
 
 	const addProduct = (e: any) => {
 		e.preventDefault();
-		props.addProduct(newProduct)
+
+		if (valid) {
+			props.addProduct(newProduct)
+		}
+	}
+
+	const setIsValid = () => {
+		setValid(newProduct.name.length > 0 && newProduct.price > 0 && newProduct.quantity > 0 && newProduct.total > 0)
 	}
 
 	return (
@@ -60,39 +82,39 @@ const NewProductForm = (props: NewProductFormInterface) => {
 					flexDirection: "column",
 				}}
 			>
-				<FormLabel>New Product</FormLabel>
-				<TextField variant="standard" label="Name"></TextField>
+				<FormLabel sx={{ m: 2, alignSelf: 'center' }}>New Product</FormLabel>
+				<TextField name="name" variant="standard" label="Name" value={newProduct.name} onChange={onNewProductChange} onBlur={onNewProductChange}></TextField>
 				<TextField
 					variant="standard"
 					label="Price"
+					name="price"
 					type="number"
+					value={newProduct.price}
+					onChange={onNewProductChange} onBlur={onNewProductChange}
 				></TextField>
 				<TextField
 					variant="standard"
 					label="Quantity"
+					name="quantity"
 					type="number"
+					value={newProduct.quantity}
+					onChange={onNewProductChange} onBlur={onNewProductChange}
 				></TextField>
 				<Box
 					sx={{
 						m: 2,
-						width: "70%",
+						width: "100%",
 						display: "flex",
 						justifyContent: "space-around",
 						alignItems: "center",
-						alignSelf: "flex-end",
+						alignSelf: "center",
 					}}
 				>
 					<Button
-						variant="outlined"
-						sx={{ width: "10%", color: "red", borderColor: "red" }}
-					>
-						<BackspaceIcon sx={{ fontSize: 32 }} />
-					</Button>
-					<Button
 						type='submit'
 						variant="outlined"
+						disabled={!valid}
 						sx={{
-							width: "10%",
 							color: "green",
 							borderColor: "green",
 						}}

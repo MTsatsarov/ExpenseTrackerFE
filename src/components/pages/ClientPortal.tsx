@@ -15,9 +15,7 @@ const ClientPortal = () => {
 	const [displayModal, setDisplayModel] = useState<boolean>(false);
 
 	const onCLick = () => {
-		{
-			setDisplayModel(!displayModal);
-		}
+		setDisplayModel(!displayModal);
 	};
 	return (
 		<Box

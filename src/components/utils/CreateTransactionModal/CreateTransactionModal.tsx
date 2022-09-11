@@ -11,16 +11,18 @@ import {
 	TableCell,
 	Tooltip,
 	IconButton,
-	TextField,
 	Button,
-	FormLabel,
+	TextField
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import instance from "../../../axios/axios";
 
 import NewProductForm from "../../pages/client/CreateExpense/NewProductForm/NewProductForm";
+import { apiRoutes, apiUrl } from "../../../apiConfig";
+import Toaster from "../Toaster/Toaster";
 
 interface ICreateTransactionModalProps {
 	showModal: boolean;
@@ -34,22 +36,42 @@ export interface IProductList {
 }
 
 const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
-	const [products, setProducts] = useState<Array<IProductList>>([
-		{
-			name: "test",
-			quantity: 2,
-			price: 3,
-			total: 6,
-		},
-
-	]);
-
+	const [products, setProducts] = useState<Array<IProductList>>([]);
 	const [showProductForm, setShowProductForm] = useState<boolean>(false);
+	const [totalPrice, setTotalPrice] = useState<number>(0)
+	const [store, setStore] = useState<string>('')
 
 	const addProduct = (product: IProductList) => {
+		var total = 0;
+		products.map(p => total += (p.price * p.quantity))
+		total += (product.price * product.quantity)
 		setProducts(products.concat(product))
+		setTotalPrice(total)
 	};
-	
+
+	const createExpense = async () => {
+		if (products.length > 0 && store.length > 0) {
+			await instance.post(`${apiUrl}/${apiRoutes.createExpense}`, { products: products, storeName: store }).then((response) => {
+				if (response.status === 200 || response.status === 201) {
+					Toaster.show("success", "", response.data);
+				}
+			}).catch(function (error) {
+				if (error.response) {
+					var errors =
+						error.response &&
+						(error.response.data.message ||
+							error.response.data ||
+							error.response.statusText);
+					errors.split(/\r?\n/).forEach((message: string) => {
+						Toaster.show("error", "", message);
+					});
+				}
+			});
+		}
+	}
+	const onStoreChange = (e: any) => {
+		setStore(e.target.value)
+	}
 	return (
 		<Modal
 			open={props.showModal}
@@ -94,6 +116,9 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 				>
 					<CloseIcon />
 				</Box>
+				<Box>
+					<TextField onChange={onStoreChange} value={store} label="Store" variant="filled"></TextField>
+				</Box>
 				<Box
 					sx={{
 						display: "flex",
@@ -134,7 +159,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 							<NewProductForm addProduct={addProduct} />
 						)}
 					</Box>
-					<Box sx={{ width: "70%" }}>
+					<Box sx={{ width: "70%", display: 'flex', flexDirection: 'column' }}>
 						<TableContainer component={Paper}>
 							<Table
 								sx={{ width: 600, overflow: "hidden" }}
@@ -149,9 +174,9 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 									</TableRow>
 								</TableHead>
 								<TableBody sx={{ overflow: "hidden" }}>
-									{products.map((row) => (
+									{products.map((row, index) => (
 										<TableRow
-											key={row.name}
+											key={index}
 											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 										>
 											<TableCell component="th" scope="row">
@@ -165,6 +190,8 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 								</TableBody>
 							</Table>
 						</TableContainer>
+						<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong>Total price of the transaction is: ${totalPrice}</strong></Box>
+						<Button onClick={createExpense} disabled={products.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "center", mt: 5 }}>Create expense</Button>
 					</Box>
 				</Box>
 			</Box>
