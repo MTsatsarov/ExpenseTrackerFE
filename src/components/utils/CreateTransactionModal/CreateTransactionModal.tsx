@@ -19,6 +19,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useState, useEffect } from "react";
 import instance from "../../../axios/axios";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import NewProductForm from "../../pages/client/CreateExpense/NewProductForm/NewProductForm";
 import { apiRoutes, apiUrl } from "../../../apiConfig";
@@ -69,9 +70,19 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 			});
 		}
 	}
+
 	const onStoreChange = (e: any) => {
 		setStore(e.target.value)
 	}
+
+	const removeProduct = (index: number) => {
+		var newProducts = products.filter((x, y) => y !== index);
+		setProducts(newProducts)
+		var total = 0;
+		newProducts.map(p => total += (p.price * p.quantity))
+		setTotalPrice(total)
+	}
+
 	return (
 		<Modal
 			open={props.showModal}
@@ -171,6 +182,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 										<TableCell align="right">Quantity</TableCell>
 										<TableCell align="right">Price</TableCell>
 										<TableCell align="right">Total</TableCell>
+										<TableCell align="right">Actions</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody sx={{ overflow: "hidden" }}>
@@ -185,13 +197,14 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 											<TableCell align="right">{row.quantity}</TableCell>
 											<TableCell align="right">{row.price}</TableCell>
 											<TableCell align="right">{row.total}</TableCell>
+											<TableCell onClick={() => removeProduct(index)} data-index={index} align="right"><Tooltip title="Remove product"><IconButton sx={{ color: 'red' }}><DeleteIcon /></IconButton></Tooltip></TableCell>
 										</TableRow>
 									))}
 								</TableBody>
 							</Table>
 						</TableContainer>
-						<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong>Total price of the transaction is: ${totalPrice}</strong></Box>
-						<Button onClick={createExpense} disabled={products.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "center", mt: 5 }}>Create expense</Button>
+						<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong>Total price of the transaction is: $ {totalPrice}</strong></Box>
+						<Button onClick={createExpense} disabled={products.length === 0 || store.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "center", mt: 5 }}>Create expense</Button>
 					</Box>
 				</Box>
 			</Box>
