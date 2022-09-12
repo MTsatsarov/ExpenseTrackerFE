@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
+import PhotoCamera  from "@mui/icons-material/PhotoCamera";
 import { useState, useEffect } from "react";
 import instance from "../../../axios/axios";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -148,10 +148,12 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 						>
 							<Box>
 								<Tooltip title="Upload your receipt.">
-									<IconButton sx={{ border: 1, color: "#2196F3" }}>
-										<FileUploadIcon sx={{ fontSize: 32 }} />
+									<IconButton sx={{ border: 1, color: "#2196F3" }} aria-label="upload picture" component="label">
+										<input hidden accept="image/*" type="file" />
+										<PhotoCamera sx={{ fontSize: 32 }} />
 									</IconButton>
 								</Tooltip>
+
 							</Box>
 							<Box>
 								<Tooltip title="Add product" sx={{}}>
