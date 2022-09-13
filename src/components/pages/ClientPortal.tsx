@@ -34,7 +34,7 @@ const ClientPortal = () => {
 					display: "flex",
 					flexDirection: "column",
 					flexWrap: "wrap",
-					width: "10%",
+					width: "220px",
 				}}
 			>
 				<Drawer
@@ -44,8 +44,7 @@ const ClientPortal = () => {
 							boxSizing: "border-box",
 							backgroundColor: "#393838",
 							color: "white",
-							zIndex: -10,
-							width: "10%",
+							width: "220px",
 						},
 					}}
 					anchor="left"
