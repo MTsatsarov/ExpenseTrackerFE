@@ -125,7 +125,7 @@ const Login = () => {
 			}}
 		>
 			<Typography  variant="h2">Login Form</Typography>
-			<Fade in={true} appear>
+			<Fade in={true} timeout={500}  >
 				<form
 					onSubmit={(e) => onSubmit(e)}
 					style={{

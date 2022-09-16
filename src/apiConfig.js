@@ -5,6 +5,8 @@ const apiRoutes = {
 signIn:'account/signIn',
 signUp:'account/signUp',
 createExpense:'transaction/create',
+getTransactions:'transaction/getTransactions',
+getTrransactionsByUser:'transaction/getUserTransactions'
 }
 
 
