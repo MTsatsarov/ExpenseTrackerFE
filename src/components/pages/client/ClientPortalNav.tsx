@@ -13,6 +13,7 @@ import { setSection } from "../../../features/ClientSideNav/clientSideSlice";
 import { appTheme } from "../../utils/AppTheme/AppTheme";
 const ClientPortalNav = () => {
 
+	
 	var dispatch = useDispatch();
 	var section = useSelector<any>((state) => state.clientSideNav.selectedSection);
 	const onClick = (section: string) => {

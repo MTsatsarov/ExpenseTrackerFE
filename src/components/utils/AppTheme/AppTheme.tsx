@@ -1,14 +1,15 @@
 import { createTheme } from '@mui/material/styles';
-import { green, purple } from '@mui/material/colors';
 
 export const appTheme = createTheme({
 	palette: {
 		primary: {
 			main: '#2196F3'
+
 		},
 		secondary: {
-			main: green[500],
+			main: '#393838',
 		},
+
 	},
 	components: {
 		MuiButton: {
@@ -18,13 +19,15 @@ export const appTheme = createTheme({
 				},
 			},
 		},
+
+		MuiListItem: {
+			styleOverrides: {
+				root: {
+					'&.Mui-selected': {
+						backgroundColor: '#2196F3'
+					}
+				}
+			}
+		}
 	},
-	//  typography: {
-	//    primary: {
-	//      main: '#2196F3'
-	//    },
-	//    secondary: {
-	//      main: green[500],
-	//    },
-	//  },
 });

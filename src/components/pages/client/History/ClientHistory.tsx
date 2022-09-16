@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { apiRoutes, apiUrl } from '../../../../apiConfig'
 import instance from '../../../../axios/axios'
 import Toaster from '../../../utils/Toaster/Toaster'
-import { Box, Typography,Fade } from "@mui/material"
+import { Box, Typography,Slide } from "@mui/material"
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 interface IProductResponse {
@@ -47,7 +47,7 @@ const ClientHistory = () => {
 		{ field: 'ac', headerName: 'Actions' },
 	]
 	return (
-		<Fade in={true} easing={'1000ms'}>
+		<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
 			<Box sx={{ mt: 10, display: 'flex', flexDirection: 'column' }}>
 				<Typography variant='h3'>History of the transactions</Typography>
 				<Box sx={{ minWidth: '40%', mt: 10, height: 400, alignSelf: 'center' }}>
@@ -59,7 +59,7 @@ const ClientHistory = () => {
 					/>
 				</Box>
 			</Box>
-		</Fade>
+		</Slide>
 	)
 }
 

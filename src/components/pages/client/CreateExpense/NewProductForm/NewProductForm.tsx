@@ -4,7 +4,9 @@ import {
 	Box,
 	Button,
 	FormLabel,
-	TextField
+	TextField,
+	Fade,
+	FormGroup
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 interface NewProductFormInterface {
@@ -74,57 +76,73 @@ const NewProductForm = (props: NewProductFormInterface) => {
 	}
 
 	return (
-		<Box sx={{ color: "#2196F3", width: "100%", mt: 5 }}>
-			<form
-				style={{
-					display: "flex",
-					width: "100%",
-					flexDirection: "column",
-				}}
-			>
-				<FormLabel sx={{ m: 2, alignSelf: 'center' }}>New Product</FormLabel>
-				<TextField name="name" variant="standard" label="Name" value={newProduct.name} onChange={onNewProductChange} onBlur={onNewProductChange}></TextField>
-				<TextField
-					variant="standard"
-					label="Price"
-					name="price"
-					type="number"
-					value={newProduct.price}
-					onChange={onNewProductChange} onBlur={onNewProductChange}
-				></TextField>
-				<TextField
-					variant="standard"
-					label="Quantity"
-					name="quantity"
-					type="number"
-					value={newProduct.quantity}
-					onChange={onNewProductChange} onBlur={onNewProductChange}
-				></TextField>
-				<Box
-					sx={{
-						m: 2,
-						width: "100%",
+		<Fade in={true} timeout={400}>
+			<Box sx={{ color: "#2196F3", width: "100%", mt: 5 }}>
+				<form
+					style={{
 						display: "flex",
-						justifyContent: "space-around",
-						alignItems: "center",
-						alignSelf: "center",
+						width: "100%",
+						flexDirection: "column",
 					}}
 				>
-					<Button
-						type='submit'
-						variant="outlined"
-						disabled={!valid}
+					<FormLabel sx={{ m: 2, alignSelf: 'center' }}>New Product</FormLabel>
+					<FormGroup sx={{mb:2}}>
+						<TextField
+							name="name"
+							variant="standard"
+							label="Name"
+							value={newProduct.name}
+							onChange={onNewProductChange}
+							onBlur={onNewProductChange}>
+
+						</TextField>
+					</FormGroup>
+					<FormGroup  sx={{mb:2}}>
+						<TextField
+							variant="standard"
+							label="Price"
+							name="price"
+							type="number"
+							value={newProduct.price}
+							onChange={onNewProductChange} onBlur={onNewProductChange}
+						></TextField>
+					</FormGroup>
+					<FormGroup  sx={{mb:2}}>
+						<TextField
+							variant="standard"
+							label="Quantity"
+							name="quantity"
+							type="number"
+							value={newProduct.quantity}
+							onChange={onNewProductChange} onBlur={onNewProductChange}
+						></TextField>
+					</FormGroup>
+					<Box
 						sx={{
-							color: "green",
-							borderColor: "green",
+							m: 2,
+							width: "100%",
+							display: "flex",
+							justifyContent: "space-around",
+							alignItems: "center",
+							alignSelf: "center",
 						}}
-						onClick={(e) => addProduct(e)}
 					>
-						<DoneIcon sx={{ fontSize: 32 }} />
-					</Button>
-				</Box>
-			</form>
-		</Box>
+						<Button
+							type='submit'
+							variant="outlined"
+							disabled={!valid}
+							sx={{
+								color: "green",
+								borderColor: "green",
+							}}
+							onClick={(e) => addProduct(e)}
+						>
+							<DoneIcon sx={{ fontSize: 32 }} />
+						</Button>
+					</Box>
+				</form>
+			</Box>
+		</Fade>
 	)
 }
 
