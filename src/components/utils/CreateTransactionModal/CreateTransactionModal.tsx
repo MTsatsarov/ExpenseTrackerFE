@@ -13,7 +13,8 @@ import {
 	IconButton,
 	Button,
 	TextField,
-	Fade
+	Fade,
+	Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
@@ -35,14 +36,36 @@ export interface IProductList {
 	quantity: number;
 	price: number;
 	total: number;
+	productId?:string | null;
 }
 
+interface iStore {
+	storeId?: string | null,
+	name: string,
+}
 const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	const [products, setProducts] = useState<Array<IProductList>>([]);
 	const [showProductForm, setShowProductForm] = useState<boolean>(false);
 	const [totalPrice, setTotalPrice] = useState<number>(0)
-	const [store, setStore] = useState<string>('')
+	const [selectedStore, setSelectedStore] = useState<iStore>({ storeId: null, name: '' })
+	const [storeSuggestions, setStoreSuggestions] = useState<Array<iStore>>([])
 
+	useEffect(() => {
+		instance.get(`${apiUrl}/${apiRoutes.getStores}`).then((response) => {
+			setStoreSuggestions(response.data);
+		}).catch(function (error) {
+			if (error.response) {
+				var errors =
+					error.response &&
+					(error.response.data.message ||
+						error.response.data ||
+						error.response.statusText);
+				errors.split(/\r?\n/).forEach((message: string) => {
+					Toaster.show("error", "", message);
+				});
+			}
+		});
+	}, [])
 	const addProduct = (product: IProductList) => {
 		var total = 0;
 		products.map(p => total += (p.price * p.quantity))
@@ -52,28 +75,43 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	};
 
 	const createExpense = async () => {
-		if (products.length > 0 && store.length > 0) {
-			await instance.post(`${apiUrl}/${apiRoutes.createExpense}`, { products: products, storeName: store }).then((response) => {
-				if (response.status === 200 || response.status === 201) {
-					Toaster.show("success", "", response.data);
-				}
-			}).catch(function (error) {
-				if (error.response) {
-					var errors =
-						error.response &&
-						(error.response.data.message ||
-							error.response.data ||
-							error.response.statusText);
-					errors.split(/\r?\n/).forEach((message: string) => {
-						Toaster.show("error", "", message);
-					});
-				}
-			});
+		if (products.length > 0 && selectedStore.name.length > 0) {
+			await instance.post(`${apiUrl}/${apiRoutes.createExpense}`, { products: products, storeName: selectedStore.name, storeId: selectedStore.storeId })
+				.then((response) => {
+					if (response.status === 200 || response.status === 201) {
+						Toaster.show("success", "", response.data);
+					}
+				}).catch(function (error) {
+					if (error.response) {
+						var errors =
+							error.response &&
+							(error.response.data.message ||
+								error.response.data ||
+								error.response.statusText);
+						errors.split(/\r?\n/).forEach((message: string) => {
+							Toaster.show("error", "", message);
+						});
+					}
+				});
 		}
 	}
 
-	const onStoreChange = (e: any) => {
-		setStore(e.target.value)
+	const onStoreChange = (storeName: string) => {
+		var store = storeSuggestions.find(x => x.name === storeName);
+		if (store) {
+			setSelectedStore(prevStore => ({
+				...prevStore,
+				storeId: store?.storeId,
+				name: store?.name
+			}))
+		}
+		else {
+			setSelectedStore(prevStore => ({
+				...prevStore,
+				name: storeName,
+				storeId: null
+			}))
+		}
 	}
 
 	const removeProduct = (index: number) => {
@@ -129,7 +167,16 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 						<CloseIcon />
 					</Box>
 					<Box>
-						<TextField onChange={onStoreChange} value={store} label="Store" variant="filled"></TextField>
+						<Autocomplete
+							sx={{ minWidth: '300px' }}
+							freeSolo
+							disableClearable
+							onChange={(e: any, v: any) => onStoreChange(v)}
+							options={storeSuggestions.map((option) => option.name)}
+							renderInput={(params) =>
+
+								<TextField value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store"  />}
+						/>
 					</Box>
 					<Box
 						sx={{
@@ -137,6 +184,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 							justifyContent: "space-between",
 							width: "90%",
 							p: 3,
+							flexWrap:'wrap'
 						}}
 					>
 						<Box sx={{ width: "20%" }}>
@@ -207,7 +255,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 								</Table>
 							</TableContainer>
 							<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong>Total price of the transaction is: $ {totalPrice}</strong></Box>
-							<Button onClick={createExpense} disabled={products.length === 0 || store.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "center", mt: 5 }}>Create expense</Button>
+							<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "center", mt: 5 }}>Create expense</Button>
 						</Box>
 					</Box>
 				</Box>

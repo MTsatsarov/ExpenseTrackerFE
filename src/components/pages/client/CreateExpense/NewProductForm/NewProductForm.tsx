@@ -6,11 +6,19 @@ import {
 	FormLabel,
 	TextField,
 	Fade,
-	FormGroup
+	FormGroup,
+	Autocomplete
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
+import instance from "../../../../../axios/axios";
+import { apiRoutes, apiUrl } from "../../../../../apiConfig";
+import Toaster from "../../../../utils/Toaster/Toaster";
 interface NewProductFormInterface {
 	addProduct: Function
+}
+interface ISuggestionProducts {
+	id: string,
+	name: string
 }
 const NewProductForm = (props: NewProductFormInterface) => {
 
@@ -19,12 +27,27 @@ const NewProductForm = (props: NewProductFormInterface) => {
 		quantity: 0,
 		price: 0,
 		total: 0,
-
+		productId: null
 	})
 
 	const [valid, setValid] = useState<boolean>(false)
+	const [productList, SetProductList] = useState<Array<ISuggestionProducts>>([])
 
 	useEffect(() => {
+		instance.get(`${apiUrl}/${apiRoutes.getProducts}`).then((response) => {
+			SetProductList(response.data)
+		}).catch(function (error) {
+			if (error.response) {
+				var errors =
+					error.response &&
+					(error.response.data.message ||
+						error.response.data ||
+						error.response.statusText);
+				errors.split(/\r?\n/).forEach((message: string) => {
+					Toaster.show("error", "", message);
+				});
+			}
+		});
 		return () => {
 			setNewProduct(prevState => ({
 				...prevState,
@@ -32,35 +55,45 @@ const NewProductForm = (props: NewProductFormInterface) => {
 				quantity: 0,
 				price: 0,
 				total: 0,
+				productId: null
 			}))
 		}
 	}, [])
+	useEffect(() => {
+		setIsValid();
+	}, [newProduct])
 
-	const onNewProductChange = (e: any) => {
-		var name = newProduct.name
+	const onNewProductChange = (name: string, value: any) => {
 		var quantity = newProduct.quantity
 		var price = newProduct.price
-
-		switch (e.target.name) {
+		var productName = newProduct.name;
+		var productId = newProduct.productId;
+		switch (name) {
 			case 'name':
-				name = e.target.value
+				productName = value
+				var existing = productList.find(x => x.name === value)
+				if (existing) {
+					productName = existing.name
+					productId = existing.id
+				}
 				break;
 			case 'quantity':
-				quantity = e.target.value
+				quantity = value
 				break;
 			case 'price':
-				price = e.target.value
+				price = value
 				break;
 		}
 		var total = price * quantity
+
 		setNewProduct(prevState => ({
 			...prevState,
-			name: name,
+			name: productName,
 			quantity: quantity,
 			price: price,
 			total: total,
+			productId:productId
 		}))
-		setIsValid();
 	}
 
 	const addProduct = (e: any) => {
@@ -86,35 +119,43 @@ const NewProductForm = (props: NewProductFormInterface) => {
 					}}
 				>
 					<FormLabel sx={{ m: 2, alignSelf: 'center' }}>New Product</FormLabel>
-					<FormGroup sx={{mb:2}}>
-						<TextField
-							name="name"
-							variant="standard"
-							label="Name"
-							value={newProduct.name}
-							onChange={onNewProductChange}
-							onBlur={onNewProductChange}>
-
-						</TextField>
+					<FormGroup sx={{ mb: 2 }}>
+						<Autocomplete
+							freeSolo
+							disableClearable
+							onChange={(e: any, v: any) => onNewProductChange(e.target.name, v)}
+							options={productList.map((option) => option.name)}
+							renderInput={(params) =>
+								<TextField
+									name="name"
+									variant="standard"
+									label="Name"
+									{...params}
+									value={newProduct.name}
+									onChange={(e) => onNewProductChange(e.target.name, e.target.value)}
+									onBlur={(e) => onNewProductChange(e.target.name, e.target.value)} />
+							} />
 					</FormGroup>
-					<FormGroup  sx={{mb:2}}>
+					<FormGroup sx={{ mb: 2 }}>
 						<TextField
 							variant="standard"
 							label="Price"
 							name="price"
 							type="number"
 							value={newProduct.price}
-							onChange={onNewProductChange} onBlur={onNewProductChange}
+							onChange={(e) => onNewProductChange(e.target.name, e.target.value)}
+							onBlur={(e) => onNewProductChange(e.target.name, e.target.value)}
 						></TextField>
 					</FormGroup>
-					<FormGroup  sx={{mb:2}}>
+					<FormGroup sx={{ mb: 2 }}>
 						<TextField
 							variant="standard"
 							label="Quantity"
 							name="quantity"
 							type="number"
 							value={newProduct.quantity}
-							onChange={onNewProductChange} onBlur={onNewProductChange}
+							onChange={(e) => onNewProductChange(e.target.name, e.target.value)}
+							onBlur={(e) => onNewProductChange(e.target.name, e.target.value)}
 						></TextField>
 					</FormGroup>
 					<Box

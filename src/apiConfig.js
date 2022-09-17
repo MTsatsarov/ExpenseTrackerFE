@@ -6,7 +6,10 @@ signIn:'account/signIn',
 signUp:'account/signUp',
 createExpense:'transaction/create',
 getTransactions:'transaction/getTransactions',
-getTrransactionsByUser:'transaction/getUserTransactions'
+getTrransactionsByUser:'transaction/getUserTransactions',
+getDashboard:'transaction/getDashboardTransactions',
+getStores:'store/getStores',
+getProducts:'product/getProducts',
 }
 
 

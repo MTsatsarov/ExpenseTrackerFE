@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { apiRoutes, apiUrl } from '../../../../apiConfig'
 import instance from '../../../../axios/axios'
 import Toaster from '../../../utils/Toaster/Toaster'
-import { Box, Typography,Slide } from "@mui/material"
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-
+import { Box, Typography, Slide } from "@mui/material"
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { appTheme } from "../../../utils/AppTheme/AppTheme";
 interface IProductResponse {
 	productId: string,
 	name: string,
@@ -39,20 +39,20 @@ const ClientHistory = () => {
 			}
 		});
 	}, [])
-	console.log(transactions)
 	const columns: GridColDef[] = [
-		{ field: 'store', headerName: 'Store', width: 150 },
+		{ field: 'store', headerName: 'Store', width: 150, },
 		{ field: 'createdOn', headerName: 'Date of Creation', width: 200 },
 		{ field: 'totalPrice', headerName: 'Total Price', width: 150 },
 		{ field: 'ac', headerName: 'Actions' },
 	]
 	return (
 		<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
-			<Box sx={{ mt: 10, display: 'flex', flexDirection: 'column' }}>
-				<Typography variant='h3'>History of the transactions</Typography>
-				<Box sx={{ minWidth: '40%', mt: 10, height: 400, alignSelf: 'center' }}>
+			<Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', background: appTheme.palette.primary.dark }}>
+				<Box sx={{ minWidth: '40%', mt: 10, height: 400, alignSelf: 'center', color: 'white' }}>
+					<Typography variant='h3'>History of the transactions</Typography>
+
 					<DataGrid
-						sx={{ textAlign: 'center' }}
+						sx={{ textAlign: 'center', mt: 2, color: 'white' }}
 						rows={transactions}
 						columns={columns}
 						disableSelectionOnClick

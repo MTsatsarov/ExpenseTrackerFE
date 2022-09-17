@@ -1,18 +1,41 @@
-import { Box,Slide } from "@mui/material";
+import { Box, Slide } from "@mui/material";
 import ExpensesByStore from "./BottomLeft/ExpensesByStore";
 import ExpensesByDay from "./TopLeft/ExpensesByDay";
 import ExpensesCountByMonths from "./TopRight/ExpensesCountByMonths";
-
+import { appTheme } from "../../../utils/AppTheme/AppTheme";
+import { useState, useEffect } from 'react';
+import instance from "../../../../axios/axios";
+import { apiUrl, apiRoutes } from "../../../../apiConfig";
+import Toaster from "../../../utils/Toaster/Toaster";
 const Dashboard = () => {
+
+	useEffect(() => {
+		const getDashboard = async ()=> {
+			instance.get(`${apiUrl}/${apiRoutes.getDashboard}`).then((response) => {
+				console.log(response.data)
+			}).catch(function (error) {
+				if (error.response) {
+					var errors =
+						error.response &&
+						(error.response.data.message ||
+							error.response.data ||
+							error.response.statusText);
+					errors.split(/\r?\n/).forEach((message: string) => {
+						Toaster.show("error", "", message);
+					});
+				}
+			});
+		}
+		 getDashboard();
+	}, [])
 	return (
 		<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
 			<Box
 				sx={{
 					display: "flex",
 					justifyContent: "space-evenly",
-					background: "#1C272C",
-					height: '100%'
-
+					background: appTheme.palette.primary.dark,
+					height: '100%',
 				}}
 			>
 				<Box sx={{ width: "10%", display: "flex", flexWrap: "wrap" }}></Box>
