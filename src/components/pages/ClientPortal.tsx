@@ -99,6 +99,7 @@ const ClientPortal = () => {
 							'& .MuiDrawer-paper': {
 								boxSizing: 'border-box', width: `${drawerWidth}px`, backgroundColor: "#393838",
 								color: "white",
+								
 							},
 						}}
 					>
@@ -133,6 +134,7 @@ const ClientPortal = () => {
 					sx={{ position: "absolute", top: "80%", left: "96%" }}
 					color="primary"
 					aria-label="add"
+				
 					onClick={onCLick}
 				>
 					<AddIcon />

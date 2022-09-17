@@ -1,9 +1,10 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
 export const appTheme = createTheme({
 	palette: {
 		primary: {
-			main: '#2196F3'
+			main: '#2196F3',
+			dark:'#1C272C'
 
 		},
 		secondary: {
@@ -28,6 +29,6 @@ export const appTheme = createTheme({
 					}
 				}
 			}
-		}
+		},
 	},
 });
