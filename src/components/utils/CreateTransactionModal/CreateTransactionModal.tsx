@@ -36,7 +36,7 @@ export interface IProductList {
 	quantity: number;
 	price: number;
 	total: number;
-	productId?:string | null;
+	productId?: string | null;
 }
 
 interface iStore {
@@ -175,7 +175,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 							options={storeSuggestions.map((option) => option.name)}
 							renderInput={(params) =>
 
-								<TextField value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store"  />}
+								<TextField value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store" />}
 						/>
 					</Box>
 					<Box
@@ -184,7 +184,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 							justifyContent: "space-between",
 							width: "90%",
 							p: 3,
-							flexWrap:'wrap'
+							flexWrap: 'wrap'
 						}}
 					>
 						<Box sx={{ width: "20%" }}>

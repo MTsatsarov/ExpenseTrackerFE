@@ -10,16 +10,18 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setSection } from "../../../features/ClientSideNav/clientSideSlice";
-import { appTheme } from "../../utils/AppTheme/AppTheme";
+import { useEffect } from 'react'
 const ClientPortalNav = () => {
 
-	
 	var dispatch = useDispatch();
 	var section = useSelector<any>((state) => state.clientSideNav.selectedSection);
 	const onClick = (section: string) => {
 		dispatch(setSection(section))
 	}
 
+	useEffect(() => {
+		onClick(window.location.pathname)
+	}, [])
 	return (
 		<>
 			<List component="nav" sx={{ display: "flex", flexDirection: "column", p: 0 }}>

@@ -20,24 +20,29 @@ interface ITransactionState {
 const ClientHistory = () => {
 
 	const [transactions, setTransactiosn] = useState<Array<ITransactionState>>([])
+
 	useEffect(() => {
-		instance.get(`${apiUrl}/${apiRoutes.getTransactions}`).then((response) => {
-			if (response.status === 200 || response.status === 201) {
-				var transactions = response.data as Array<ITransactionState>;
-				setTransactiosn(transactions);
-			}
-		}).catch(function (error) {
-			if (error.response) {
-				var errors =
-					error.response &&
-					(error.response.data.message ||
-						error.response.data ||
-						error.response.statusText);
-				errors.split(/\r?\n/).forEach((message: string) => {
-					Toaster.show("error", "", message);
-				});
-			}
-		});
+		const getProducts = async () => {
+			await instance.get(`${apiUrl}/${apiRoutes.getTransactions}`).then((response) => {
+				if (response.status === 200 || response.status === 201) {
+					var transactions = response.data as Array<ITransactionState>;
+					setTransactiosn(transactions);
+				}
+			}).catch(function (error) {
+				if (error.response) {
+					var errors =
+						error.response &&
+						(error.response.data.message ||
+							error.response.data ||
+							error.response.statusText);
+					errors.split(/\r?\n/).forEach((message: string) => {
+						Toaster.show("error", "", message);
+					});
+				}
+			});
+		}
+		getProducts()
+
 	}, [])
 	const columns: GridColDef[] = [
 		{ field: 'store', headerName: 'Store', width: 150, },

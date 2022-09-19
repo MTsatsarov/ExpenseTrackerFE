@@ -10,9 +10,9 @@ import Toaster from "../../../utils/Toaster/Toaster";
 const Dashboard = () => {
 
 	useEffect(() => {
-		const getDashboard = async ()=> {
-			instance.get(`${apiUrl}/${apiRoutes.getDashboard}`).then((response) => {
-				console.log(response.data)
+		const getDashboard = async () => {
+			
+			await instance.get(`${apiUrl}/${apiRoutes.getDashboard}`).then((response) => {
 			}).catch(function (error) {
 				if (error.response) {
 					var errors =
@@ -26,7 +26,7 @@ const Dashboard = () => {
 				}
 			});
 		}
-		 getDashboard();
+		getDashboard();
 	}, [])
 	return (
 		<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >

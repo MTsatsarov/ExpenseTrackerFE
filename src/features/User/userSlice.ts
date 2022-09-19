@@ -1,11 +1,10 @@
 import {createSlice } from '@reduxjs/toolkit';
 const initialState = {
 	id: '',
-	userName: '',
+	firstName:'',
+	lastName:'',
 	role:'',
 	email: '',
-	subscription:'',
-	remainingFreeAttempts: 0 
 };
 
 export const userSlice = createSlice({
@@ -18,18 +17,17 @@ export const userSlice = createSlice({
 			localStorage.setItem("refresh_token",action.payload.refreshToken)
 		},
 		setCurrentUser: (state,action) => {
-			console.log(action.payload)
 			state.id = action.payload.userId;
-			state.userName = action.payload.userName;
+			state.lastName = action.payload.lastName;
+			state.firstName = action.payload.firstName;
 			state.role = action.payload.role;
 			state.email = action.payload.email;
-			state.subscription = action.payload.subscription;
-			state.remainingFreeAttempts = action.payload.remainingFreeAttempts;
 		},
 		logOutUser: (state,action) => {
 			localStorage.clear();
 			state.id = '';
-			state.userName = '';
+			state.firstName = '';
+			state.lastName = '';
 			state.role = '';
 			state.email = '';
 		},
@@ -40,6 +38,6 @@ export const userSlice = createSlice({
 
 });
 
-export const { setTokens,setCurrentUser: getCurrentUser,getUser,logOutUser } = userSlice.actions;
+export const { setTokens,setCurrentUser,getUser,logOutUser } = userSlice.actions;
 
 export default userSlice.reducer;
