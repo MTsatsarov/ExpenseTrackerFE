@@ -17,6 +17,9 @@ export const appTheme = createTheme({
 			styleOverrides: {
 				root: {
 					fontSize: '1rem',
+					//'&:hover': {
+					//	backgroundColor: 'white'
+					//}
 				},
 			},
 		},

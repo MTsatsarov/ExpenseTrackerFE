@@ -15,8 +15,9 @@ const ClientPortalNav = () => {
 
 	var dispatch = useDispatch();
 	var section = useSelector<any>((state) => state.clientSideNav.selectedSection);
-	const onClick = (section: string) => {
-		dispatch(setSection(section))
+	const onClick = (newSection: string) => {
+		dispatch(setSection(newSection))
+		section = newSection
 	}
 
 	useEffect(() => {

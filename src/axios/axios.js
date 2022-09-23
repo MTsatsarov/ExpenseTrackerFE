@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { apiUrl,apiRoutes } from "../apiConfig.js"
-import { store } from '../app/store.js';
+import { store } from "../app/store"
 import BrowserHistory from '../components/utils/BrowserHistory/BrowserHistory.js';
 import Toaster from "../components/utils/Toaster/Toaster";
-import { logOutUser } from '../features/User/userSlice.js';
+import { logOutUser } from '../features/User/userSlice';
 
 const instance = axios.create({
 	baseURL: window.location.protocol + "//" + window.location.host,

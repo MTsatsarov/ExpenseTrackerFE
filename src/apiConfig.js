@@ -11,7 +11,8 @@ const apiRoutes = {
 	getDashboard: 'transaction/getDashboardTransactions',
 	getStores: 'store/getStores',
 	getProducts: 'product/getProducts',
-	getCurrentUser: 'account/current'
+	getCurrentUser: 'account/current',
+	getTransactionDetails:'transaction/details'
 }
 
 
