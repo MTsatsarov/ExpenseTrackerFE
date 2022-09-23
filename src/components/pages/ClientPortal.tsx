@@ -6,13 +6,14 @@ import ClientPortalNav from "./client/ClientPortalNav";
 import AddIcon from "@mui/icons-material/Add";
 import { useState, useEffect } from "react";
 import CreateTransactionModal from "../utils/CreateTransactionModal/CreateTransactionModal";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { apiRoutes, apiUrl } from "../../apiConfig";
 import Toaster from "../utils/Toaster/Toaster";
 import instance from "../../axios/axios";
 import { logOutUser } from "../../features/User/userSlice";
 import { useNavigate } from "react-router-dom";
+
 const ClientPortal = () => {
 	const DrawerHeader = styled("div")(() => ({
 		display: "flex",
@@ -23,19 +24,17 @@ const ClientPortal = () => {
 	const [displayModal, setDisplayModel] = useState<boolean>(false);
 	const [displaySideNav, setDisplaySideNav] = useState<boolean>(false)
 	const [toggleSideNav, setToggleSideNav] = useState<boolean>(false)
-	const [user, setUser] = useState<any>({})
 	const [showMenu, setShowMenu] = useState<boolean>(false)
 	const [anchorEl, setAnchorEL] = useState<any>()
+	const [sectionName,setSectionName] = useState<string>(" ")
 
 	const mobileBreak = 1300
 	const drawerWidth = 220;
 
-	var stateUser = useSelector<any>((state) => state.user);
 	var dispatch = useDispatch();
 	var navigate = useNavigate();
 	useEffect(() => {
 		window.addEventListener('resize', handleResize)
-		setUser(stateUser)
 		return function cleanUp() {
 			window.removeEventListener('resize', handleResize)
 		}
@@ -77,6 +76,10 @@ const ClientPortal = () => {
 			}
 		});
 	}
+
+	const changeSection = (section:string) => {
+		setSectionName(section)
+	}
 	return (
 
 		<Box sx={{ display: 'flex' }}>
@@ -97,7 +100,7 @@ const ClientPortal = () => {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						News
+						{sectionName}
 					</Typography>
 
 					<div>
@@ -145,7 +148,7 @@ const ClientPortal = () => {
 				>
 					<DrawerHeader>MY logo will be here</DrawerHeader>
 					<Divider sx={{ background: "#A2A0A0" }} />
-					<ClientPortalNav />
+					<ClientPortalNav changeSection={changeSection} />
 				</Drawer>
 				{
 					displaySideNav &&
@@ -169,7 +172,7 @@ const ClientPortal = () => {
 						<DrawerHeader>MY logo will be here</DrawerHeader>
 
 						<Divider sx={{ background: "#A2A0A0" }} />
-						<ClientPortalNav />
+						<ClientPortalNav changeSection={changeSection} />
 
 					</Drawer>
 				}
