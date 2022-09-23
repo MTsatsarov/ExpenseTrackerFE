@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { apiRoutes, apiUrl } from "../../apiConfig";
 import instance from "../../axios/axios";
 import Toaster from "../utils/Toaster/Toaster";
-import { setTokens } from "../../features/User/userSlice";
+import { setTokens, setCurrentUser } from "../../features/User/userSlice";
 import { useAppDispatch } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -93,7 +93,32 @@ const Login = () => {
 								refreshToken: response.data.refreshToken,
 							})
 						);
-						//TODO ADD GetCurrentUser
+
+						instance.get(`${apiUrl}/${apiRoutes.getCurrentUser}`).then((response) => {
+							if (response.status === 200 || response.status === 201) {
+								dispatch(
+									setCurrentUser({
+										id: response.data.userId,
+										firstName: response.data.firstName,
+										lastName: response.data.lastName,
+										role: response.data.role,
+										email: response.data.email,
+									})
+								)
+							}
+						}).catch(function (error) {
+							if (error.response) {
+								var errors =
+									error.response &&
+									(error.response.data.message ||
+										error.response.data ||
+										error.response.statusText);
+								errors.split(/\r?\n/).forEach((message: string) => {
+									Toaster.show("error", "", message);
+								});
+							}
+						});
+
 
 						navigate("/portal/user/dashboard", { replace: true });
 					}
@@ -124,7 +149,7 @@ const Login = () => {
 				flexDirection: "column",
 			}}
 		>
-			<Typography  variant="h2">Login Form</Typography>
+			<Typography variant="h2">Login Form</Typography>
 			<Fade in={true} timeout={500}  >
 				<form
 					onSubmit={(e) => onSubmit(e)}

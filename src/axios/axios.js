@@ -1,6 +1,9 @@
 import axios from 'axios'
-import {apiUrl,apiRoutes} from "../apiConfig.js"
+import { apiUrl,apiRoutes } from "../apiConfig.js"
+import { store } from "../app/store"
+import BrowserHistory from '../components/utils/BrowserHistory/BrowserHistory.js';
 import Toaster from "../components/utils/Toaster/Toaster";
+import { logOutUser } from '../features/User/userSlice';
 
 const instance = axios.create({
 	baseURL: window.location.protocol + "//" + window.location.host,
@@ -10,33 +13,41 @@ const instance = axios.create({
 	}
 })
 
-var location = window.location;
-var locationPathname = location.pathname.replace(process.env.PUBLIC_URL,"");
+
 instance.interceptors.request.use(
 	config => {
 		const token = localStorage.getItem("access_token")
 		if (token) {
 			config.headers["Authorization"] = `Bearer ${token}`
 		}
+
 		return config;
 	},
 	error => {
 		Promise.reject(error);
 	}
-);instance.interceptors.response.use(function (response) {
-	return response;
-},
+);
+
+instance.interceptors.response.use(
+	response => {
+		return response
+	},
+
 	function (error) {
+		var location = window.location;
+		var locationPathname = location.pathname.replace(process.env.PUBLIC_URL,"");
+		var originalRequest = error.config
+		console.log(originalRequest)
+		originalRequest._retry = false;
 		var responseStatus = error.response.status;
 		if (error.response && responseStatus === 401) {
 			const refreshToken = localStorage.getItem("refresh_token")
-			//var state = store.getState();
-			//console.log(store.getState())
+			var state = store.getState();
 			if (refreshToken) {
 				return instance
 					.post(`${apiUrl}/${apiRoutes.refreshToken}`,{
 						refreshToken: refreshToken,
-						//userId: state.user.id
+						userId: state.user.id
 					}).then(res => {
 
 						if (res.status === 201 || res.status === 200) {
@@ -45,20 +56,20 @@ instance.interceptors.request.use(
 
 						}
 						else {
-							//store.dispatch(logOutUser())
-							//history.push({ pathname: "/login",state: { redirectPath: null } })
+							store.dispatch(logOutUser())
+							BrowserHistory.push({ pathname: "/signIn",state: { redirectPath: null } })
 							Promise.reject({});
 						}
 					}).catch((error) => {
-						//store.dispatch(logOutUser())
-						//history.go({ pathname: "/login",state: { redirectPath: null } })
+						store.dispatch(logOutUser())
+						BrowserHistory.go({ pathname: "/signIn",state: { redirectPath: null } })
 						Promise.reject({});
 					})
 			}
 
 			else {
-				//history.push({ pathname: "/login",state: { redirectPath: null }})
-				//history.go({ pathname: "/login",state: { redirectPath: null }})
+				BrowserHistory.push({ pathname: "/signIn",state: { redirectPath: null } })
+				BrowserHistory.go({ pathname: "/signIn",state: { redirectPath: null } })
 				Promise.reject({});
 			}
 		}

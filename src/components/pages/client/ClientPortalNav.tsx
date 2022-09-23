@@ -8,17 +8,25 @@ import {
 import HistoryIcon from '@mui/icons-material/History';
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setSection } from "../../../features/ClientSideNav/clientSideSlice";
-import { appTheme } from "../../utils/AppTheme/AppTheme";
-const ClientPortalNav = () => {
+import { useEffect, useState } from 'react'
+interface ClientPortalNav {
+	changeSection: Function
+}
+const ClientPortalNav = (props: ClientPortalNav) => {
 
-	
-	var dispatch = useDispatch();
-	var section = useSelector<any>((state) => state.clientSideNav.selectedSection);
-	const onClick = (section: string) => {
-		dispatch(setSection(section))
+	const [currSection, SetCurrSection] = useState<string>(window.location.pathname)
+	const onClick = (newSection: string) => {
+		SetCurrSection(newSection);
+		var newSectionName = newSection.split("/").pop()
+		var sectionName = newSectionName && newSectionName?.charAt(0).toUpperCase() + newSectionName?.slice(1)
+		props.changeSection(sectionName)
 	}
+
+	useEffect(() => {
+		var section = window.location.pathname
+		onClick(section)
+	}, [])
+
 
 	return (
 		<>
@@ -30,8 +38,8 @@ const ClientPortalNav = () => {
 					<ListItem
 						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
 						button
-						onClick={() => onClick('dashboard')}
-						selected={section === 'dashboard'}
+						onClick={() => onClick('/portal/user/dashboard')}
+						selected={currSection === '/portal/user/dashboard'}
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<DashboardIcon sx={{ color: 'white' }} />
@@ -48,8 +56,9 @@ const ClientPortalNav = () => {
 					<ListItem
 						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
 						button
-						onClick={() => onClick('history')}
-						selected={section === 'history'}
+
+						onClick={() => onClick('/portal/user/history')}
+						selected={currSection === '/portal/user/history'}
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<HistoryIcon sx={{ color: 'white' }} />
