@@ -10,6 +10,7 @@ export const appTheme = createTheme({
 		secondary: {
 			main: '#393838',
 		},
+		
 
 	},
 	components: {

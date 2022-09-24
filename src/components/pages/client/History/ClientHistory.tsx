@@ -70,8 +70,8 @@ const ClientHistory = () => {
 
 	return (
 		<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
-			<Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', background: appTheme.palette.primary.dark }}>
-				<Box sx={{ minWidth: 900, mt: 10, minHeight: 500, alignSelf: 'center', color: 'white' }}>
+			<Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+				<Box sx={{ minWidth: 900, mt: 10, minHeight: 500, alignSelf: 'center' }}>
 					<Typography variant='h3'>History of the transactions</Typography>
 					<TableContainer className='mt-5' sx={{
 						border: "1px solid rgba(128,128,128,0.4)",
@@ -92,9 +92,9 @@ const ClientHistory = () => {
 							<TableBody>
 								{
 									transactions.map(x => <TableRow key={x.id} >
-										<TableCell scope='row' sx={{ color: 'white' }}>{x.createdOn.toString()}</TableCell>
-										<TableCell scope='row' sx={{ color: 'white' }}>{x.store}</TableCell>
-										<TableCell scope='row' sx={{ color: 'white' }}>{x.totalPrice}</TableCell>
+										<TableCell scope='row'>{x.createdOn.toString()}</TableCell>
+										<TableCell scope='row'>{x.store}</TableCell>
+										<TableCell scope='row'>{x.totalPrice}</TableCell>
 										<TableCell scope='row'><Button variant='contained' onClick={(e) => toggleMenu(e, x)}>Actions</Button></TableCell>
 									</TableRow>)
 								}

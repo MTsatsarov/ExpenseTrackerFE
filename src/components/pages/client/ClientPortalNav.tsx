@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import HistoryIcon from '@mui/icons-material/History';
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react'
 interface ClientPortalNav {
@@ -65,6 +66,25 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						</ListItemIcon>
 						<ListItemText>
 							<span style={{ fontSize: '0.9em', fontWeight: 300, color: 'white' }}>History</span>
+						</ListItemText>
+					</ListItem>
+				</Link>
+
+				<Divider sx={{ background: "#A2A0A0" }} />
+
+				<Link to={'/portal/user/settings'} style={{ textDecoration: 'none' }}>
+					<ListItem
+						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
+						button
+
+						onClick={() => onClick('/portal/user/settings')}
+						selected={currSection === '/portal/user/settings'}
+					>
+						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+							<ManageAccountsIcon sx={{ color: 'white' }} />
+						</ListItemIcon>
+						<ListItemText>
+							<span style={{ fontSize: '0.9em', fontWeight: 300, color: 'white' }}>Settings</span>
 						</ListItemText>
 					</ListItem>
 				</Link>
