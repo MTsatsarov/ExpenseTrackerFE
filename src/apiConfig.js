@@ -1,4 +1,4 @@
-const apiUrl = "https://localhost:7017/api"
+const apiUrl = "https://localhost:44305/api"
 
 
 const apiRoutes = {
@@ -12,7 +12,8 @@ const apiRoutes = {
 	getStores: 'store/getStores',
 	getProducts: 'product/getProducts',
 	getCurrentUser: 'account/current',
-	getTransactionDetails:'transaction/details'
+	getTransactionDetails:'transaction/details',
+	changePass:'account/changePassword'
 }
 
 

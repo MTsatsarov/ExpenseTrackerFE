@@ -43,10 +43,10 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 			});
 		}
 		getUser()
-	})
+	},[])
 
 	return (
-		<Box className="mt-10" sx={{minWidth:'30%', maxWidth: '40%' }} >
+		<Box className="mt-10" sx={{minWidth: '35%' }} >
 			<Typography sx={{ mb: 4 }} variant='h4'>User Settings</Typography>
 			<form style={{ color: 'white' }}>
 				<FormGroup sx={{ mb: 3 }} >
@@ -58,10 +58,10 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 				<FormGroup sx={{ mb: 3 }} >
 					<TextField label='Last Name' sx={{ color: 'white' }} variant='standard' value={user.lastName} />
 				</FormGroup>
-				<ButtonGroup sx={{ display: 'flex', justifyContent: 'space-around',flexWrap:'wrap' }}>
-					<Button name="changePass" onClick={(e) => props.click(e)} variant="contained" sx={{ width: "40%" }} >Change Password</Button>
-					<Button name="submitForm" onClick={(e) => props.click(e)} variant="contained" sx={{ width: "20%" }} color="success">Submit</Button>
-					<Button name="cancel" onClick={(e) => props.click(e)} variant="contained" sx={{ width: "20%" }} color="error">Cancel</Button>
+				<ButtonGroup sx={{ display: 'flex', justifyContent: 'space-around',width:'100%',flexWrap:'wrap' }}>
+					<Button name="changePass" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "45%" }} >Change Password</Button>
+					<Button name="submitForm" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "20%" }} color="success">Submit</Button>
+					<Button name="cancel" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "20%" }} color="error">Cancel</Button>
 				</ButtonGroup>
 			</form>
 		</Box>

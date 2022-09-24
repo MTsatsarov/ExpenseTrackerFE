@@ -1,7 +1,12 @@
-import { Modal, Fade, Box, Typography, TextField, FormGroup, ButtonGroup, Button } from "@mui/material"
+import { Modal, Fade, Box, Typography, TextField, FormGroup, ButtonGroup, Button, InputAdornment, IconButton } from "@mui/material"
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useEffect, useState } from "react";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { apiUrl, apiRoutes } from "../../../../../apiConfig";
+import instance from "../../../../../axios/axios";
+import Toaster from "../../../../utils/Toaster/Toaster";
 interface ChangePasswordModalProps {
 	show: boolean
 	onClose: Function
@@ -31,6 +36,9 @@ const ChangePasswordModal = (props: ChangePasswordModalProps) => {
 		confirmNewPassTouched: false
 	})
 	const [modelValid, setModelValid] = useState<boolean>(false)
+	const [oldPassVisible, setOldPassVisible] = useState<boolean>(false)
+	const [newPassVisible, setNewPassVisible] = useState<boolean>(false)
+	const [confirmPassVisible, setConfirmPassVisible] = useState<boolean>(false)
 
 	useEffect(() => {
 		validateForm();
@@ -83,15 +91,41 @@ const ChangePasswordModal = (props: ChangePasswordModalProps) => {
 		}))
 		validateForm();
 	}
-const onCancelClick = () => {
-	props.onClose();
-}
+
+	const onCancelClick = () => {
+		props.onClose();
+	}
+
 	const validateForm = () => {
 		var valid = model.oldPassValid &&
 			model.newPassValid &&
 			model.confirmNewPassValid &&
 			model.newPass === model.confirmNewPass
 		setModelValid(valid)
+	}
+
+	const submit = async () => {
+		validateForm();
+
+		if (modelValid) {
+			await instance.post(`${apiUrl}/${apiRoutes.changePass}`, { oldPassword: model.oldPass, newPassword: model.newPass }).then((response) => {
+				if (response.status === 200 || response.status === 201) {
+					Toaster.show('success', '', response.data)
+					onCancelClick();
+				}
+			}).catch(function (error) {
+				if (error.response) {
+					var errors =
+						error.response &&
+						(error.response.data.message ||
+							error.response.data ||
+							error.response.statusText);
+					errors.split(/\r?\n/).forEach((message: string) => {
+						Toaster.show("error", "", message);
+					});
+				}
+			});
+		}
 	}
 	return (
 		<Modal open={props.show}
@@ -101,7 +135,7 @@ const onCancelClick = () => {
 				width: "100%",
 				height: "100%",
 			}}>
-			<Fade in={true} timeout={500}>
+			<Fade in={true} timeout={500} exit={true}>
 				<Box
 					sx={{
 						width: "40%",
@@ -126,7 +160,7 @@ const onCancelClick = () => {
 							<FormGroup className="p-2" sx={{ width: '100%' }}>
 								<TextField
 									name="oldPass"
-									type='password'
+									type={oldPassVisible ? 'text' : 'password'}
 									label="Old Password"
 									onChange={onInputChange}
 									error={!model.oldPassValid && model.oldPassTouched}
@@ -137,12 +171,24 @@ const onCancelClick = () => {
 									}
 									focused={
 										model.oldPassValid && model.oldPassTouched ? true : false
-									} />
+									}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={() => { setOldPassVisible(!oldPassVisible) }}
+												>
+													{oldPassVisible ? <VisibilityIcon color="primary" /> : <VisibilityOffIcon />}
+												</IconButton>
+											</InputAdornment>
+										)
+									}} />
 							</FormGroup>
 							<FormGroup className="p-2">
 								<TextField
 									name="newPass"
-									type='password'
+									type={newPassVisible ? 'text' : 'password'}
 									label="New Password"
 									onChange={onInputChange}
 									error={!model.newPassValid && model.newPassTouched}
@@ -153,12 +199,24 @@ const onCancelClick = () => {
 									}
 									focused={
 										model.newPassValid && model.newPassTouched ? true : false
-									} />
+									}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={() => { setNewPassVisible(!newPassVisible) }}
+												>
+													{newPassVisible ? <VisibilityIcon color="primary" /> : <VisibilityOffIcon />}
+												</IconButton>
+											</InputAdornment>
+										)
+									}} />
 							</FormGroup>
 							<FormGroup className="p-2">
 								<TextField
 									name="confirmPass"
-									type='password'
+									type={confirmPassVisible ? 'text' : 'password'}
 									label="Confirm New Password"
 									onChange={onInputChange}
 									error={!model.confirmNewPassValid && model.confirmNewPassTouched}
@@ -169,11 +227,23 @@ const onCancelClick = () => {
 									}
 									focused={
 										model.confirmNewPassValid && model.confirmNewPassTouched ? true : false
-									} />
+									}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={() => { setConfirmPassVisible(!confirmPassVisible) }}
+												>
+													{confirmPassVisible ? <VisibilityIcon color="primary" /> : <VisibilityOffIcon />}
+												</IconButton>
+											</InputAdornment>
+										)
+									}} />
 							</FormGroup>
-							<ButtonGroup className="p-2" sx={{ display: 'flex', justifyContent: "flex-end",flexWrap:'wrap' }}>
-								<Button sx={{ marginRight: '10px' }} disabled={!modelValid} variant='contained' color="success"><CheckIcon ></CheckIcon> Submit</Button>
-								<Button onClick ={onCancelClick} variant='contained' color='error'><CancelIcon ></CancelIcon> Cancel</Button>
+							<ButtonGroup className="p-2" sx={{ display: 'flex', justifyContent: "flex-end", flexWrap: 'wrap' }}>
+								<Button onClick={submit} sx={{ marginRight: '10px' }} disabled={!modelValid} variant='contained' color="success"><CheckIcon ></CheckIcon> Submit</Button>
+								<Button onClick={onCancelClick} variant='contained' color='error'><CancelIcon ></CancelIcon> Cancel</Button>
 							</ButtonGroup>
 						</form>
 					</Box>
