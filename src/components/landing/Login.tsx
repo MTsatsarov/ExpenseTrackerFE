@@ -7,6 +7,7 @@ import Toaster from "../utils/Toaster/Toaster";
 import { setTokens, setCurrentUser } from "../../features/User/userSlice";
 import { useAppDispatch } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
+import Loader from "../utils/Loader/Loader"
 
 interface ILoginState {
 	email: string;
@@ -19,7 +20,6 @@ interface ILoginState {
 const Login = () => {
 	var dispatch = useAppDispatch();
 	var navigate = useNavigate();
-	const [loading, setIsLoading] = useState<boolean>(true);
 	const [isValid, setIsValid] = useState<boolean>(false);
 	const [model, setModel] = useState<ILoginState>({
 		email: "",
@@ -29,7 +29,7 @@ const Login = () => {
 		isEmailValid: false,
 		isPasswordValid: false,
 	});
-
+	const [loading, setLoading] = useState<boolean>(false)
 	useEffect(() => {
 		validateForm();
 	}, [model]);
@@ -80,6 +80,7 @@ const Login = () => {
 	const onSubmit = async (e: any) => {
 		e.preventDefault();
 		if (isValid) {
+			setLoading(true)
 			await instance
 				.post(`${apiUrl}/${apiRoutes.signIn}`, {
 					email: model.email,
@@ -119,6 +120,7 @@ const Login = () => {
 							}
 						});
 
+						setLoading(false)
 
 						navigate("/portal/user/dashboard", { replace: true });
 					}
@@ -135,6 +137,7 @@ const Login = () => {
 						});
 					}
 				});
+			setLoading(false)
 		}
 	};
 	return (
@@ -225,6 +228,8 @@ const Login = () => {
 				</form>
 			</Fade>
 			<Link to="/signup">Create new account</Link>
+			{loading &&
+				<Loader />}
 		</Box>
 	);
 };
