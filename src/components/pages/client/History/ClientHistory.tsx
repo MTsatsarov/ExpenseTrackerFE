@@ -76,7 +76,7 @@ const ClientHistory = () => {
 	return (
 		<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
 			<Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-				<Box sx={{ minWidth: 900, mt: 10, minHeight: 500, alignSelf: 'center' }}>
+				<Box sx={{ minWidth: 900, mt: 10, height: 800, alignSelf: 'center', overflow:'auto' }}>
 					<Typography variant='h3'>History of the transactions</Typography>
 					<TableContainer className='mt-5' sx={{
 						border: "1px solid rgba(128,128,128,0.4)",
