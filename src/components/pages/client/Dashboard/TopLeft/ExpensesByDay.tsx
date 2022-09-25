@@ -77,8 +77,8 @@ const ExpensesByDay = () => {
 			{
 				label: "Dataset 1",
 				data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-				borderColor: "rgb(255, 255, 255)",
-				backgroundColor: "rgba(255, 255, 255, 1)",
+				borderColor: "rgb(0, 0, 0)",
+				backgroundColor: "rgba(0, 0, 0, 1)",
 			},
 		],
 	};
