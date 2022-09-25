@@ -7,6 +7,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { apiUrl, apiRoutes } from "../../../../../apiConfig";
 import instance from "../../../../../axios/axios";
 import Toaster from "../../../../utils/Toaster/Toaster";
+import Loader from "../../../../utils/Loader/Loader";
 interface ChangePasswordModalProps {
 	show: boolean
 	onClose: Function
@@ -40,6 +41,7 @@ const ChangePasswordModal = (props: ChangePasswordModalProps) => {
 	const [newPassVisible, setNewPassVisible] = useState<boolean>(false)
 	const [confirmPassVisible, setConfirmPassVisible] = useState<boolean>(false)
 	const [showDialog, setShowDialog] = useState<boolean>(false)
+	const [loading, setLoading] = useState<boolean>(false)
 	useEffect(() => {
 		validateForm();
 	}, [model])
@@ -108,6 +110,7 @@ const ChangePasswordModal = (props: ChangePasswordModalProps) => {
 		validateForm();
 
 		if (modelValid) {
+			setLoading(true)
 			await instance.post(`${apiUrl}/${apiRoutes.changePass}`, { oldPassword: model.oldPass, newPassword: model.newPass }).then((response) => {
 				if (response.status === 200 || response.status === 201) {
 					Toaster.show('success', '', response.data)
@@ -125,6 +128,7 @@ const ChangePasswordModal = (props: ChangePasswordModalProps) => {
 					});
 				}
 			});
+			setLoading(false)
 		}
 	}
 	const toggleDialog = () => {
@@ -277,6 +281,10 @@ const ChangePasswordModal = (props: ChangePasswordModalProps) => {
 					</Button>
 				</DialogActions>
 			</Dialog>
+			{
+				loading &&
+				<Loader/>
+			}
 		</>
 	)
 }

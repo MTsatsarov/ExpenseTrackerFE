@@ -5,6 +5,7 @@ import Toaster from '../../../utils/Toaster/Toaster'
 import { Box, Typography, Slide, TableContainer, TableHead, TableCell, Table, TableRow, TableBody, Button, Menu, MenuItem, Paper } from "@mui/material"
 import { appTheme } from "../../../utils/AppTheme/AppTheme";
 import Details from './Details/Details'
+import Loader from '../../../utils/Loader/Loader'
 export interface IProductResponse {
 	productId: string,
 	name: string,
@@ -24,7 +25,10 @@ const ClientHistory = () => {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [selectedRow, SetSelectedRow] = useState<any>({})
 	const [displayDetails, setDisplayDetails] = useState<boolean>(false)
+	const [loading, setLoading] = useState<boolean>(false)
+
 	useEffect(() => {
+
 		const getProducts = async () => {
 			await instance.get(`${apiUrl}/${apiRoutes.getTransactions}`).then((response) => {
 				if (response.status === 200 || response.status === 201) {
@@ -44,8 +48,9 @@ const ClientHistory = () => {
 				}
 			});
 		}
+		setLoading(true)
 		getProducts()
-
+		setLoading(false)
 	}, [])
 
 
@@ -122,7 +127,13 @@ const ClientHistory = () => {
 				{displayDetails &&
 					<Details show={displayDetails} onClose={toggleDetails} id={selectedRow.id} date={selectedRow.createdOn} totalPrice={selectedRow.totalPrice} />
 				}
+
+				{
+					loading &&
+					<Loader />
+				}
 			</Box>
+
 		</Slide >
 	)
 }

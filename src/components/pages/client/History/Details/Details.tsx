@@ -6,6 +6,7 @@ import { IProductResponse } from "../ClientHistory"
 import { Modal, Fade, Box, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper } from "@mui/material"
 import { appTheme } from "../../../../utils/AppTheme/AppTheme"
 import { exit } from "process"
+import Loader from "../../../../utils/Loader/Loader"
 
 interface IDetailsProps {
 	id: string,
@@ -29,8 +30,9 @@ const Details = (props: IDetailsProps) => {
 		store: "",
 		products: []
 	})
-
+	const [loading, setLoading] = useState<boolean>(false)
 	useEffect(() => {
+		setLoading(true)
 		instance.get(`${apiUrl}/${apiRoutes.getTransactionDetails}/${props.id}`).then((response) => {
 			var data = response.data;
 			setDetails(prevState => ({
@@ -50,6 +52,7 @@ const Details = (props: IDetailsProps) => {
 				});
 			}
 		});
+		setLoading(false)
 	}, [props.id])
 
 	return (
@@ -138,6 +141,10 @@ const Details = (props: IDetailsProps) => {
 							</TableContainer>
 						</div>
 					</Box>
+					{
+						loading &&
+						<Loader/>
+					}
 				</Box>
 			</Fade>
 		</Modal >

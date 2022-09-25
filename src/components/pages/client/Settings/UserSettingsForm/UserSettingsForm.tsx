@@ -2,11 +2,12 @@ import { Box, Typography, FormGroup, Button, ButtonGroup, TextField } from "@mui
 import { useState, useEffect } from "react";
 import { apiUrl, apiRoutes } from "../../../../../apiConfig";
 import instance from "../../../../../axios/axios"
+import Loader from "../../../../utils/Loader/Loader";
 import Toaster from "../../../../utils/Toaster/Toaster";
 
 interface UserSettingsFormProps {
 	click: Function,
-	setParent: Function
+	setParent: Function,
 }
 interface ResponseSettings {
 	email: string,
@@ -29,6 +30,7 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 		lastNameTouched: false
 	})
 	const [userValid, setUserValid] = useState<boolean>(false)
+	const [loading, setLoading] = useState<boolean>(false);
 	useEffect(() => {
 		const getUser = async () => {
 			await instance.get(`${apiUrl}/${apiRoutes.getCurrentUser}`).then((response) => {
@@ -54,7 +56,11 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 				}
 			});
 		}
+		
+		setLoading(true)
 		getUser()
+		setLoading(false)
+
 	}, [])
 	useEffect(() => {
 		validateForm();
@@ -115,6 +121,10 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 					<Button name="submitForm" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "40%" }} color="success" disabled={!userValid}>Submit</Button>
 				</ButtonGroup>
 			</form>
+			{
+				loading &&
+				<Loader />
+			}
 		</Box>
 	)
 }

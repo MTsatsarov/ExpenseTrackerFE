@@ -6,6 +6,7 @@ import instance from "../../axios/axios";
 import { apiUrl, apiRoutes } from "../../apiConfig";
 import Toaster from "../utils/Toaster/Toaster";
 import { useNavigate } from "react-router-dom";
+import Loader from "../utils/Loader/Loader";
 
 interface IRegistrationfields {
 	username: string;
@@ -52,7 +53,6 @@ const Register = () => {
 		isTouchedConfirmPassword: false,
 	});
 	const [canRegister, setCanRegister] = useState<boolean>(false);
-
 	useEffect(() => {
 		validateForm();
 	}, [fields]);
@@ -179,7 +179,7 @@ const Register = () => {
 					userName: fields.username,
 					lastName: fields.lastName,
 					email: fields.email,
-					password:fields.password
+					password: fields.password
 				})
 				.then((response) => {
 					navigate("/", { replace: true });
@@ -329,6 +329,10 @@ const Register = () => {
 				</Button>
 			</form>
 			<Link to="/signIn">Already have an account</Link>
+			{
+				loading &&
+				<Loader />
+			}
 		</Box>
 	);
 };
