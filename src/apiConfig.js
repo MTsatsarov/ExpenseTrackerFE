@@ -13,7 +13,8 @@ const apiRoutes = {
 	getProducts: 'product/getProducts',
 	getCurrentUser: 'account/current',
 	getTransactionDetails:'transaction/details',
-	changePass:'account/changePassword'
+	changePass:'account/changePassword',
+	updateUser:'account/updateUser'
 }
 
 

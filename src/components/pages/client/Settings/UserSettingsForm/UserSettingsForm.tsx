@@ -5,13 +5,17 @@ import instance from "../../../../../axios/axios"
 import Toaster from "../../../../utils/Toaster/Toaster";
 
 interface UserSettingsFormProps {
-	click: Function
+	click: Function,
+	setParent: Function
 }
 interface ResponseSettings {
 	email: string,
 	firstName: string,
 	lastName: string,
-	userName: string,
+	firstNameValid: boolean,
+	lastNameValid: boolean,
+	firstNameTouched: boolean,
+	lastNameTouched: boolean
 }
 
 const UserSettingsForm = (props: UserSettingsFormProps) => {
@@ -19,15 +23,23 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 		email: '',
 		firstName: '',
 		lastName: '',
-		userName: ''
+		firstNameValid: true,
+		lastNameValid: true,
+		firstNameTouched: false,
+		lastNameTouched: false
 	})
-
+	const [userValid, setUserValid] = useState<boolean>(false)
 	useEffect(() => {
 		const getUser = async () => {
 			await instance.get(`${apiUrl}/${apiRoutes.getCurrentUser}`).then((response) => {
 				if (response.status === 200 || response.status === 201) {
 					var userData = response.data as ResponseSettings
-					setUser(userData)
+					setUser(prevState => ({
+						...prevState,
+						email: userData.email,
+						firstName: userData.firstName,
+						lastName: userData.lastName,
+					}))
 				}
 			}).catch(function (error) {
 				if (error.response) {
@@ -43,25 +55,64 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 			});
 		}
 		getUser()
-	},[])
+	}, [])
+	useEffect(() => {
+		validateForm();
+		props.setParent(user)
+	}, [user])
+	const onChange = (e: any) => {
+		const { name, value } = e.target;
+		let firstName = user.firstName
+		let lastName = user.lastName
+		let firstNameValid = user.firstNameValid
+		let lastNameValid = user.lastNameValid
+		let firstNameTouched = user.firstNameTouched
+		let lastNameTouched = user.lastNameTouched
 
+		switch (name) {
+			case 'firstName':
+				firstNameValid = value.length > 0 ? true : false
+				firstNameTouched = true
+				firstName = value
+				break;
+			case 'lastName':
+				lastNameValid = value.length > 0 ? true : false
+				lastNameTouched = true
+				lastName = value
+				break;
+		}
+		setUser(prevState => ({
+			...prevState,
+			firstName: firstName,
+			lastName: lastName,
+			firstNameValid: firstNameValid,
+			lastNameValid: lastNameValid,
+			firstNameTouched: firstNameTouched,
+			lastNameTouched: lastNameTouched
+		}));
+
+		validateForm();
+	}
+	const validateForm = () => {
+		var valid = user.firstNameValid && user.lastNameValid && (user.firstNameTouched || user.lastNameTouched)
+		setUserValid(valid);
+	}
 	return (
-		<Box className="mt-10" sx={{minWidth: '35%' }} >
+		<Box className="mt-10" sx={{ minWidth: '35%' }} >
 			<Typography sx={{ mb: 4 }} variant='h4'>User Settings</Typography>
 			<form style={{ color: 'white' }}>
 				<FormGroup sx={{ mb: 3 }} >
 					<TextField label='email' disabled sx={{ color: 'white' }} variant='standard' value={user.email} />
 				</FormGroup>
 				<FormGroup sx={{ mb: 3 }}>
-					<TextField label='First Name' sx={{ color: 'white' }} variant='standard' value={user.firstName} />
+					<TextField name="firstName" label='First Name' sx={{ color: 'white' }} variant='standard' value={user.firstName} onChange={onChange} onBlur={onChange} />
 				</FormGroup>
 				<FormGroup sx={{ mb: 3 }} >
-					<TextField label='Last Name' sx={{ color: 'white' }} variant='standard' value={user.lastName} />
+					<TextField name="lastName" label='Last Name' sx={{ color: 'white' }} variant='standard' value={user.lastName} onChange={onChange} onBlur={onChange} />
 				</FormGroup>
-				<ButtonGroup sx={{ display: 'flex', justifyContent: 'space-around',width:'100%',flexWrap:'wrap' }}>
+				<ButtonGroup sx={{ display: 'flex', justifyContent: 'space-around', width: '100%', flexWrap: 'wrap' }}>
 					<Button name="changePass" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "45%" }} >Change Password</Button>
-					<Button name="submitForm" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "20%" }} color="success">Submit</Button>
-					<Button name="cancel" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "20%" }} color="error">Cancel</Button>
+					<Button name="submitForm" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "40%" }} color="success" disabled={!userValid}>Submit</Button>
 				</ButtonGroup>
 			</form>
 		</Box>
