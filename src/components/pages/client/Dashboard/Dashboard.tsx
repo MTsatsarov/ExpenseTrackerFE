@@ -34,7 +34,6 @@ const Dashboard = () => {
 				sx={{
 					display: "flex",
 					justifyContent: "space-evenly",
-					background: appTheme.palette.primary.dark,
 					height: '100%',
 				}}
 			>

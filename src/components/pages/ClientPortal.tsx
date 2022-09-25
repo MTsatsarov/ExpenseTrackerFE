@@ -26,7 +26,7 @@ const ClientPortal = () => {
 	const [toggleSideNav, setToggleSideNav] = useState<boolean>(false)
 	const [showMenu, setShowMenu] = useState<boolean>(false)
 	const [anchorEl, setAnchorEL] = useState<any>()
-	const [sectionName,setSectionName] = useState<string>(" ")
+	const [sectionName, setSectionName] = useState<string>(" ")
 
 	const mobileBreak = 1300
 	const drawerWidth = 220;
@@ -77,7 +77,7 @@ const ClientPortal = () => {
 		});
 	}
 
-	const changeSection = (section:string) => {
+	const changeSection = (section: string) => {
 		setSectionName(section)
 	}
 	return (

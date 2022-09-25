@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import { useAppSelector } from "../../../app/hooks";
 import Dashboard from "./Dashboard/Dashboard";
 import ClientHistory from "./History/ClientHistory";
+import UserSettings from "./Settings/Settings";
 const ClientRoutes = () => {
 	//var user = useAppSelector((state) => state.user);
 	//return user.role === "CLIENT" ? (
@@ -9,11 +9,8 @@ const ClientRoutes = () => {
 		<Routes>
 			<Route path="/dashboard" element={<Dashboard />} />
 			<Route path="/history" element={<ClientHistory />} />
+			<Route path="/settings" element={<UserSettings />} />
 		</Routes>
 	);
-
-	//) : (
-	//	""
-	//);
 };
 export default ClientRoutes;
