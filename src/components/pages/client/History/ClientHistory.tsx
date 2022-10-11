@@ -6,6 +6,8 @@ import { Box, Typography, Slide, TableContainer, TableHead, TableCell, Table, Ta
 import { appTheme } from "../../../utils/AppTheme/AppTheme";
 import Details from './Details/Details'
 import Loader from '../../../utils/Loader/Loader'
+import RuleFolderOutlinedIcon from '@mui/icons-material/RuleFolderOutlined';
+
 export interface IProductResponse {
 	productId: string,
 	name: string,
@@ -76,7 +78,7 @@ const ClientHistory = () => {
 	return (
 		<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
 			<Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-				<Box sx={{ minWidth: 900, mt: 10, minHeight: 500, alignSelf: 'center' }}>
+				<Box sx={{ minWidth: 900, mt: 10, height: 800, alignSelf: 'center', overflow: 'auto' }}>
 					<Typography variant='h3'>History of the transactions</Typography>
 					<TableContainer className='mt-5' sx={{
 						border: "1px solid rgba(128,128,128,0.4)",
@@ -85,7 +87,7 @@ const ClientHistory = () => {
 						marginTop: 4,
 						borderRadius: 2,
 					}}>
-						<Table stickyHeader={true}>
+						<Table stickyHeader={true} sx={{ minHeight: 500 }}>
 							<TableHead sx={{ "& .MuiTableCell-stickyHeader": { backgroundColor: appTheme.palette.primary.main } }}>
 								<TableRow>
 									<TableCell scope='head' variant='head' sx={{ color: 'white' }}>Date</TableCell>
@@ -94,14 +96,18 @@ const ClientHistory = () => {
 									<TableCell scope='head' variant='head' sx={{ color: 'white' }}>Actions</TableCell>
 								</TableRow>
 							</TableHead>
-							<TableBody>
+							<TableBody >
 								{
-									transactions.map(x => <TableRow key={x.id} >
-										<TableCell scope='row'>{x.createdOn.toString()}</TableCell>
-										<TableCell scope='row'>{x.store}</TableCell>
-										<TableCell scope='row'>{x.totalPrice}</TableCell>
-										<TableCell scope='row'><Button variant='contained' onClick={(e) => toggleMenu(e, x)}>Actions</Button></TableCell>
-									</TableRow>)
+									transactions.length > 0 ?
+										transactions.map(x => <TableRow key={x.id} >
+											<TableCell scope='row'>{x.createdOn.toString()}</TableCell>
+											<TableCell scope='row'>{x.store}</TableCell>
+											<TableCell scope='row'>{x.totalPrice}</TableCell>
+											<TableCell scope='row'><Button variant='contained' onClick={(e) => toggleMenu(e, x)}>Actions</Button></TableCell>
+										</TableRow>) :
+										<Box >
+											<RuleFolderOutlinedIcon fontSize='large' sx={{fontSize:'200px'}} />
+										</Box>
 								}
 							</TableBody>
 						</Table>

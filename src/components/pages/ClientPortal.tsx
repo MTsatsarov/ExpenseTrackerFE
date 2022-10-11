@@ -197,7 +197,7 @@ const ClientPortal = () => {
 
 				<ClientRoutes />
 				<Fab
-					sx={{ position: "absolute", top: "80%", left: "96%" }}
+					sx={{ position: "absolute", top: "100%", left: "96%" }}
 					color="primary"
 					aria-label="add"
 

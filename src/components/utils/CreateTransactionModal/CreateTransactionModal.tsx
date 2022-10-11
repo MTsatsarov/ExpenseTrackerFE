@@ -26,6 +26,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import NewProductForm from "../../pages/client/CreateExpense/NewProductForm/NewProductForm";
 import { apiRoutes, apiUrl } from "../../../apiConfig";
 import Toaster from "../Toaster/Toaster";
+import Loader from "../Loader/Loader";
 
 interface ICreateTransactionModalProps {
 	showModal: boolean;
@@ -49,6 +50,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	const [totalPrice, setTotalPrice] = useState<number>(0)
 	const [selectedStore, setSelectedStore] = useState<iStore>({ storeId: null, name: '' })
 	const [storeSuggestions, setStoreSuggestions] = useState<Array<iStore>>([])
+	const [loading, setLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		instance.get(`${apiUrl}/${apiRoutes.getStores}`).then((response) => {
@@ -76,6 +78,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 
 	const createExpense = async () => {
 		if (products.length > 0 && selectedStore.name.length > 0) {
+			setLoading(true)
 			await instance.post(`${apiUrl}/${apiRoutes.createExpense}`, { products: products, storeName: selectedStore.name, storeId: selectedStore.storeId })
 				.then((response) => {
 					if (response.status === 200 || response.status === 201) {
@@ -93,6 +96,8 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 						});
 					}
 				});
+				setLoading(false)
+			
 		}
 	}
 
@@ -258,6 +263,8 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 							<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "center", mt: 5 }}>Create expense</Button>
 						</Box>
 					</Box>
+					{loading && 
+					<Loader/>}
 				</Box>
 			</Fade >
 
