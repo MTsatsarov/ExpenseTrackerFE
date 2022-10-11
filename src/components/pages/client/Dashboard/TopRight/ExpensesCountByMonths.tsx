@@ -1,67 +1,27 @@
-import {
-	Chart as ChartJS,
-	CategoryScale,
-	LinearScale,
-	PointElement,
-	LineElement,
-	Title,
-	Tooltip,
-	Legend,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
+import { Typography } from "@mui/material";
+import { LineChart, CartesianGrid, XAxis, YAxis, Legend, Tooltip, Line } from "recharts";
+import { TransactonsByMonth } from "../Dashboard";
 
-const ExpensesCountByMonths = () => {
-	ChartJS.register(
-		CategoryScale,
-		LinearScale,
-		PointElement,
-		LineElement,
-		Title,
-		Tooltip,
-		Legend
-	);
+interface ExpensesCountByMonthsInterface {
+transactions:Array<TransactonsByMonth>
+}
+const ExpensesCountByMonths = (props:ExpensesCountByMonthsInterface) => {
 
-	const options = {
-		responsive: true,
-		plugins: {
-			legend: {
-				position: "top" as const,
-			},
-			title: {
-				display: true,
-				text: "Chart.js Line Chart",
-			},
-		},
-	};
 
-	const labels = [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
-	];
-
-	const data = {
-		labels,
-		datasets: [
-			{
-				label: "Dataset 1",
-				data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-				borderColor: "rgb(0, 0, 0)",
-				backgroundColor: "rgba(0, 0, 0, 0.5)",
-			},
-		],
-	};
-	return <Line options={options} data={data} />;
+	return (
+		<>
+		<Typography sx={{textAlign:'center',mb:3}} variant="h5">Transactions for current year</Typography>
+		<LineChart width={730} height={250} data={props.transactions}
+			margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+			<CartesianGrid strokeDasharray="3 3" />
+			<XAxis dataKey="month" />
+			<YAxis />
+			<Tooltip />
+			<Legend />
+			<Line type="monotone" dataKey="sum" stroke="#8884d8" />
+		</LineChart>
+		</>
+	)
 };
 
 export default ExpensesCountByMonths;

@@ -1,44 +1,32 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
-import { Box } from "@mui/material";
-ChartJS.register(ArcElement, Tooltip, Legend);
+import { Typography } from "@mui/material";
+import { RadialBarChart, Tooltip, Legend, RadialBar } from "recharts";
+import { StoreTransactions } from "../Dashboard";
 
-const ExpensesByStore = () => {
-	const data = {
-		labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-		datasets: [
-			{
-				label: "# of Votes",
-				data: [12, 19, 3, 5, 2, 3],
-				backgroundColor: [
-					"rgba(255, 99, 132, 1)",
-					"rgba(54, 162, 235, 1)",
-					"rgba(255, 206, 86, 1)",
-					"rgba(75, 192, 192, 1)",
-					"rgba(153, 102, 255, 1)",
-					"rgba(255, 159, 64,1)",
-				],
-				borderColor: [
-					"rgba(255, 99, 132, 1)",
-					"rgba(54, 162, 235, 1)",
-					"rgba(255, 206, 86, 1)",
-					"rgba(75, 192, 192, 1)",
-					"rgba(153, 102, 255, 1)",
-					"rgba(255, 159, 64, 1)",
-				],
-				borderWidth: 1,
-			},
-		],
-	};
+interface ExpenseByStoreProps {
+	transactions: Array<StoreTransactions>
+}
+
+
+const ExpensesByStore = (props: ExpenseByStoreProps) => {
 
 	return (
-		<Box
-			style={{
-				margin: "0px auto",
-			}}
-		>
-			<Pie style={{ margin: "0px auto" }} data={data} />
-		</Box>
+
+		<>
+			<Typography sx={{ textAlign: 'center', mb: 3 }} variant="h5">Most transactions by store</Typography>
+			<RadialBarChart
+				width={700}
+				height={450}
+				innerRadius="10%"
+				outerRadius="%"
+				data={props.transactions}
+				startAngle={180}
+				endAngle={0}
+			>
+				<RadialBar label={{ fill: '#666', position: 'insideStart' }} background dataKey='count' />
+				<Legend iconSize={20} width={200} height={140} layout='vertical' verticalAlign='middle' align="right" />
+				<Tooltip />
+			</RadialBarChart>
+		</>
 	);
 };
 
