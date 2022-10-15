@@ -1,4 +1,6 @@
-import { Drawer, styled, Divider, Fab, AppBar, Toolbar, IconButton, Typography, Menu, MenuItem } from "@mui/material";
+import { Drawer, styled, Divider, AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, SpeedDial,SpeedDialAction } from "@mui/material";
+import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
+import BroadcastOnHomeIcon from '@mui/icons-material/BroadcastOnHome';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Box } from "@mui/system";
 import ClientRoutes from "./client/ClientRoutes";
@@ -13,7 +15,6 @@ import Toaster from "../utils/Toaster/Toaster";
 import instance from "../../axios/axios";
 import { logOutUser } from "../../features/User/userSlice";
 import { useNavigate } from "react-router-dom";
-
 const ClientPortal = () => {
 	const DrawerHeader = styled("div")(() => ({
 		display: "flex",
@@ -39,7 +40,6 @@ const ClientPortal = () => {
 			window.removeEventListener('resize', handleResize)
 		}
 	}, [])
-
 
 	const onCLick = () => {
 		setDisplayModel(!displayModal);
@@ -80,6 +80,12 @@ const ClientPortal = () => {
 	const changeSection = (section: string) => {
 		setSectionName(section)
 	}
+	
+	const actions = [
+		{ icon: <LocalGroceryStoreIcon color="primary" fontSize="medium" onClick={onCLick} />, name: 'Groceries' },
+		{ icon: <BroadcastOnHomeIcon color="primary" fontSize="medium"   />, name: 'Services' },
+	];
+
 	return (
 
 		<Box sx={{ display: 'flex' }}>
@@ -196,15 +202,22 @@ const ClientPortal = () => {
 				)}
 
 				<ClientRoutes />
-				<Fab
-					sx={{ position: "absolute", top: "100%", left: "96%" }}
+				<SpeedDial
+					sx={{ position: "absolute", top: "80%", left: "96%" }}
 					color="primary"
-					aria-label="add"
+					ariaLabel="SpeedDial tooltip example"
+					
+					icon={<AddIcon />}>
 
-					onClick={onCLick}
-				>
-					<AddIcon />
-				</Fab>
+					{actions.map((action) => (
+						<SpeedDialAction
+							key={action.name}
+							icon={action.icon}
+							tooltipTitle={action.name}
+							tooltipOpen
+						/>
+					))}
+				</SpeedDial>
 			</Box>
 		</Box>
 	);

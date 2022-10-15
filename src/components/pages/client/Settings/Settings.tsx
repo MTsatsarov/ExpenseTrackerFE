@@ -6,6 +6,7 @@ import { apiUrl, apiRoutes } from "../../../../apiConfig"
 import instance from "../../../../axios/axios"
 import Toaster from "../../../utils/Toaster/Toaster"
 import Loader from "../../../utils/Loader/Loader"
+import styles from "./Dashboard.module.css"
 const UserSettings = () => {
 
 	const [showChangePass, SetShowChangePass] = useState<boolean>(false)
