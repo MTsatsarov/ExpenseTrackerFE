@@ -1,0 +1,6 @@
+@media All and  (max-width:1600px) {
+	.box {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}

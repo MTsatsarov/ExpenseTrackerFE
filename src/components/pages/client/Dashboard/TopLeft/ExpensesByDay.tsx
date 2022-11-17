@@ -1,93 +1,38 @@
-import React from "react";
-import {
-	Chart as ChartJS,
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
-import { Box } from "@mui/material";
-
-ChartJS.register(
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend
-);
-
-const ExpensesByDay = () => {
-	const options = {
-		responsive: true,
-		plugins: {
-			legend: {
-				position: "top" as const,
-				padding: "0px",
-			},
-			title: {
-				display: true,
-				text: "Moqt test ",
-			},
-			color: "white",
-		},
-	};
-
-	const labels = [
-		"1",
-		"2",
-		"3",
-		"4",
-		"5",
-		"6",
-		"7",
-		"8",
-		"9",
-		"10",
-		"11",
-		"12",
-		"13",
-		"14",
-		"15",
-		"16",
-		"17",
-		"18",
-		"19",
-		"20",
-		"21",
-		"22",
-		"23",
-		"24",
-		"25",
-		"26",
-		"27",
-		"28",
-		"29",
-		"30",
-		"31",
-	];
-
-	const data = {
-		labels,
-		datasets: [
-			{
-				label: "Dataset 1",
-				data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-				borderColor: "rgb(0, 0, 0)",
-				backgroundColor: "rgba(0, 0, 0, 1)",
-			},
-		],
-	};
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Box,Typography } from "@mui/material";
+import { DailyTransactions } from '../Dashboard';
+import styles from "./ExpenseByDay.module.css"
+interface ExpenseByDayProps{
+transactions: Array<DailyTransactions>
+}
+const ExpensesByDay = (props:ExpenseByDayProps) => {
 
 	return (
-		<Box>
-			<Bar style={{ color: "white" }} options={options} data={data} />
+		<Box  className={styles.box} sx={{ pt: 5,maxWidth:'1200px' }}>
+			<Typography sx={{ textAlign: 'center', mb: 3 }} variant="h5">Daily transactions for current month</Typography>
+			<BarChart
+				width={1200}
+				height={300}
+				data={props.transactions}
+				margin={{
+					top: 5,
+					right: 30,
+					left: 20,
+					bottom: 5,
+				}}
+			>
+				<CartesianGrid strokeDasharray="3 3" />
+				<XAxis dataKey="name" />
+				<YAxis />
+				<Tooltip />
+				<Legend />
+				<Bar dataKey="sum" fill="#8884d8" />
+			</BarChart>
+			{/*</ResponsiveContainer>*/}
 		</Box>
 	);
 };
 
 export default ExpensesByDay;
+
+

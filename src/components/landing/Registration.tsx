@@ -6,6 +6,7 @@ import instance from "../../axios/axios";
 import { apiUrl, apiRoutes } from "../../apiConfig";
 import Toaster from "../utils/Toaster/Toaster";
 import { useNavigate } from "react-router-dom";
+import Loader from "../utils/Loader/Loader";
 
 interface IRegistrationfields {
 	username: string;
@@ -14,18 +15,21 @@ interface IRegistrationfields {
 	email: string;
 	password: string;
 	confirmPassword: string;
+	organization: string;
 	isValidUsername: boolean;
 	isValidFirstName: boolean;
 	isValidLastName: boolean;
 	isValidPassword: boolean;
 	isValidEmail: boolean;
 	isValidConfirmPassword: boolean;
+	isValidOrganization: boolean;
 	isTouchedUsername: boolean;
 	isTouchedFirstName: boolean;
 	isTouchedLastName: boolean;
 	isTouchedPassword: boolean;
 	isTouchedEmail: boolean;
 	isTouchedConfirmPassword: boolean;
+	isTouchedOrganization: boolean;
 }
 
 const Register = () => {
@@ -50,9 +54,11 @@ const Register = () => {
 		isTouchedPassword: false,
 		isTouchedEmail: false,
 		isTouchedConfirmPassword: false,
+		organization:'',
+		isValidOrganization:false,
+		isTouchedOrganization:false,
 	});
 	const [canRegister, setCanRegister] = useState<boolean>(false);
-
 	useEffect(() => {
 		validateForm();
 	}, [fields]);
@@ -81,6 +87,9 @@ const Register = () => {
 		var isTouchedPassword = fields.isTouchedPassword;
 		var isTouchedEmail = fields.isTouchedEmail;
 		var isTouchedConfirmPassword = fields.isTouchedConfirmPassword;
+		var organization = fields.organization;
+		var validOrganization = fields.isValidOrganization;
+		var isTouchedOrganization = fields.isTouchedOrganization
 		switch (field) {
 			case "username":
 				validUsername = value.length > 0 && value.length <= 20;
@@ -122,6 +131,13 @@ const Register = () => {
 				confirmPassword = value;
 				isTouchedConfirmPassword = true;
 				break;
+				case "organization":
+					validOrganization = value.length >=2  && value.length<=50
+						? true
+						: false;
+					organization = value;
+					isTouchedOrganization = true;
+					break;
 			default:
 				break;
 		}
@@ -145,6 +161,9 @@ const Register = () => {
 			isTouchedEmail: isTouchedEmail,
 			isTouchedPassword: isTouchedPassword,
 			isTouchedConfirmPassword: isTouchedConfirmPassword,
+			organization:organization,
+			isValidOrganization:validOrganization,
+			isTouchedOrganization:isTouchedOrganization
 		}));
 
 		validateForm();
@@ -179,7 +198,8 @@ const Register = () => {
 					userName: fields.username,
 					lastName: fields.lastName,
 					email: fields.email,
-					password:fields.password
+					password: fields.password,
+					organization:fields.organization,
 				})
 				.then((response) => {
 					navigate("/", { replace: true });
@@ -319,6 +339,27 @@ const Register = () => {
 					onChange={handleChange}
 					onBlur={handleChange}
 				/>
+				<TextField
+					type="text"
+					name="organization"
+					label="Organization"
+					sx={{ m: 1 }}
+					error={
+						!fields.isValidOrganization && fields.isTouchedOrganization
+					}
+					color={
+						fields.isValidOrganization && fields.isTouchedOrganization
+							? "success"
+							: "primary"
+					}
+					focused={
+						fields.isValidOrganization && fields.isTouchedOrganization
+							? true
+							: false
+					}
+					onChange={handleChange}
+					onBlur={handleChange}
+				/>
 				<Button
 					type="submit"
 					disabled={!canRegister}
@@ -329,6 +370,10 @@ const Register = () => {
 				</Button>
 			</form>
 			<Link to="/signIn">Already have an account</Link>
+			{
+				loading &&
+				<Loader />
+			}
 		</Box>
 	);
 };

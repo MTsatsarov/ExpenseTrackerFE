@@ -5,10 +5,13 @@ import ChangePasswordModal from "./ChangePasswordModal/ChangePasswordModal"
 import { apiUrl, apiRoutes } from "../../../../apiConfig"
 import instance from "../../../../axios/axios"
 import Toaster from "../../../utils/Toaster/Toaster"
+import Loader from "../../../utils/Loader/Loader"
+import styles from "./Dashboard.module.css"
 const UserSettings = () => {
 
 	const [showChangePass, SetShowChangePass] = useState<boolean>(false)
 	const [model, setModel] = useState<any>({});
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const onButtonClick = (e: any) => {
 		const { name, value } = e.target;
@@ -25,7 +28,8 @@ const UserSettings = () => {
 	}
 
 	const submitForm = () => {
-		instance.post(`${apiUrl}/${apiRoutes.updateUser}`, {firstName:model.firstName, lastName:model.lastName}).then((response) => {
+		setLoading(true)
+		instance.post(`${apiUrl}/${apiRoutes.updateUser}`, { firstName: model.firstName, lastName: model.lastName }).then((response) => {
 			Toaster.show('success', "", response.data)
 		}).catch(function (error) {
 			if (error.response) {
@@ -39,6 +43,7 @@ const UserSettings = () => {
 				});
 			}
 		});
+		setLoading(false)
 	}
 
 	const toggleChangePassword = () => {
@@ -46,6 +51,10 @@ const UserSettings = () => {
 	}
 	return (
 		<>
+			{
+				loading &&
+				<Loader />
+			}
 			<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
 				<Box
 					sx={{
@@ -61,8 +70,9 @@ const UserSettings = () => {
 				</Box>
 			</Slide>
 			{showChangePass &&
-				<ChangePasswordModal  show={showChangePass} onClose={toggleChangePassword} />
+				<ChangePasswordModal show={showChangePass} onClose={toggleChangePassword} />
 			}
+
 		</>
 
 	)

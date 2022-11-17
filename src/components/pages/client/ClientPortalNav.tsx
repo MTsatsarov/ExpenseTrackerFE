@@ -65,7 +65,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 							<HistoryIcon sx={{ color: 'white' }} />
 						</ListItemIcon>
 						<ListItemText>
-							<span style={{ fontSize: '0.9em', fontWeight: 300, color: 'white' }}>History</span>
+							<span style={{ fontSize: '0.9em', fontWeight: 300, color: 'white' }}>Organization History</span>
 						</ListItemText>
 					</ListItem>
 				</Link>
