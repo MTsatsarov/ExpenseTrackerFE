@@ -1,14 +1,14 @@
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Box,Typography } from "@mui/material";
 import { DailyTransactions } from '../Dashboard';
-
+import styles from "./ExpenseByDay.module.css"
 interface ExpenseByDayProps{
 transactions: Array<DailyTransactions>
 }
 const ExpensesByDay = (props:ExpenseByDayProps) => {
 
 	return (
-		<Box sx={{ pt: 5,maxWidth:'1200px' }}>
+		<Box  className={styles.box} sx={{ pt: 5,maxWidth:'1200px' }}>
 			<Typography sx={{ textAlign: 'center', mb: 3 }} variant="h5">Daily transactions for current month</Typography>
 			<BarChart
 				width={1200}

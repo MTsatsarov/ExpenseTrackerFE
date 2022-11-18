@@ -7,6 +7,7 @@ import { apiUrl, apiRoutes } from "../../../../apiConfig";
 import Toaster from "../../../utils/Toaster/Toaster";
 import { useState, useEffect } from "react";
 import Loader from "../../../utils/Loader/Loader";
+import styles from "./Dashboard.module.css"
 export interface StoreTransactions {
 	name: string,
 	count: number
@@ -98,7 +99,7 @@ const Dashboard = () => {
 			<Loader />
 		}
 			<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
-				<Box
+				<Box className={styles.box}
 					sx={{
 						display: "flex",
 						justifyContent: "space-evenly",
@@ -136,14 +137,14 @@ const Dashboard = () => {
 							</Box>
 						</Box>
 
-						<Box
+						<Box className={styles.box}
 							sx={{
 								display: "flex",
 								width: "100%",
 								justifyContent: "space-evenly",
 							}}
 						>
-							<Box sx={{ width: "50%", }}>
+							<Box sx={{ width: "50%",p:0 }}>
 								<ExpensesByStore transactions={transactionsByStore} />
 							</Box>
 							<Box sx={{ width: "50%", m: 4 }}><ExpensesCountByMonths transactions={monthlyTransactions} /> </Box>

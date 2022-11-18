@@ -79,7 +79,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	const createExpense = async () => {
 		if (products.length > 0 && selectedStore.name.length > 0) {
 			setLoading(true)
-			await instance.post(`${apiUrl}/${apiRoutes.createExpense}`, { products: products, storeName: selectedStore.name, storeId: selectedStore.storeId })
+			await instance.post(`${apiUrl}/${apiRoutes.createExpense}`, { products: products, storeName: selectedStore.name, storeId: selectedStore.storeId, type:"product" })
 				.then((response) => {
 					if (response.status === 200 || response.status === 201) {
 						Toaster.show("success", "", response.data);

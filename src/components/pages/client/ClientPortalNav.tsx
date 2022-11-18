@@ -8,6 +8,7 @@ import {
 import HistoryIcon from '@mui/icons-material/History';
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import CorporateFareRoundedIcon from '@mui/icons-material/CorporateFareRounded';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react'
 interface ClientPortalNav {
@@ -65,7 +66,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 							<HistoryIcon sx={{ color: 'white' }} />
 						</ListItemIcon>
 						<ListItemText>
-							<span style={{ fontSize: '0.9em', fontWeight: 300, color: 'white' }}>History</span>
+							<span style={{ fontSize: '0.9em', fontWeight: 300, color: 'white' }}>Organization History</span>
 						</ListItemText>
 					</ListItem>
 				</Link>
@@ -89,6 +90,24 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 					</ListItem>
 				</Link>
 
+				<Divider sx={{ background: "#A2A0A0" }} />
+
+				<Link to={'/portal/user/MyOrganization'} style={{ textDecoration: 'none' }}>
+					<ListItem
+						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
+						button
+
+						onClick={() => onClick('/portal/user/myOrganization')}
+						selected={currSection === '/portal/user/myOrganization'}
+					>
+						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+							<CorporateFareRoundedIcon sx={{ color: 'white' }} />
+						</ListItemIcon>
+						<ListItemText>
+							<span style={{ fontSize: '0.9em', fontWeight: 300, color: 'white' }}>My Organization</span>
+						</ListItemText>
+					</ListItem>
+				</Link>
 				<Divider sx={{ background: "#A2A0A0" }} />
 			</List>
 		</>

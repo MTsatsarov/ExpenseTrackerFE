@@ -22,7 +22,7 @@ const ExpensesByStore = (props: ExpenseByStoreProps) => {
 				startAngle={180}
 				endAngle={0}
 			>
-				<RadialBar label={{ fill: '#666', position: 'insideStart' }} background dataKey='count' />
+				<RadialBar label={{ fill: '#666', position: 'insideStart'}} background dataKey='count' />
 				<Legend iconSize={20} width={200} height={140} layout='vertical' verticalAlign='middle' align="right" />
 				<Tooltip />
 			</RadialBarChart>

@@ -8,7 +8,7 @@ import Toaster from "../utils/Toaster/Toaster";
 import { useNavigate } from "react-router-dom";
 import Loader from "../utils/Loader/Loader";
 
-interface IRegistrationfields {
+ export interface IBaseRegistrationFields {
 	username: string;
 	firstName: string;
 	lastName: string;
@@ -27,6 +27,11 @@ interface IRegistrationfields {
 	isTouchedPassword: boolean;
 	isTouchedEmail: boolean;
 	isTouchedConfirmPassword: boolean;
+}
+interface IRegistrationfields extends IBaseRegistrationFields {
+	organization: string;
+	isValidOrganization: boolean;
+	isTouchedOrganization: boolean;
 }
 
 const Register = () => {
@@ -51,6 +56,9 @@ const Register = () => {
 		isTouchedPassword: false,
 		isTouchedEmail: false,
 		isTouchedConfirmPassword: false,
+		organization: '',
+		isValidOrganization: false,
+		isTouchedOrganization: false,
 	});
 	const [canRegister, setCanRegister] = useState<boolean>(false);
 	useEffect(() => {
@@ -81,6 +89,9 @@ const Register = () => {
 		var isTouchedPassword = fields.isTouchedPassword;
 		var isTouchedEmail = fields.isTouchedEmail;
 		var isTouchedConfirmPassword = fields.isTouchedConfirmPassword;
+		var organization = fields.organization;
+		var validOrganization = fields.isValidOrganization;
+		var isTouchedOrganization = fields.isTouchedOrganization
 		switch (field) {
 			case "username":
 				validUsername = value.length > 0 && value.length <= 20;
@@ -122,6 +133,13 @@ const Register = () => {
 				confirmPassword = value;
 				isTouchedConfirmPassword = true;
 				break;
+			case "organization":
+				validOrganization = value.length >= 2 && value.length <= 50
+					? true
+					: false;
+				organization = value;
+				isTouchedOrganization = true;
+				break;
 			default:
 				break;
 		}
@@ -145,6 +163,9 @@ const Register = () => {
 			isTouchedEmail: isTouchedEmail,
 			isTouchedPassword: isTouchedPassword,
 			isTouchedConfirmPassword: isTouchedConfirmPassword,
+			organization: organization,
+			isValidOrganization: validOrganization,
+			isTouchedOrganization: isTouchedOrganization
 		}));
 
 		validateForm();
@@ -179,7 +200,8 @@ const Register = () => {
 					userName: fields.username,
 					lastName: fields.lastName,
 					email: fields.email,
-					password: fields.password
+					password: fields.password,
+					organization: fields.organization,
 				})
 				.then((response) => {
 					navigate("/", { replace: true });
@@ -313,6 +335,27 @@ const Register = () => {
 					}
 					focused={
 						fields.isValidConfirmPassword && fields.isTouchedConfirmPassword
+							? true
+							: false
+					}
+					onChange={handleChange}
+					onBlur={handleChange}
+				/>
+				<TextField
+					type="text"
+					name="organization"
+					label="Organization"
+					sx={{ m: 1 }}
+					error={
+						!fields.isValidOrganization && fields.isTouchedOrganization
+					}
+					color={
+						fields.isValidOrganization && fields.isTouchedOrganization
+							? "success"
+							: "primary"
+					}
+					focused={
+						fields.isValidOrganization && fields.isTouchedOrganization
 							? true
 							: false
 					}
