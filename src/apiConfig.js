@@ -2,19 +2,30 @@ const apiUrl = "https://localhost:44305/api"
 
 
 const apiRoutes = {
+
+	//Account
 	signIn: 'account/signIn',
 	signUp: 'account/signUp',
 	logOut: 'account/logOut',
+	changePass: 'account/changePassword',
+	updateUser: 'account/updateUser',
+	getCurrentUser: 'account/current',
+
+	//Store
+	getStores: 'store/getStores',
+
+	//Products
+	getProducts: 'product/getProducts',
+
+	//Transactions
 	createExpense: 'transaction/create',
 	getTransactions: 'transaction/getTransactions',
 	getTrransactionsByUser: 'transaction/getUserTransactions',
 	getDashboard: 'transaction/getDashboardTransactions',
-	getStores: 'store/getStores',
-	getProducts: 'product/getProducts',
-	getCurrentUser: 'account/current',
-	getTransactionDetails:'transaction/details',
-	changePass:'account/changePassword',
-	updateUser:'account/updateUser'
+	getTransactionDetails: 'transaction/details',
+
+	//Organization
+	addEmployee: 'organization/addEmployee'
 }
 
 

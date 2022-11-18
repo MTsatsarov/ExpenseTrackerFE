@@ -20,7 +20,7 @@ interface ITransactionState {
 	totalPrice: number,
 	createdOn: Date
 }
-const ClientHistory = () => {
+const OrganizationHistory = () => {
 
 	const [transactions, setTransactiosn] = useState<Array<ITransactionState>>([])
 	const [displayMenu, setDisplayMenu] = useState<boolean>(false)
@@ -144,4 +144,4 @@ const ClientHistory = () => {
 	)
 }
 
-export default ClientHistory
+export default OrganizationHistory

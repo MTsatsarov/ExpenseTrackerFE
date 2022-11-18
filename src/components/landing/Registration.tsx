@@ -8,27 +8,29 @@ import Toaster from "../utils/Toaster/Toaster";
 import { useNavigate } from "react-router-dom";
 import Loader from "../utils/Loader/Loader";
 
-interface IRegistrationfields {
+ export interface IBaseRegistrationFields {
 	username: string;
 	firstName: string;
 	lastName: string;
 	email: string;
 	password: string;
 	confirmPassword: string;
-	organization: string;
 	isValidUsername: boolean;
 	isValidFirstName: boolean;
 	isValidLastName: boolean;
 	isValidPassword: boolean;
 	isValidEmail: boolean;
 	isValidConfirmPassword: boolean;
-	isValidOrganization: boolean;
 	isTouchedUsername: boolean;
 	isTouchedFirstName: boolean;
 	isTouchedLastName: boolean;
 	isTouchedPassword: boolean;
 	isTouchedEmail: boolean;
 	isTouchedConfirmPassword: boolean;
+}
+interface IRegistrationfields extends IBaseRegistrationFields {
+	organization: string;
+	isValidOrganization: boolean;
 	isTouchedOrganization: boolean;
 }
 
@@ -54,9 +56,9 @@ const Register = () => {
 		isTouchedPassword: false,
 		isTouchedEmail: false,
 		isTouchedConfirmPassword: false,
-		organization:'',
-		isValidOrganization:false,
-		isTouchedOrganization:false,
+		organization: '',
+		isValidOrganization: false,
+		isTouchedOrganization: false,
 	});
 	const [canRegister, setCanRegister] = useState<boolean>(false);
 	useEffect(() => {
@@ -131,13 +133,13 @@ const Register = () => {
 				confirmPassword = value;
 				isTouchedConfirmPassword = true;
 				break;
-				case "organization":
-					validOrganization = value.length >=2  && value.length<=50
-						? true
-						: false;
-					organization = value;
-					isTouchedOrganization = true;
-					break;
+			case "organization":
+				validOrganization = value.length >= 2 && value.length <= 50
+					? true
+					: false;
+				organization = value;
+				isTouchedOrganization = true;
+				break;
 			default:
 				break;
 		}
@@ -161,9 +163,9 @@ const Register = () => {
 			isTouchedEmail: isTouchedEmail,
 			isTouchedPassword: isTouchedPassword,
 			isTouchedConfirmPassword: isTouchedConfirmPassword,
-			organization:organization,
-			isValidOrganization:validOrganization,
-			isTouchedOrganization:isTouchedOrganization
+			organization: organization,
+			isValidOrganization: validOrganization,
+			isTouchedOrganization: isTouchedOrganization
 		}));
 
 		validateForm();
@@ -199,7 +201,7 @@ const Register = () => {
 					lastName: fields.lastName,
 					email: fields.email,
 					password: fields.password,
-					organization:fields.organization,
+					organization: fields.organization,
 				})
 				.then((response) => {
 					navigate("/", { replace: true });
