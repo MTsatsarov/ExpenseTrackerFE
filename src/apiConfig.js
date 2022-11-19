@@ -25,7 +25,8 @@ const apiRoutes = {
 	getTransactionDetails: 'transaction/details',
 
 	//Organization
-	addEmployee: 'organization/addEmployee'
+	addEmployee: 'organization/addEmployee',
+	getEmployees:'organization/getEmployees'
 }
 
 
