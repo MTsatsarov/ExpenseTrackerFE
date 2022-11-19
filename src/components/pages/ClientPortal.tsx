@@ -1,4 +1,4 @@
-import { Drawer, styled, Divider, AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, SpeedDial,SpeedDialAction } from "@mui/material";
+import { Drawer, styled, Divider, AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, SpeedDial, SpeedDialAction } from "@mui/material";
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import BroadcastOnHomeIcon from '@mui/icons-material/BroadcastOnHome';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -80,10 +80,10 @@ const ClientPortal = () => {
 	const changeSection = (section: string) => {
 		setSectionName(section)
 	}
-	
+
 	const actions = [
 		{ icon: <LocalGroceryStoreIcon color="primary" fontSize="medium" onClick={onCLick} />, name: 'Groceries' },
-		{ icon: <BroadcastOnHomeIcon color="primary" fontSize="medium"   />, name: 'Services' },
+		{ icon: <BroadcastOnHomeIcon color="primary" fontSize="medium" />, name: 'Services' },
 	];
 
 	return (
@@ -206,7 +206,7 @@ const ClientPortal = () => {
 					sx={{ position: "absolute", top: "80%", left: "96%" }}
 					color="primary"
 					ariaLabel="SpeedDial tooltip example"
-					
+
 					icon={<AddIcon />}>
 
 					{actions.map((action) => (

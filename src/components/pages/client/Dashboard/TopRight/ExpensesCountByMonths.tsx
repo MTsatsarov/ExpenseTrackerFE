@@ -6,8 +6,6 @@ interface ExpensesCountByMonthsInterface {
 transactions:Array<TransactonsByMonth>
 }
 const ExpensesCountByMonths = (props:ExpensesCountByMonthsInterface) => {
-
-
 	return (
 		<>
 		<Typography sx={{textAlign:'center',mb:3}} variant="h5">Transactions for current year.</Typography>
