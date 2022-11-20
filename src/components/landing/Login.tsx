@@ -104,6 +104,7 @@ const Login = () => {
 										lastName: response.data.lastName,
 										role: response.data.role,
 										email: response.data.email,
+										currencySymbol: response.data.currencySymbol,
 									})
 								)
 							}

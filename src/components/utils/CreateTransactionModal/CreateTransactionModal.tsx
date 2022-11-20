@@ -27,6 +27,7 @@ import NewProductForm from "../../pages/client/CreateExpense/NewProductForm/NewP
 import { apiRoutes, apiUrl } from "../../../apiConfig";
 import Toaster from "../Toaster/Toaster";
 import Loader from "../Loader/Loader";
+import { useAppSelector } from "../../../app/hooks";
 
 interface ICreateTransactionModalProps {
 	showModal: boolean;
@@ -44,6 +45,7 @@ interface iStore {
 	storeId?: string | null,
 	name: string,
 }
+
 const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	const [products, setProducts] = useState<Array<IProductList>>([]);
 	const [showProductForm, setShowProductForm] = useState<boolean>(false);
@@ -51,7 +53,8 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	const [selectedStore, setSelectedStore] = useState<iStore>({ storeId: null, name: '' })
 	const [storeSuggestions, setStoreSuggestions] = useState<Array<iStore>>([])
 	const [loading, setLoading] = useState<boolean>(false);
-
+	var user = useAppSelector((state) => state.user);
+	console.log(user)
 	useEffect(() => {
 		instance.get(`${apiUrl}/${apiRoutes.getStores}`).then((response) => {
 			setStoreSuggestions(response.data);
@@ -259,7 +262,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 									</TableBody>
 								</Table>
 							</TableContainer>
-							<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong>Total price of the transaction is: $ {totalPrice}</strong></Box>
+							<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong>Total price of the transaction is: {totalPrice} {user.currencySymbol}</strong></Box>
 							<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "center", mt: 5 }}>Create expense</Button>
 						</Box>
 					</Box>

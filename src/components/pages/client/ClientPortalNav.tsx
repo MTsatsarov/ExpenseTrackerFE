@@ -9,6 +9,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import CorporateFareRoundedIcon from '@mui/icons-material/CorporateFareRounded';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react'
 interface ClientPortalNav {
@@ -105,6 +106,24 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						</ListItemIcon>
 						<ListItemText>
 							<span style={{ fontSize: '0.9em', fontWeight: 300, color: 'white' }}>My Organization</span>
+						</ListItemText>
+					</ListItem>
+				</Link>
+				<Divider sx={{ background: "#A2A0A0" }} />
+				
+				<Link to={'/portal/user/Storage'} style={{ textDecoration: 'none' }}>
+					<ListItem
+						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
+						button
+
+						onClick={() => onClick('/portal/user/Storage')}
+						selected={currSection === '/portal/user/Storage'}
+					>
+						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+							<WarehouseIcon sx={{ color: 'white' }} />
+						</ListItemIcon>
+						<ListItemText>
+							<span style={{ fontSize: '0.9em', fontWeight: 300, color: 'white' }}>Storage</span>
 						</ListItemText>
 					</ListItem>
 				</Link>
