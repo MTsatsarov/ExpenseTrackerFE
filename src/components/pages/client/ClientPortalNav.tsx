@@ -28,7 +28,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 	useEffect(() => {
 		var section = window.location.pathname
 		onClick(section)
-	}, [])
+	}, [currSection])
 
 
 	return (
@@ -98,8 +98,8 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
 						button
 
-						onClick={() => onClick('/portal/user/myOrganization')}
-						selected={currSection === '/portal/user/myOrganization'}
+						onClick={() => onClick('/portal/user/MyOrganization')}
+						selected={currSection === '/portal/user/MyOrganization'}
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<CorporateFareRoundedIcon sx={{ color: 'white' }} />
