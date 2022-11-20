@@ -1,4 +1,4 @@
-import { Typography, TextField, Button } from "@mui/material";
+import { Typography, TextField, Button, Select, MenuItem, InputLabel } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ import Toaster from "../utils/Toaster/Toaster";
 import { useNavigate } from "react-router-dom";
 import Loader from "../utils/Loader/Loader";
 
- export interface IBaseRegistrationFields {
+export interface IBaseRegistrationFields {
 	username: string;
 	firstName: string;
 	lastName: string;
@@ -30,8 +30,17 @@ import Loader from "../utils/Loader/Loader";
 }
 interface IRegistrationfields extends IBaseRegistrationFields {
 	organization: string;
+	currency: ICurrency | undefined;
 	isValidOrganization: boolean;
+	isValidCurrency: boolean;
 	isTouchedOrganization: boolean;
+	isTouchedCurrency: boolean;
+
+}
+interface ICurrency {
+	currency: string,
+	abbreviation: string,
+	symbol: string,
 }
 
 const Register = () => {
@@ -59,8 +68,37 @@ const Register = () => {
 		organization: '',
 		isValidOrganization: false,
 		isTouchedOrganization: false,
+		currency: undefined,
+		isValidCurrency: false,
+		isTouchedCurrency: false,
+
 	});
 	const [canRegister, setCanRegister] = useState<boolean>(false);
+	const [currencies, setCurrencies] = useState<Array<ICurrency>>([])
+
+	useEffect(() => {
+		const getCurrencies = async () => {
+			await instance
+				.get(`${apiUrl}/${apiRoutes.getCurrencies}`)
+				.then((response) => {
+					setCurrencies(response.data as Array<ICurrency>)
+				})
+				.catch(function (error) {
+					if (error.response) {
+						var errors =
+							error.response &&
+							(error.response.data.message ||
+								error.response.data ||
+								error.response.statusText);
+						errors.split(/\r?\n/).forEach((message: string) => {
+							setLoading(false);
+							Toaster.show("error", "", message);
+						});
+					}
+				})
+		}
+		getCurrencies();
+	}, [])
 	useEffect(() => {
 		validateForm();
 	}, [fields]);
@@ -92,6 +130,9 @@ const Register = () => {
 		var organization = fields.organization;
 		var validOrganization = fields.isValidOrganization;
 		var isTouchedOrganization = fields.isTouchedOrganization
+		var currency = fields.currency
+		var isValidCurrency = fields.isValidCurrency
+		var isTouchedCurrency = fields.isTouchedCurrency
 		switch (field) {
 			case "username":
 				validUsername = value.length > 0 && value.length <= 20;
@@ -140,6 +181,17 @@ const Register = () => {
 				organization = value;
 				isTouchedOrganization = true;
 				break;
+				case "currency":
+					var isValid = currencies.find(x=>x.currency===value);
+				isValidCurrency  = isValid
+					? true
+					: false;
+					if (isValidCurrency) {
+						currency = isValid  ;
+					}
+				
+				isTouchedCurrency = true;
+				break;
 			default:
 				break;
 		}
@@ -165,7 +217,10 @@ const Register = () => {
 			isTouchedConfirmPassword: isTouchedConfirmPassword,
 			organization: organization,
 			isValidOrganization: validOrganization,
-			isTouchedOrganization: isTouchedOrganization
+			isTouchedOrganization: isTouchedOrganization,
+			currency:currency,
+			isValidCurrency:isValidCurrency,
+			isTouchedCurrency:isTouchedCurrency,
 		}));
 
 		validateForm();
@@ -185,7 +240,11 @@ const Register = () => {
 			fields.isTouchedPassword &&
 			fields.isTouchedConfirmPassword &&
 			fields.password === fields.confirmPassword &&
-			fields.password.length >= 8;
+			fields.password.length >= 8 &&
+			fields.isValidOrganization &&
+			fields.isTouchedOrganization && 
+			fields.isValidCurrency && 
+			fields.isTouchedCurrency;
 		setCanRegister(isValidForm);
 	};
 
@@ -202,6 +261,7 @@ const Register = () => {
 					email: fields.email,
 					password: fields.password,
 					organization: fields.organization,
+					currency: fields.currency,
 				})
 				.then((response) => {
 					navigate("/", { replace: true });
@@ -362,6 +422,24 @@ const Register = () => {
 					onChange={handleChange}
 					onBlur={handleChange}
 				/>
+
+				<Select
+					name="currency"
+					label="Age"
+					sx={{ m: 1 }}
+					error={
+						!fields.isValidCurrency && fields.isTouchedCurrency
+					}
+				color={
+					fields.isValidCurrency && fields.isTouchedCurrency
+						? "success"
+						: "primary"
+				}
+				onChange={handleChange}
+				onBlur={handleChange}
+				>
+					{currencies.map(x => <MenuItem className="d-flex" value={x.currency}>{x.currency} </MenuItem>)}
+				</Select>
 				<Button
 					type="submit"
 					disabled={!canRegister}
@@ -376,7 +454,7 @@ const Register = () => {
 				loading &&
 				<Loader />
 			}
-		</Box>
+		</Box >
 	);
 };
 
