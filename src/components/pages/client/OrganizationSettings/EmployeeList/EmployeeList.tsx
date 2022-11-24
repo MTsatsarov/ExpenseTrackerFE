@@ -122,7 +122,7 @@ const EmployeeList = () => {
 										<TableCell scope='row'>{x.totalSum}</TableCell>
 										<TableCell scope='row'>{x.lastTransaction}</TableCell>
 										<TableCell scope='row'>
-											<Button disabled ={user.role !== "OWNER"} variant='contained' onClick={(e) => toggleMenu(e, x)}>Actions</Button>
+											<Button disabled={!user.roles.includes("OWNER") && true} variant='contained' onClick={(e) => toggleMenu(e, x)}>Actions</Button>
 										</TableCell>
 									</TableRow>)}
 							</TableBody>

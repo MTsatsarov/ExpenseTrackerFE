@@ -102,7 +102,7 @@ const Login = () => {
 										id: response.data.userId,
 										firstName: response.data.firstName,
 										lastName: response.data.lastName,
-										role: response.data.role,
+										roles: response.data.roles,
 										email: response.data.email,
 										currencySymbol: response.data.currencySymbol,
 									})
