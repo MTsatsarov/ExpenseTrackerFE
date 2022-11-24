@@ -54,7 +54,6 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	const [storeSuggestions, setStoreSuggestions] = useState<Array<iStore>>([])
 	const [loading, setLoading] = useState<boolean>(false);
 	var user = useAppSelector((state) => state.user);
-	console.log(user)
 	useEffect(() => {
 		instance.get(`${apiUrl}/${apiRoutes.getStores}`).then((response) => {
 			setStoreSuggestions(response.data);
@@ -255,14 +254,14 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 												</TableCell>
 												<TableCell align="right">{row.quantity}</TableCell>
 												<TableCell align="right">{row.price}</TableCell>
-												<TableCell align="right">{row.total}</TableCell>
+												<TableCell align="right">{row.total.toFixed(2)}</TableCell>
 												<TableCell onClick={() => removeProduct(index)} data-index={index} align="right"><Tooltip title="Remove product"><IconButton sx={{ color: 'red' }}><DeleteIcon /></IconButton></Tooltip></TableCell>
 											</TableRow>
 										))}
 									</TableBody>
 								</Table>
 							</TableContainer>
-							<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong>Total price of the transaction is: {totalPrice} {user.currencySymbol}</strong></Box>
+							<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong>Total price of the transaction is: {totalPrice.toFixed(2)} {user.currencySymbol}</strong></Box>
 							<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "center", mt: 5 }}>Create expense</Button>
 						</Box>
 					</Box>

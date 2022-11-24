@@ -37,7 +37,6 @@ instance.interceptors.response.use(
 		var location = window.location;
 		var locationPathname = location.pathname.replace(process.env.PUBLIC_URL,"");
 		var originalRequest = error.config
-		console.log(originalRequest)
 		originalRequest._retry = false;
 		var responseStatus = error.response.status;
 		if (error.response && responseStatus === 401) {

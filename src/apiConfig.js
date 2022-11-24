@@ -28,6 +28,11 @@ const apiRoutes = {
 	addEmployee: 'organization/addEmployee',
 	getEmployees:'organization/getEmployees',
 	getCurrencies:'organization/currencies',
+
+	//Storage
+	getStorage:'storage/storage',
+	updateStorage:'storage/update',
+	addNewStore:'storage/add',
 }
 
 
