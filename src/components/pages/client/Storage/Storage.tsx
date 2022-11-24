@@ -1,4 +1,4 @@
-import { Box, Radio, Slide, Button } from "@mui/material"
+import { Box, Radio, Slide, Button, TablePagination } from "@mui/material"
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from "react"
 import { apiRoutes, apiUrl } from "../../../../apiConfig"
@@ -13,6 +13,13 @@ import Loader from "../../../utils/Loader/Loader";
 import NewStorage from "./NewStorage/NewStorage";
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import { useAppSelector } from "../../../../app/hooks";
+
+interface IBaseStorage {
+	page: number,
+
+	count: number,
+	products: Array<IStorage>
+}
 export interface IStorage {
 	id: string,
 	product: string,
@@ -22,6 +29,7 @@ export interface IStorage {
 }
 const Storage = () => {
 
+	const defaultPage = 1;
 	const [storage, setStorage] = useState<Array<IStorage>>([])
 	const [selectedRow, setSelectedRow] = useState<IStorage>({} as IStorage)
 	const [canEdit, setCanEdit] = useState<boolean>(false)
@@ -29,16 +37,21 @@ const Storage = () => {
 	const [isNew, setIsNew] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
 	const [newStorageModel, setNewStorageModel] = useState<IStorage>({} as IStorage)
+	const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+	const [page, setPage] = useState<number>(1);
+	const [count, setCount] = useState<number>(0);
+
 	var user = useAppSelector((state) => state.user);
-	
+
 	useEffect(() => {
 
-		getStorage();
+		getStorage(defaultPage,rowsPerPage);
 	}, [])
-	const getStorage = async () => {
+	const getStorage = async (page:number,rowsPerPage:number) => {
 		setLoading(true)
-		instance.get(`${apiUrl}/${apiRoutes.getStorage}`).then((response) => {
-			setStorage(response.data as Array<IStorage>)
+		instance.get(`${apiUrl}/${apiRoutes.getStorage}?page=${page}&itemsPerPage=${rowsPerPage}`).then((response) => {
+			setStorage(response.data.products as Array<IStorage>)
+			setCount(response.data.count)
 		}).catch(function (error) {
 			if (error.response) {
 				var errors =
@@ -76,7 +89,7 @@ const Storage = () => {
 
 	const editStorage = async () => {
 		await instance.patch(`${apiUrl}/${apiRoutes.updateStorage}`, editModel).then((response) => {
-			getStorage();
+			getStorage(1,rowsPerPage);
 			onCancelAction();
 		}).catch(function (error) {
 			if (error.response) {
@@ -98,7 +111,6 @@ const Storage = () => {
 	}
 
 	const updateNewStorageModel = (e: any) => {
-		console.log(e.target.value)
 		var product = newStorageModel.product;
 		var quantity = newStorageModel.quantity;
 		if (e.target.name === 'product') {
@@ -112,21 +124,19 @@ const Storage = () => {
 		setNewStorageModel(prevState => ({
 			...prevState,
 			product: product,
-			quantity:quantity,
+			quantity: quantity,
 		}))
-		console.log(newStorageModel)
 	}
 
 	const add = async () => {
 		var model = {
-			product : newStorageModel.product,
-			quantity : newStorageModel.quantity,
-			email : user.email
+			product: newStorageModel.product,
+			quantity: newStorageModel.quantity,
+			email: user.email
 		}
-console.log("here")
 		await instance.post(`${apiUrl}/${apiRoutes.addNewStore}`, model).then((response) => {
 			setLoading(true)
-			getStorage();
+			getStorage(1,rowsPerPage);
 			onCancelAction();
 			Toaster.show("success", "", `Succesfully added ${model.product}`);
 		}).catch(function (error) {
@@ -140,10 +150,24 @@ console.log("here")
 					Toaster.show("error", "", message);
 				});
 			}
-		}).finally(()=> {
+		}).finally(() => {
 			setLoading(false)
 		});
 	}
+	const handleChangePage = async (
+		event: React.MouseEvent<HTMLButtonElement> | null,
+		newPage: number,
+	) => {
+		console.log(newPage)
+		setPage(newPage+1);
+		await getStorage(newPage+1,rowsPerPage)
+	};
+	const handleChangeRowsPerPage = async (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) => {
+		setRowsPerPage(parseInt(event.target.value,));
+		await getStorage(page,parseInt(event.target.value,))
+	};
 	return (
 		<>
 			{loading ? <Loader /> :
@@ -190,7 +214,7 @@ console.log("here")
 										<Button
 											sx={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }}
 											variant="contained"
-											color="success" onClick={canEdit ? editStorage :add}>
+											color="success" onClick={canEdit ? editStorage : add}>
 											<CheckIcon fontSize="small" />
 											Confirm
 										</Button>
@@ -222,7 +246,7 @@ console.log("here")
 								<span style={{ width: '3.5rem' }} className="py-4 px-1 mr-4 text-center">
 									<FiberNewIcon color="primary" />
 								</span>
-								<NewStorage onChange = {updateNewStorageModel} />
+								<NewStorage onChange={updateNewStorageModel} />
 							</div>}
 						{
 							storage.map(s =>
@@ -233,6 +257,15 @@ console.log("here")
 									<EditStorage model={s} changeEditModel={changeEditModel} canEdit={canEdit && selectedRow.id === s.id} />
 								</div>)
 						}
+						<TablePagination
+							component="div"
+							count={count}
+							page={page-1}
+							onPageChange={handleChangePage}
+							rowsPerPage={rowsPerPage}
+							rowsPerPageOptions={[5, 10, 25]}
+							onRowsPerPageChange={handleChangeRowsPerPage}
+						/>
 					</Box >
 				</Slide>}
 		</>
