@@ -10,7 +10,8 @@ const apiRoutes = {
 	changePass: 'account/changePassword',
 	updateUser: 'account/updateUser',
 	getCurrentUser: 'account/current',
-
+	refreshToken:'account/refreshToken',
+	
 	//Store
 	getStores: 'store/getStores',
 

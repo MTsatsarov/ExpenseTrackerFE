@@ -26,7 +26,7 @@ export const userSlice = createSlice({
 			localStorage.setItem("refresh_token", action.payload.refreshToken)
 		},
 		setCurrentUser: (state, action) => {
-			state.id = action.payload.userId;
+			state.id = action.payload.id;
 			state.lastName = action.payload.lastName;
 			state.firstName = action.payload.firstName;
 			state.roles = action.payload.roles;
