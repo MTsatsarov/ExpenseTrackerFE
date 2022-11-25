@@ -179,7 +179,7 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 				})
 				.finally(() => {
 					setLoading(false);
-					props.onCloseModal();
+					props.onCloseModal(true);
 				});
 		}
 	}

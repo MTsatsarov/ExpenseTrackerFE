@@ -1,4 +1,4 @@
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Slide, Menu, MenuItem } from "@mui/material"
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Slide, Menu, MenuItem, TablePagination } from "@mui/material"
 import { Box } from "@mui/system"
 import { appTheme } from "../../../../utils/AppTheme/AppTheme"
 import { useState, useEffect } from "react"
@@ -27,6 +27,9 @@ const EmployeeList = () => {
 	const [displayMenu, setDisplayMenu] = useState<boolean>(false)
 	const [anchorEl, setAnchorEl] = useState<any>()
 	const [selectedRow, setSelectedRow] = useState<number>(-1)
+	const [page, setPage] = useState<number>(1);
+	const [count, setCount] = useState<number>(0);
+	const [itemsPerPage, setItemsPerPage] = useState<number>(10);
 
 	var user = useAppSelector((state) => state.user);
 
@@ -47,42 +50,63 @@ const EmployeeList = () => {
 	const onOpenModal = () => {
 		setShowModal(true)
 	}
-	const onCloseModal = () => {
+	const onCloseModal = async (isSubmitted: boolean) => {
 		setShowModal(false)
-	}
-	useEffect(() => {
-		const getUsers = async () => {
-			setLoading(true);
-			await instance
-				.get(`${apiUrl}/${apiRoutes.getEmployees}`)
-				.then((response) => {
-					var users = response.data as Array<EmployeeList>
-					setEmployees(users);
-				})
-				.catch(function (error) {
-					if (error.response) {
-						var errors =
-							error.response &&
-							(error.response.data.message ||
-								error.response.data ||
-								error.response.statusText);
-						errors.split(/\r?\n/).forEach((message: string) => {
-
-							Toaster.show("error", "", message);
-						});
-					}
-				}).finally(() => {
-					setLoading(false);
-				})
+		if(isSubmitted){
+			await getUsers(1,itemsPerPage);
 		}
-		getUsers();
+	}
+	const getUsers = async (page: number, itemsPerPage: number) => {
+		setLoading(true);
+		await instance
+			.get(`${apiUrl}/${apiRoutes.getEmployees}?page=${page}&itemsPerPage=${itemsPerPage}`)
+			.then((response) => {
+				var users = response.data.employees as Array<EmployeeList>
+				setEmployees(users)
+				setCount(response.data.count)
+			})
+			.catch(function (error) {
+				if (error.response) {
+					var errors =
+						error.response &&
+						(error.response.data.message ||
+							error.response.data ||
+							error.response.statusText);
+					errors.split(/\r?\n/).forEach((message: string) => {
+
+						Toaster.show("error", "", message);
+					});
+				}
+			}).finally(() => {
+				setLoading(false);
+			})
+	}
+
+	useEffect(() => {
+
+		getUsers(page, itemsPerPage);
+
 	}, [])
+
+	const handleChangePage = async (
+		event: React.MouseEvent<HTMLButtonElement> | null,
+		newPage: number,
+	) => {
+		setPage(newPage + 1);
+		await getUsers(newPage + 1, itemsPerPage)
+	};
+
+	const handleChangeRowsPerPage = async (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) => {
+		setItemsPerPage(parseInt(event.target.value,));
+		await getUsers(page, parseInt(event.target.value,))
+	};
+
 	return (
 		<>
 			{loading && <Loader />}
 			<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
-
-
 				<Box sx={{
 					maxWidth: '90%', width: 'auto', mt: 2, alignSelf: 'center', overflow: 'auto', marginLeft: "auto",
 					marginRight: "auto",
@@ -98,7 +122,7 @@ const EmployeeList = () => {
 						marginRight: "auto",
 						borderRadius: 2,
 					}}>
-						<Table stickyHeader={true} sx={{ minHeight: 500 }}>
+						<Table stickyHeader={true}>
 							<TableHead sx={{ "& .MuiTableCell-stickyHeader": { backgroundColor: appTheme.palette.primary.main } }}>
 								<TableRow>
 									<TableCell scope='head' variant='head' sx={{ color: 'white' }}>Employee Email</TableCell>
@@ -145,6 +169,15 @@ const EmployeeList = () => {
 						<MenuItem disableRipple >ShowDetails</MenuItem>
 					</Menu>
 					{showModal && <NewEmployeeForm onCloseModal={onCloseModal} />}
+					<TablePagination
+						component="div"
+						count={count}
+						page={page - 1}
+						onPageChange={handleChangePage}
+						rowsPerPage={itemsPerPage}
+						rowsPerPageOptions={[5, 10, 25]}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+					/>
 				</Box>
 			</Slide>
 		</>
