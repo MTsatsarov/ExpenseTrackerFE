@@ -158,7 +158,6 @@ const Storage = () => {
 		event: React.MouseEvent<HTMLButtonElement> | null,
 		newPage: number,
 	) => {
-		console.log(newPage)
 		setPage(newPage+1);
 		await getStorage(newPage+1,rowsPerPage)
 	};
