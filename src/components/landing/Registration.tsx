@@ -1,4 +1,4 @@
-import { Typography, TextField, Button, Select, MenuItem, InputLabel } from "@mui/material";
+import { Typography, TextField, Button, Select, MenuItem, FormControl, Tooltip, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,7 +7,8 @@ import { apiUrl, apiRoutes } from "../../apiConfig";
 import Toaster from "../utils/Toaster/Toaster";
 import { useNavigate } from "react-router-dom";
 import Loader from "../utils/Loader/Loader";
-
+import InfoIcon from '@mui/icons-material/Info';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
 export interface IBaseRegistrationFields {
 	username: string;
 	firstName: string;
@@ -181,15 +182,15 @@ const Register = () => {
 				organization = value;
 				isTouchedOrganization = true;
 				break;
-				case "currency":
-					var isValid = currencies.find(x=>x.currency===value);
-				isValidCurrency  = isValid
+			case "currency":
+				var isValid = currencies.find(x => x.currency === value);
+				isValidCurrency = isValid
 					? true
 					: false;
-					if (isValidCurrency) {
-						currency = isValid  ;
-					}
-				
+				if (isValidCurrency) {
+					currency = isValid;
+				}
+
 				isTouchedCurrency = true;
 				break;
 			default:
@@ -218,9 +219,9 @@ const Register = () => {
 			organization: organization,
 			isValidOrganization: validOrganization,
 			isTouchedOrganization: isTouchedOrganization,
-			currency:currency,
-			isValidCurrency:isValidCurrency,
-			isTouchedCurrency:isTouchedCurrency,
+			currency: currency,
+			isValidCurrency: isValidCurrency,
+			isTouchedCurrency: isTouchedCurrency,
 		}));
 
 		validateForm();
@@ -242,8 +243,8 @@ const Register = () => {
 			fields.password === fields.confirmPassword &&
 			fields.password.length >= 8 &&
 			fields.isValidOrganization &&
-			fields.isTouchedOrganization && 
-			fields.isValidCurrency && 
+			fields.isTouchedOrganization &&
+			fields.isValidCurrency &&
 			fields.isTouchedCurrency;
 		setCanRegister(isValidForm);
 	};
@@ -422,24 +423,35 @@ const Register = () => {
 					onChange={handleChange}
 					onBlur={handleChange}
 				/>
-
+				<Tooltip sx={{ position: 'relative', bottom: '50px', left: '110%', p:0, width:'50px' }} color="warning" title="This is the name of your organization. It will be created for you automatically once the registration is succesful.">
+					<IconButton>
+						<LightbulbIcon />
+					</IconButton>
+				</Tooltip>
 				<Select
 					name="currency"
-					label="Age"
-					sx={{ m: 1 }}
+					title="Currency"
+					label="Currency"
+					sx={{width:'99%'}}
 					error={
 						!fields.isValidCurrency && fields.isTouchedCurrency
 					}
-				color={
-					fields.isValidCurrency && fields.isTouchedCurrency
-						? "success"
-						: "primary"
-				}
-				onChange={handleChange}
-				onBlur={handleChange}
+					color={
+						fields.isValidCurrency && fields.isTouchedCurrency
+							? "success"
+							: "primary"
+					}
+					onChange={handleChange}
+					onBlur={handleChange}
 				>
 					{currencies.map(x => <MenuItem className="d-flex" value={x.currency}>{x.currency} </MenuItem>)}
 				</Select>
+				<Tooltip sx={{ position: 'relative', bottom: '50px', left: '110%', width:'50px' }} color="warning" title="Please choose any currency. This Currency will be used for all of your transactions and you will not be able to change it!">
+					<IconButton>
+						<LightbulbIcon />
+					</IconButton>
+				</Tooltip>
+
 				<Button
 					type="submit"
 					disabled={!canRegister}

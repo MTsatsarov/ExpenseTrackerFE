@@ -46,7 +46,6 @@ const Dashboard = () => {
 
 			await instance.get(`${apiUrl}/${apiRoutes.getDashboard}`).then((response) => {
 				var data = response.data
-				console.log(data.transactionsByMonth)
 				var arr: Array<MappedTransactions> = []
 				data.transactionsByStore.map((x: StoreTransactions, y: number) => convertTransactions(arr, x, y))
 				setTransactionsByStore(arr)

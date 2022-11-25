@@ -37,13 +37,13 @@ instance.interceptors.response.use(
 		var location = window.location;
 		var locationPathname = location.pathname.replace(process.env.PUBLIC_URL,"");
 		var originalRequest = error.config
-		console.log(originalRequest)
-		originalRequest._retry = false;
+		originalRequest._retry = true;
 		var responseStatus = error.response.status;
 		if (error.response && responseStatus === 401) {
 			const refreshToken = localStorage.getItem("refresh_token")
 			var state = store.getState();
 			if (refreshToken) {
+
 				return instance
 					.post(`${apiUrl}/${apiRoutes.refreshToken}`,{
 						refreshToken: refreshToken,
@@ -53,7 +53,10 @@ instance.interceptors.response.use(
 						if (res.status === 201 || res.status === 200) {
 							localStorage.setItem("access_token",res.data.token)
 							localStorage.setItem("refresh_token",res.data.accessToken)
-
+							originalRequest.headers[
+								"Authorization"
+							] = `Bearer ${res.data.token}`
+							return axios(originalRequest)
 						}
 						else {
 							store.dispatch(logOutUser())

@@ -7,7 +7,6 @@ import EmployeeList from "./EmployeeList/EmployeeList"
 
 const OrganizationSettings = () => {
 	var user = useAppSelector((state) => state.user);
-
 	const [tabIndex, setTabIndex] = useState<number>(0)
 
 	const onTabChange = (e: any, i: number) => {
@@ -19,7 +18,7 @@ const OrganizationSettings = () => {
 			<Tabs sx={{ ml: 4, mt: 1 }} variant="fullWidth" value={tabIndex} onChange={onTabChange}>
 				<Tab label="Basic" />
 				<Tab label="Employee List" />
-				<Tab disabled={user.role !== "OWNER"} label="Employee management" />
+				<Tab disabled={!user.roles.includes("OWNER") && true} label="Employee management" />
 			</Tabs>
 			{tabIndex === 0 &&
 				<BasicInfo />}

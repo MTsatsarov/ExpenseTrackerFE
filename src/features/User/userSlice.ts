@@ -1,9 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
-const initialState = {
+interface IUserProps {
+	id: string,
+	firstName: string,
+	lastName: string,
+	roles:Array<string>,
+	email: string,
+	currencySymbol: string,
+}
+const initialState:IUserProps = {
 	id: '',
 	firstName: '',
 	lastName: '',
-	role: '',
+	roles:[] as Array<string>,
 	email: '',
 	currencySymbol: '',
 };
@@ -18,10 +26,10 @@ export const userSlice = createSlice({
 			localStorage.setItem("refresh_token", action.payload.refreshToken)
 		},
 		setCurrentUser: (state, action) => {
-			state.id = action.payload.userId;
+			state.id = action.payload.id;
 			state.lastName = action.payload.lastName;
 			state.firstName = action.payload.firstName;
-			state.role = action.payload.role;
+			state.roles = action.payload.roles;
 			state.email = action.payload.email;
 			state.currencySymbol = action.payload.currencySymbol;
 		},
@@ -30,7 +38,7 @@ export const userSlice = createSlice({
 			state.id = '';
 			state.firstName = '';
 			state.lastName = '';
-			state.role = '';
+			state.roles = [];
 			state.email = '';
 			state.currencySymbol = '';
 

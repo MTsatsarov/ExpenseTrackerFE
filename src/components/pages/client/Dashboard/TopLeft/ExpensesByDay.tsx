@@ -22,7 +22,7 @@ const ExpensesByDay = (props:ExpenseByDayProps) => {
 				}}
 			>
 				<CartesianGrid strokeDasharray="3 3" />
-				<XAxis dataKey="name" />
+				<XAxis dataKey="name" stroke='red' />
 				<YAxis />
 				<Tooltip />
 				<Legend />
