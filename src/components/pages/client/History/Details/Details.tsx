@@ -7,13 +7,15 @@ import { Modal, Fade, Box, Table, TableContainer, TableHead, TableRow, TableCell
 import { appTheme } from "../../../../utils/AppTheme/AppTheme"
 import { exit } from "process"
 import Loader from "../../../../utils/Loader/Loader"
+import { useAppSelector } from "../../../../../app/hooks"
 
 interface IDetailsProps {
 	id: string,
 	totalPrice: number,
 	date: Date,
 	show: boolean,
-	onClose: Function
+	onClose: Function,
+	user:string
 }
 interface IDetailsState {
 	id: string,
@@ -30,6 +32,7 @@ const Details = (props: IDetailsProps) => {
 		store: "",
 		products: []
 	})
+	var mode = useAppSelector(store=>store.theme.mode)
 	const [loading, setLoading] = useState<boolean>(false)
 	useEffect(() => {
 		setLoading(true)
@@ -68,7 +71,7 @@ const Details = (props: IDetailsProps) => {
 					sx={{
 						width: "70%",
 						height: "70%",
-						background: "rgba(255,255,255,1)",
+						backgroundColor: `${mode === 'dark' ? 'black' : "white"}`,
 						borderRadius: "12px",
 						display: "flex",
 						flexDirection: "column",
@@ -81,7 +84,7 @@ const Details = (props: IDetailsProps) => {
 						transform: "translate(-50%, -50%)",
 					}}
 				>
-					<Box sx={{ p: 4, width: '100%', display: 'flex', justifyContent: 'space-between', backgroundColor: "#EAEAEA", alignItems: 'flex-start' }}>
+					<Box sx={{ p: 4, width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
 						<div className="mt-5 p-2" style={{ width: '35%' }}>
 							<h3 style={{ textAlign: 'center' }}>Main Details</h3>
 
@@ -103,6 +106,10 @@ const Details = (props: IDetailsProps) => {
 										<TableRow className="hover-table" sx={{ '&:last0child td, &:last-child th': { border: 0 } }}>
 											<TableCell style={{ color: appTheme.palette.primary.main, textTransform: 'uppercase' }} align='left'>Date</TableCell>
 											<TableCell align='left'>{props.date.toString()}</TableCell>
+										</TableRow>
+										<TableRow className="hover-table" sx={{ '&:last0child td, &:last-child th': { border: 0 } }}>
+											<TableCell style={{ color: appTheme.palette.primary.main, textTransform: 'uppercase' }} align='left'>Added By</TableCell>
+											<TableCell align='left'>{props.user.toString()}</TableCell>
 										</TableRow>
 									</TableBody>
 								</Table>

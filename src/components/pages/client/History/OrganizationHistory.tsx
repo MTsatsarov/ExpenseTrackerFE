@@ -18,7 +18,8 @@ interface ITransactionState {
 	id: string,
 	store: string,
 	totalPrice: number,
-	createdOn: Date
+	createdOn: string,
+	user: string
 }
 const OrganizationHistory = () => {
 
@@ -88,7 +89,7 @@ const OrganizationHistory = () => {
 						borderRadius: 2,
 					}}>
 						<Table stickyHeader={true} sx={{ minHeight: 500 }}>
-							<TableHead sx={{ "& .MuiTableCell-stickyHeader": { backgroundColor: appTheme.palette.primary.main } }}>
+							<TableHead >
 								<TableRow>
 									<TableCell scope='head' variant='head' sx={{ color: 'white' }}>Date</TableCell>
 									<TableCell scope='head' variant='head' sx={{ color: 'white' }}>Store</TableCell>
@@ -131,7 +132,7 @@ const OrganizationHistory = () => {
 				</Box>
 
 				{displayDetails &&
-					<Details show={displayDetails} onClose={toggleDetails} id={selectedRow.id} date={selectedRow.createdOn} totalPrice={selectedRow.totalPrice} />
+					<Details show={displayDetails} onClose={toggleDetails} id={selectedRow.id} date={selectedRow.createdOn} totalPrice={selectedRow.totalPrice} user={selectedRow.user} />
 				}
 
 				{

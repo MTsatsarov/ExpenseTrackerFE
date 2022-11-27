@@ -1,6 +1,7 @@
-import { Box, Button, Dialog, Modal, TextField, Typography } from "@mui/material"
+import { Box, Button, Dialog, Modal, PaletteMode, TextField, Typography } from "@mui/material"
 import { useState, useEffect } from "react"
 import { apiRoutes, apiUrl } from "../../../apiConfig";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import instance from "../../../axios/axios";
 import { IBaseRegistrationFields } from "../../landing/Registration";
 import Loader from "../Loader/Loader";
@@ -33,7 +34,10 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 		isTouchedEmail: false,
 		isTouchedConfirmPassword: false,
 	});
-
+	var dispatch = useAppDispatch()
+	var mode = useAppSelector(x=>x.theme.mode)
+	console.log(mode);
+	
 	useEffect(() => {
 		validateForm();
 	}, [fields]);
@@ -42,7 +46,6 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 		let { name, value } = event.target;
 		validateField(name, value);
 	};
-
 	const validateField = (field: any, value: string) => {
 		var validUsername = fields.isValidUsername;
 		var validFirstName = fields.isValidFirstName;
@@ -196,8 +199,8 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 				sx={{
 					width: "40%",
 					height: "60%",
-					background: "rgba(255,255,255,1)",
 					borderRadius: "12px",
+					backgroundColor: `${mode === 'dark' ? 'black' : "white"}`,
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",

@@ -15,7 +15,7 @@ const NewStorage = (props: INewStorageProps) => {
 								sx={{ minWidth: '30rem', p: 1 }}
 								variant="standard"
 								name="product"
-								onChange={(e)=>props.onChange(e)}
+								onChange={(e) => props.onChange(e)}
 							/>
 						</FormControl>
 					</span>
@@ -31,7 +31,7 @@ const NewStorage = (props: INewStorageProps) => {
 								name="quantity"
 								type="number"
 								InputProps={{ inputProps: { min: 0, step: 0.01 } }}
-								onChange={(e)=>props.onChange(e)} />
+								onChange={(e) => props.onChange(e)} />
 						</FormControl>
 					</span>
 				</CardContent>
@@ -43,7 +43,7 @@ const NewStorage = (props: INewStorageProps) => {
 							<TextField
 								sx={{ minWidth: '20rem', p: 1 }}
 								variant="standard"
-
+								disabled={true}
 							/>
 						</FormControl>
 					</span>

@@ -1,6 +1,7 @@
 import { combineReducers, configureStore, createReducer } from '@reduxjs/toolkit';
 import userReducer from '../features/User/userSlice'
 import clientReducer from '../features/ClientSideNav/clientSideSlice';
+import themeReducer from "../features/Theme/ThemeSlice"
 import storage from 'redux-persist/lib/storage';
 import {
 	persistReducer,
@@ -21,7 +22,8 @@ const persistedReducer = persistReducer(persistConfig, userReducer)
 export const store = configureStore({
 	reducer: {
 		user: persistedReducer,
-		clientSideNav: clientReducer
+		clientSideNav: clientReducer,
+		theme: themeReducer
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({

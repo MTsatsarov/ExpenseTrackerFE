@@ -1,4 +1,4 @@
-import { Drawer, styled, Divider, AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, SpeedDial, SpeedDialAction } from "@mui/material";
+import { Drawer, styled, Divider, AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, SpeedDial, SpeedDialAction, Switch } from "@mui/material";
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import BroadcastOnHomeIcon from '@mui/icons-material/BroadcastOnHome';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -15,7 +15,15 @@ import Toaster from "../utils/Toaster/Toaster";
 import instance from "../../axios/axios";
 import { logOutUser } from "../../features/User/userSlice";
 import { useNavigate } from "react-router-dom";
-const ClientPortal = () => {
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useTheme } from '@mui/material/styles';
+
+interface IClientPortalProps {
+	getTheme: Function
+}
+
+const ClientPortal = (props: IClientPortalProps) => {
 	const DrawerHeader = styled("div")(() => ({
 		display: "flex",
 		alignItems: "center",
@@ -28,7 +36,7 @@ const ClientPortal = () => {
 	const [showMenu, setShowMenu] = useState<boolean>(false)
 	const [anchorEl, setAnchorEL] = useState<any>()
 	const [sectionName, setSectionName] = useState<string>(" ")
-
+	const [theme, setTheme] = useState<string>('light')
 	const mobileBreak = 1300
 	const drawerWidth = 220;
 
@@ -86,6 +94,11 @@ const ClientPortal = () => {
 		{ icon: <BroadcastOnHomeIcon color="primary" fontSize="medium" />, name: 'Services' },
 	];
 
+	const changeTheme = () => {
+		var newMode = theme === 'light' ? 'dark' : 'light'
+		props.getTheme(newMode)
+		setTheme(newMode)
+	}
 	return (
 
 		<Box sx={{ display: 'flex' }}>
@@ -94,6 +107,7 @@ const ClientPortal = () => {
 					ml: { sm: `${drawerWidth}px` },
 				}}
 			>
+
 				<Toolbar>
 					<IconButton
 						size="large"
@@ -108,6 +122,14 @@ const ClientPortal = () => {
 					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 						{sectionName}
 					</Typography>
+
+					<div style={{ marginRight: '2rem', display: 'flex', alignItems: 'flex-start' }}>
+						<Switch onChange={changeTheme} />
+						<IconButton color="inherit">
+							{theme === 'dark' ? <Brightness4Icon /> : <Brightness7Icon />}
+						</IconButton>
+					</div>
+
 
 					<div>
 						<IconButton sx={{ color: 'white', fontSize: '14px', border: '2px' }} onClick={toggleMenu}>

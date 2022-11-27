@@ -123,7 +123,7 @@ const EmployeeList = () => {
 						borderRadius: 2,
 					}}>
 						<Table stickyHeader={true}>
-							<TableHead sx={{ "& .MuiTableCell-stickyHeader": { backgroundColor: appTheme.palette.primary.main } }}>
+							<TableHead>
 								<TableRow>
 									<TableCell scope='head' variant='head' sx={{ color: 'white' }}>Employee Email</TableCell>
 									<TableCell scope='head' variant='head' sx={{ color: 'white' }}>UserName</TableCell>
