@@ -165,7 +165,8 @@ const Storage = () => {
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		setRowsPerPage(parseInt(event.target.value,));
-		await getStorage(page, parseInt(event.target.value,))
+		await getStorage(1, parseInt(event.target.value,))
+		setPage(1);
 	};
 	return (
 		<>

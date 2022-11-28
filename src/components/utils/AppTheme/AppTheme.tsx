@@ -93,7 +93,17 @@ export const getDesignTokens = (mode: PaletteMode) => ({
 
 				}
 			}
-		}
+		},
 
+		MuiTextField: {
+			styleOverrides: {
+				root: {
+					"& .MuiInputBase-root.Mui-disabled": {
+						color: "rgba(0, 0, 0, 1)",
+						fontWeight:'bold',
+					  },
+				}
+			}
+		},
 	},
 });

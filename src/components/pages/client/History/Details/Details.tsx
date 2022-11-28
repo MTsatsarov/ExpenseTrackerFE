@@ -15,7 +15,7 @@ interface IDetailsProps {
 	date: Date,
 	show: boolean,
 	onClose: Function,
-	user:string
+	user: string
 }
 interface IDetailsState {
 	id: string,
@@ -32,8 +32,10 @@ const Details = (props: IDetailsProps) => {
 		store: "",
 		products: []
 	})
-	var mode = useAppSelector(store=>store.theme.mode)
+	var mode = useAppSelector(store => store.theme.mode)
 	const [loading, setLoading] = useState<boolean>(false)
+	var user = useAppSelector((state) => state.user);
+
 	useEffect(() => {
 		setLoading(true)
 		instance.get(`${apiUrl}/${apiRoutes.getTransactionDetails}/${props.id}`).then((response) => {
@@ -97,7 +99,7 @@ const Details = (props: IDetailsProps) => {
 									<TableBody >
 										<TableRow className="hover-table" sx={{ '&:last0child td, &:last-child th': { border: 0 } }}>
 											<TableCell style={{ color: appTheme.palette.primary.main, textTransform: 'uppercase' }} align='left'>Total Price</TableCell>
-											<TableCell align='left'>{props.totalPrice} $</TableCell>
+											<TableCell align='left'>{props.totalPrice} {user.currencySymbol}</TableCell>
 										</TableRow>
 										<TableRow className="hover-table" sx={{ '&:last0child td, &:last-child th': { border: 0 } }}>
 											<TableCell style={{ color: appTheme.palette.primary.main, textTransform: 'uppercase' }} align='left'>Store</TableCell>
@@ -150,7 +152,7 @@ const Details = (props: IDetailsProps) => {
 					</Box>
 					{
 						loading &&
-						<Loader/>
+						<Loader />
 					}
 				</Box>
 			</Fade>

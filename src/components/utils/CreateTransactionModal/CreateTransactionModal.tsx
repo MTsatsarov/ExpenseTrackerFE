@@ -54,6 +54,8 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	const [storeSuggestions, setStoreSuggestions] = useState<Array<iStore>>([])
 	const [loading, setLoading] = useState<boolean>(false);
 	var user = useAppSelector((state) => state.user);
+	var mode = useAppSelector(store=>store.theme.mode)
+
 	useEffect(() => {
 		instance.get(`${apiUrl}/${apiRoutes.getStores}`).then((response) => {
 			setStoreSuggestions(response.data);
@@ -145,7 +147,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 					sx={{
 						width: "70%",
 						height: "70%",
-						background: "rgba(255,255,255,1)",
+						backgroundColor: `${mode === 'dark' ? 'black' : "white"}`,
 						borderRadius: "12px",
 						display: "flex",
 						flexDirection: "column",

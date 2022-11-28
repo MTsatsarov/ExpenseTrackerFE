@@ -100,7 +100,8 @@ const EmployeeList = () => {
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		setItemsPerPage(parseInt(event.target.value,));
-		await getUsers(page, parseInt(event.target.value,))
+		await getUsers(1, parseInt(event.target.value,))
+		setPage(1);
 	};
 
 	return (

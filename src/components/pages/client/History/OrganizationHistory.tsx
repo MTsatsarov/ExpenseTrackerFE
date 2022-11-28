@@ -2,7 +2,7 @@ import { useState, useEffect, } from 'react'
 import { apiRoutes, apiUrl } from '../../../../apiConfig'
 import instance from '../../../../axios/axios'
 import Toaster from '../../../utils/Toaster/Toaster'
-import { Box, Typography, Slide, TableContainer, TableHead, TableCell, Table, TableRow, TableBody, Button, Menu, MenuItem, Paper } from "@mui/material"
+import { Box, Typography, Slide, TableContainer, TableHead, TableCell, Table, TableRow, TableBody, Button, Menu, MenuItem, Paper, TablePagination } from "@mui/material"
 import { appTheme } from "../../../utils/AppTheme/AppTheme";
 import Details from './Details/Details'
 import Loader from '../../../utils/Loader/Loader'
@@ -29,33 +29,37 @@ const OrganizationHistory = () => {
 	const [selectedRow, SetSelectedRow] = useState<any>({})
 	const [displayDetails, setDisplayDetails] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
+	const [count, setCount] = useState<number>(0);
+	const [page, setPage] = useState<number>(1);
+	const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+
+	const getProducts = async (page: number, itemsPerPage: number) => {
+		await instance.get(`${apiUrl}/${apiRoutes.getTransactions}?page=${page}&itemsPerPage=${itemsPerPage}`).then((response) => {
+			if (response.status === 200 || response.status === 201) {
+				var transactions = response.data.transactions as Array<ITransactionState>;
+				setTransactiosn(transactions);
+				setCount(response.data.count)
+			}
+		}).catch(function (error) {
+			if (error.response) {
+				var errors =
+					error.response &&
+					(error.response.data.message ||
+						error.response.data ||
+						error.response.statusText);
+				errors.split(/\r?\n/).forEach((message: string) => {
+					Toaster.show("error", "", message);
+				});
+			}
+		});
+	}
 
 	useEffect(() => {
 
-		const getProducts = async () => {
-			await instance.get(`${apiUrl}/${apiRoutes.getTransactions}`).then((response) => {
-				if (response.status === 200 || response.status === 201) {
-					var transactions = response.data as Array<ITransactionState>;
-					setTransactiosn(transactions);
-				}
-			}).catch(function (error) {
-				if (error.response) {
-					var errors =
-						error.response &&
-						(error.response.data.message ||
-							error.response.data ||
-							error.response.statusText);
-					errors.split(/\r?\n/).forEach((message: string) => {
-						Toaster.show("error", "", message);
-					});
-				}
-			});
-		}
 		setLoading(true)
-		getProducts()
+		getProducts(page, rowsPerPage)
 		setLoading(false)
 	}, [])
-
 
 	const toggleMenu = (event: any, data: any) => {
 		setAnchorEl(event.currentTarget);
@@ -76,10 +80,26 @@ const OrganizationHistory = () => {
 		setDisplayMenu(!displayMenu)
 	}
 
+	const handleChangePage = async (
+		event: React.MouseEvent<HTMLButtonElement> | null,
+		newPage: number,
+	) => {
+		setPage(newPage + 1);
+		await getProducts(newPage + 1, rowsPerPage)
+	};
+
+	const handleChangeRowsPerPage = async (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) => {
+		setRowsPerPage(parseInt(event.target.value,));
+		await getProducts(1, parseInt(event.target.value,))
+		setPage(1);
+	};
+
 	return (
 		<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
-			<Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-				<Box sx={{ minWidth: 900, mt: 10, height: 800, alignSelf: 'center', overflow: 'auto' }}>
+			<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+				<Box sx={{ minWidth: 900, mt: 10, alignSelf: 'center', overflow: 'auto' }}>
 					<Typography variant='h3'>History of the transactions</Typography>
 					<TableContainer className='mt-5' sx={{
 						border: "1px solid rgba(128,128,128,0.4)",
@@ -106,9 +126,11 @@ const OrganizationHistory = () => {
 											<TableCell scope='row'>{x.totalPrice}</TableCell>
 											<TableCell scope='row'><Button variant='contained' onClick={(e) => toggleMenu(e, x)}>Actions</Button></TableCell>
 										</TableRow>) :
-										<Box >
-											<RuleFolderOutlinedIcon fontSize='large' sx={{fontSize:'200px'}} />
-										</Box>
+										<TableRow >
+											<Box >
+												<RuleFolderOutlinedIcon fontSize='large' sx={{ fontSize: '200px' }} />
+											</Box>
+										</TableRow>
 								}
 							</TableBody>
 						</Table>
@@ -139,6 +161,16 @@ const OrganizationHistory = () => {
 					loading &&
 					<Loader />
 				}
+				<TablePagination
+					component="div"
+					count={count}
+					page={page - 1}
+					onPageChange={handleChangePage}
+					rowsPerPage={rowsPerPage}
+					rowsPerPageOptions={[5, 10, 25]}
+					onRowsPerPageChange={handleChangeRowsPerPage}
+					sx={{ mr: '10rem' }}
+				/>
 			</Box>
 
 		</Slide >

@@ -6,6 +6,7 @@ import instance from "../../../axios/axios";
 import { IBaseRegistrationFields } from "../../landing/Registration";
 import Loader from "../Loader/Loader";
 import Toaster from "../Toaster/Toaster";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface INewEmployeeFormProps {
 	onCloseModal: any,
@@ -36,7 +37,6 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 	});
 	var dispatch = useAppDispatch()
 	var mode = useAppSelector(x=>x.theme.mode)
-	console.log(mode);
 	
 	useEffect(() => {
 		validateForm();
@@ -186,6 +186,7 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 				});
 		}
 	}
+
 	return (
 		<Modal
 			open={true}
@@ -211,6 +212,18 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 					transform: "translate(-50%, -50%)",
 				}}
 			>
+				<Box
+						sx={{
+							position: "absolute",
+							top: "0%",
+							right: "0%",
+							p: 2,
+							cursor: "pointer",
+						}}
+						onClick={props.onCloseModal}
+					>
+						<CloseIcon />
+					</Box>
 				<Typography className="mb-4 mt-4" variant="h4">Create new employee</Typography>
 				<form
 					style={{

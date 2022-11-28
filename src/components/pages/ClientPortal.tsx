@@ -15,10 +15,8 @@ import Toaster from "../utils/Toaster/Toaster";
 import instance from "../../axios/axios";
 import { logOutUser } from "../../features/User/userSlice";
 import { useNavigate } from "react-router-dom";
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useTheme } from '@mui/material/styles';
-
+import LightModeTwoToneIcon from '@mui/icons-material/LightModeTwoTone';
+import DarkModeTwoToneIcon from '@mui/icons-material/DarkModeTwoTone';
 interface IClientPortalProps {
 	getTheme: Function
 }
@@ -124,9 +122,9 @@ const ClientPortal = (props: IClientPortalProps) => {
 					</Typography>
 
 					<div style={{ marginRight: '2rem', display: 'flex', alignItems: 'flex-start' }}>
-						<Switch onChange={changeTheme} />
+						<Switch checked={theme === 'dark' && true} onChange={changeTheme} />
 						<IconButton color="inherit">
-							{theme === 'dark' ? <Brightness4Icon /> : <Brightness7Icon />}
+							{theme === 'dark' ? <DarkModeTwoToneIcon sx={{color:'#F7FB07'}} /> : <LightModeTwoToneIcon sx={{color:'#F7FB07'}} />}
 						</IconButton>
 					</div>
 
