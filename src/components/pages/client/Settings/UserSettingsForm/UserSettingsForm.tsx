@@ -56,7 +56,7 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 				}
 			});
 		}
-		
+
 		setLoading(true)
 		getUser()
 		setLoading(false)
@@ -106,7 +106,7 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 	return (
 		<Box className="mt-10" sx={{ minWidth: '35%' }} >
 			<Typography sx={{ mb: 4 }} variant='h4'>User Settings</Typography>
-			<form style={{ color: 'white' }}>
+			<form style={{ color: 'white', display: 'flex', flexDirection: 'column' }}>
 				<FormGroup sx={{ mb: 3 }} >
 					<TextField label='email' disabled sx={{ color: 'white' }} variant='standard' value={user.email} />
 				</FormGroup>
@@ -116,7 +116,7 @@ const UserSettingsForm = (props: UserSettingsFormProps) => {
 				<FormGroup sx={{ mb: 3 }} >
 					<TextField name="lastName" label='Last Name' sx={{ color: 'white' }} variant='standard' value={user.lastName} onChange={onChange} onBlur={onChange} />
 				</FormGroup>
-				<ButtonGroup sx={{ display: 'flex', justifyContent: 'space-around', width: '100%', flexWrap: 'wrap' }}>
+				<ButtonGroup sx={{ display: 'flex', justifyContent: 'space-between', width:'65%', flexWrap: 'wrap', alignSelf: "flex-end"}}>
 					<Button name="changePass" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "45%" }} >Change Password</Button>
 					<Button name="submitForm" onClick={(e) => props.click(e)} variant="contained" sx={{ minWidth: "40%" }} color="success" disabled={!userValid}>Submit</Button>
 				</ButtonGroup>

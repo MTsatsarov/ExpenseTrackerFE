@@ -11,6 +11,7 @@ const apiRoutes = {
 	updateUser: 'account/updateUser',
 	getCurrentUser: 'account/current',
 	refreshToken:'account/refreshToken',
+	changeThemeMode:'account/changeThemeMode',
 	
 	//Store
 	getStores: 'store/getStores',

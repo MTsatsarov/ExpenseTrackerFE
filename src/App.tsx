@@ -11,8 +11,9 @@ import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { setMode } from "./features/Theme/ThemeSlice";
 function App() {
 
+	var mode = useAppSelector(store => store.user.themeMode)
 	var dispatch = useAppDispatch();
-	const [myMode, setMyMode] = useState<PaletteMode>("light")
+	const [myMode, setMyMode] = useState<PaletteMode>(mode)
 	const colorMode = React.useMemo(
 		() => ({
 			// The dark mode switch would invoke this method

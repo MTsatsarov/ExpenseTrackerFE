@@ -5,9 +5,9 @@ import Toaster from "../../../../utils/Toaster/Toaster"
 import { IProductResponse } from "../OrganizationHistory"
 import { Modal, Fade, Box, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper } from "@mui/material"
 import { appTheme } from "../../../../utils/AppTheme/AppTheme"
-import { exit } from "process"
 import Loader from "../../../../utils/Loader/Loader"
 import { useAppSelector } from "../../../../../app/hooks"
+import CloseIcon from "@mui/icons-material/Close";
 
 interface IDetailsProps {
 	id: string,
@@ -32,7 +32,7 @@ const Details = (props: IDetailsProps) => {
 		store: "",
 		products: []
 	})
-	var mode = useAppSelector(store => store.theme.mode)
+	var mode = useAppSelector(store => store.user.themeMode)
 	const [loading, setLoading] = useState<boolean>(false)
 	var user = useAppSelector((state) => state.user);
 
@@ -86,6 +86,18 @@ const Details = (props: IDetailsProps) => {
 						transform: "translate(-50%, -50%)",
 					}}
 				>
+					<Box
+						sx={{
+							position: "absolute",
+							top: "0%",
+							right: "0%",
+							p: 2,
+							cursor: "pointer",
+						}}
+						onClick={(e)=>props.onClose(e)}
+					>
+						<CloseIcon />
+					</Box>
 					<Box sx={{ p: 4, width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
 						<div className="mt-5 p-2" style={{ width: '35%' }}>
 							<h3 style={{ textAlign: 'center' }}>Main Details</h3>

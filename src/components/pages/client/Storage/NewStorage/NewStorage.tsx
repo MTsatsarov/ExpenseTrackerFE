@@ -5,7 +5,7 @@ interface INewStorageProps {
 	onChange: Function
 }
 const NewStorage = (props: INewStorageProps) => {
-var mode = useAppSelector(store=> store.theme.mode)
+	var mode = useAppSelector(store => store.user.themeMode)
 	return (
 		<>
 			<Card style={{ width: '31.2%', height: '3.5rem', marginRight: '0.4Rem', marginTop: '1rem', background: `${mode}` === 'light' ? '#bee6fa' : '#212121' }}>

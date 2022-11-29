@@ -36,7 +36,7 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 		isTouchedConfirmPassword: false,
 	});
 	var dispatch = useAppDispatch()
-	var mode = useAppSelector(x=>x.theme.mode)
+	var mode = useAppSelector(store => store.user.themeMode)
 	
 	useEffect(() => {
 		validateForm();

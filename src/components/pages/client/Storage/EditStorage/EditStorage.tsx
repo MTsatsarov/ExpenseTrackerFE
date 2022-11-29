@@ -11,7 +11,7 @@ interface IEditStorageProps {
 
 const EditStorage = (props: IEditStorageProps) => {
 	const [editedModel, setEditedModel] = useState<IStorage>(props.model)
-	const mode = useAppSelector((store) => store.theme.mode)
+	var mode = useAppSelector(store => store.user.themeMode)
 	const onChangeModel = (e: any) => {
 		var quantity = editedModel.quantity;
 		switch (e.target.name) {

@@ -13,10 +13,11 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { apiRoutes, apiUrl } from "../../apiConfig";
 import Toaster from "../utils/Toaster/Toaster";
 import instance from "../../axios/axios";
-import { logOutUser } from "../../features/User/userSlice";
+import { logOutUser, setCurrentUser } from "../../features/User/userSlice";
 import { useNavigate } from "react-router-dom";
 import LightModeTwoToneIcon from '@mui/icons-material/LightModeTwoTone';
 import DarkModeTwoToneIcon from '@mui/icons-material/DarkModeTwoTone';
+import { useAppSelector } from "../../app/hooks";
 interface IClientPortalProps {
 	getTheme: Function
 }
@@ -28,19 +29,21 @@ const ClientPortal = (props: IClientPortalProps) => {
 		padding: "5px",
 		justifyContent: "flex-start",
 	}));
+	var mode = useAppSelector(x => x.user.themeMode)
 	const [displayModal, setDisplayModel] = useState<boolean>(false);
 	const [displaySideNav, setDisplaySideNav] = useState<boolean>(false)
 	const [toggleSideNav, setToggleSideNav] = useState<boolean>(false)
 	const [showMenu, setShowMenu] = useState<boolean>(false)
 	const [anchorEl, setAnchorEL] = useState<any>()
-	const [sectionName, setSectionName] = useState<string>(" ")
-	const [theme, setTheme] = useState<string>('light')
+	const [sectionName, setSectionName] = useState<string>(mode)
+	const [theme, setTheme] = useState<string>()
 	const mobileBreak = 1300
 	const drawerWidth = 220;
 
 	var dispatch = useDispatch();
 	var navigate = useNavigate();
 	useEffect(() => {
+		getCurrentUser();
 		window.addEventListener('resize', handleResize)
 		return function cleanUp() {
 			window.removeEventListener('resize', handleResize)
@@ -92,10 +95,58 @@ const ClientPortal = (props: IClientPortalProps) => {
 		{ icon: <BroadcastOnHomeIcon color="primary" fontSize="medium" />, name: 'Services' },
 	];
 
-	const changeTheme = () => {
+	const getCurrentUser = async () => {
+		instance.get(`${apiUrl}/${apiRoutes.getCurrentUser}`).then((response) => {
+			if (response.status === 200 || response.status === 201) {
+				dispatch(
+					setCurrentUser({
+						id: response.data.userId,
+						firstName: response.data.firstName,
+						lastName: response.data.lastName,
+						roles: response.data.roles,
+						email: response.data.email,
+						currencySymbol: response.data.currencySymbol,
+						mode: response.data.mode
+					})
+				)
+				setTheme(response.data.mode)
+				props.getTheme(response.data.mode)
+			}
+		}).catch(function (error) {
+			if (error.response) {
+				var errors =
+					error.response &&
+					(error.response.data.message ||
+						error.response.data ||
+						error.response.statusText);
+				errors.split(/\r?\n/).forEach((message: string) => {
+					Toaster.show("error", "", message);
+				});
+			}
+		});
+	}
+	const changeTheme = async () => {
 		var newMode = theme === 'light' ? 'dark' : 'light'
-		props.getTheme(newMode)
-		setTheme(newMode)
+
+		await instance.post(`${apiUrl}/${apiRoutes.changeThemeMode}`,newMode).then((response) => {
+			if (response.status === 200 || response.status === 201) {
+				props.getTheme(newMode)
+				getCurrentUser();
+				setTheme(newMode)
+
+			}
+		}).catch(function (error) {
+			if (error.response) {
+				var errors =
+					error.response &&
+					(error.response.data.message ||
+						error.response.data ||
+						error.response.statusText);
+				errors.split(/\r?\n/).forEach((message: string) => {
+					Toaster.show("error", "", message);
+				});
+			}
+		});
 	}
 	return (
 
@@ -124,7 +175,7 @@ const ClientPortal = (props: IClientPortalProps) => {
 					<div style={{ marginRight: '2rem', display: 'flex', alignItems: 'flex-start' }}>
 						<Switch checked={theme === 'dark' && true} onChange={changeTheme} />
 						<IconButton color="inherit">
-							{theme === 'dark' ? <DarkModeTwoToneIcon sx={{color:'#F7FB07'}} /> : <LightModeTwoToneIcon sx={{color:'#F7FB07'}} />}
+							{theme === 'dark' ? <DarkModeTwoToneIcon sx={{ color: '#F7FB07' }} /> : <LightModeTwoToneIcon sx={{ color: '#F7FB07' }} />}
 						</IconButton>
 					</div>
 
