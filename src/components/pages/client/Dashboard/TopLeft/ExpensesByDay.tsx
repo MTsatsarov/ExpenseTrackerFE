@@ -2,10 +2,13 @@ import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Resp
 import { Box, Typography } from "@mui/material";
 import { DailyTransactions } from '../Dashboard';
 import styles from "./ExpenseByDay.module.css"
+import instance from '../../../../../axios/axios';
 interface ExpenseByDayProps {
-	transactions: Array<DailyTransactions>
+	transactions: Array<DailyTransactions>,
+	onClick :Function,
 }
 const ExpensesByDay = (props: ExpenseByDayProps) => {
+
 
 	return (
 		<Box className={styles.box} sx={{ pt: 5, width: '100%' }}>
@@ -28,7 +31,7 @@ const ExpensesByDay = (props: ExpenseByDayProps) => {
 						<YAxis />
 						<Tooltip />
 						<Legend />
-						<Bar dataKey="sum" fill="#8884d8" />
+						<Bar dataKey="sum" fill="#8884d8" onClick={(e) => props.onClick(e)} />
 					</BarChart>
 				</>
 			</ResponsiveContainer>

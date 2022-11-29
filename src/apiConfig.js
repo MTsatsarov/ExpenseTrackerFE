@@ -25,6 +25,10 @@ const apiRoutes = {
 	getTrransactionsByUser: 'transaction/getUserTransactions',
 	getDashboard: 'transaction/getDashboardTransactions',
 	getTransactionDetails: 'transaction/details',
+	getCurrentDateTransactions:'transactions/today',
+	getMonthlyTransactions:'transactions/monthly',
+	getTransactionsByStore:'transactions/byStore',
+
 
 	//Organization
 	addEmployee: 'organization/addEmployee',
