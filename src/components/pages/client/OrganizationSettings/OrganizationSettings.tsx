@@ -1,4 +1,4 @@
-import { Tab, Tabs, Typography } from "@mui/material"
+import { Tab, Tabs } from "@mui/material"
 import { Box } from "@mui/system"
 import { useState } from 'react'
 import { useAppSelector } from "../../../../app/hooks"
@@ -14,8 +14,7 @@ const OrganizationSettings = () => {
 	}
 	return (
 		<Box>
-			<Typography sx={{ mt: 12 }} variant='h3'>My Organization</Typography>
-			<Tabs sx={{ ml: 4, mt: 1 }} variant="fullWidth" value={tabIndex} onChange={onTabChange}>
+			<Tabs sx={{ ml: 4, mt: 7 }} variant="fullWidth" value={tabIndex} onChange={onTabChange}>
 				<Tab label="Basic" />
 				<Tab label="Employee List" />
 				<Tab disabled={!user.roles.includes("OWNER") && true} label="Employee management" />

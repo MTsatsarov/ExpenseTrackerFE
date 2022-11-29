@@ -7,27 +7,13 @@ import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { getDesignTokens } from "./components/utils/AppTheme/AppTheme";
 import { createTheme } from "@mui/material/styles";
 import React, { useState } from "react";
-import { useAppDispatch, useAppSelector } from "./app/hooks";
-import { setMode } from "./features/Theme/ThemeSlice";
+import {useAppSelector } from "./app/hooks";
 function App() {
 
 	var mode = useAppSelector(store => store.user.themeMode)
-	var dispatch = useAppDispatch();
 	const [myMode, setMyMode] = useState<PaletteMode>(mode)
-	const colorMode = React.useMemo(
-		() => ({
-			// The dark mode switch would invoke this method
-			toggleColorMode: () => {
-				dispatch(setMode((prevMode: PaletteMode) =>
-					prevMode === 'light' ? 'dark' : 'light',
-				));
-			},
-		}),
-		[],
-	);
 
 	const getTheme = (theme: PaletteMode) => {
-		dispatch(setMode(theme))
 		setMyMode(theme)
 	}
 	const theme = React.useMemo(() => createTheme(getDesignTokens(myMode)), [myMode]);

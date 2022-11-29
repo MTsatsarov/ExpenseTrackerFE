@@ -1,4 +1,4 @@
-import { Typography, TextField, Button, Select, MenuItem, FormControl, Tooltip, IconButton } from "@mui/material";
+import { Typography, TextField, Button, Select, MenuItem, FormControl, Tooltip, IconButton, InputAdornment, InputLabel, ListItem, List, FormHelperText } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,8 +7,14 @@ import { apiUrl, apiRoutes } from "../../apiConfig";
 import Toaster from "../utils/Toaster/Toaster";
 import { useNavigate } from "react-router-dom";
 import Loader from "../utils/Loader/Loader";
-import InfoIcon from '@mui/icons-material/Info';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import InfoIcon from '@mui/icons-material/Info';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
+
+import React from "react";
 export interface IBaseRegistrationFields {
 	username: string;
 	firstName: string;
@@ -44,6 +50,7 @@ interface ICurrency {
 	symbol: string,
 }
 
+
 const Register = () => {
 	var navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
@@ -76,7 +83,16 @@ const Register = () => {
 	});
 	const [canRegister, setCanRegister] = useState<boolean>(false);
 	const [currencies, setCurrencies] = useState<Array<ICurrency>>([])
+	const [isPassVisible, setIsPassVisible] = useState<boolean>(false)
+	const [isConfirmPassVisible, setConfirmIsPassVisible] = useState<boolean>(false)
 
+	const [passWordInfo, setPasswordInfo] = useState({
+		hasNumber: false,
+		isLongEnough: false,
+		hasCapitalLetter: false,
+		hasSmallLetter: false,
+		hasSpecialSymbol: false,
+	})
 	useEffect(() => {
 		const getCurrencies = async () => {
 			await instance
@@ -103,6 +119,15 @@ const Register = () => {
 	useEffect(() => {
 		validateForm();
 	}, [fields]);
+
+	const setVisibleField = (fieldName: string) => {
+		if (fieldName === "password") {
+			setIsPassVisible(!isPassVisible)
+		}
+		if (fieldName === 'confirmPassword') {
+			setConfirmIsPassVisible(!isConfirmPassVisible)
+		}
+	}
 
 	const handleChange = (event: any) => {
 		let { name, value } = event.target;
@@ -136,17 +161,17 @@ const Register = () => {
 		var isTouchedCurrency = fields.isTouchedCurrency
 		switch (field) {
 			case "username":
-				validUsername = value.length > 0 && value.length <= 20;
+				validUsername = value.length > 5 && value.length <= 20;
 				username = value;
 				isTouchedUsername = true;
 				break;
 			case "firstName":
-				validFirstName = value.length > 0 && value.length <= 20;
+				validFirstName = value.length >= 2 && value.length <= 20;
 				firstName = value;
 				isTouchedFirstName = true;
 				break;
 			case "lastName":
-				validLastName = value.length > 0 && value.length <= 20;
+				validLastName = value.length >= 2 && value.length <= 20;
 				lastName = value;
 				isTouchedLastName = true;
 				break;
@@ -165,6 +190,15 @@ const Register = () => {
 					: false;
 				password = value;
 				isTouchedPassword = true;
+
+				setPasswordInfo(prevState => ({
+					...prevState,
+					isLongEnough: value.length >= 8 ? true : false,
+					hasNumber: value.match('.*[0-9].*') ? true : false,
+					hasCapitalLetter: value.match('.*[A-Z].*') ? true : false,
+					hasSmallLetter: value.match('.*[a-z].*') ? true : false,
+					hasSpecialSymbol: value.match('.*[\!\@\#\$\%\^\&\*\)\(+\=\._-].*') ? true : false
+				}))
 				break;
 			case "confirmPassword":
 				validConfirmPassword = value.match(
@@ -316,6 +350,7 @@ const Register = () => {
 					}
 					onChange={handleChange}
 					onBlur={handleChange}
+					helperText={!fields.isValidUsername && fields.isTouchedUsername && 'Username must be maximum 20 characters long and minimum 5 characters long.'}
 				/>
 				<TextField
 					type="text"
@@ -333,6 +368,7 @@ const Register = () => {
 					}
 					onChange={handleChange}
 					onBlur={handleChange}
+					helperText={!fields.isValidFirstName && fields.isTouchedFirstName && 'First name must be maximum 20 characters long and minimum 2 characters long.'}
 				/>
 				<TextField
 					type="text"
@@ -350,6 +386,7 @@ const Register = () => {
 					}
 					onChange={handleChange}
 					onBlur={handleChange}
+					helperText={!fields.isValidLastName && fields.isTouchedLastName && 'Last name must be maximum 20 characters long and minimum 2 characters long.'}
 				/>
 				<TextField
 					type="email"
@@ -363,26 +400,87 @@ const Register = () => {
 					focused={fields.isValidEmail && fields.isTouchedEmail ? true : false}
 					onChange={handleChange}
 					onBlur={handleChange}
+					helperText={!fields.isValidEmail && fields.isTouchedEmail && 'The provided email is invalid.'}
 				/>
+				<FormControl>
+					<TextField
+						type={isPassVisible ? 'text' : "password"}
+						name="password"
+						label="Password"
+						sx={{ m: 1 }}
+						error={!fields.isValidPassword && fields.isTouchedPassword}
+						color={
+							fields.isValidPassword && fields.isTouchedPassword
+								? "success"
+								: "primary"
+						}
+						focused={
+							fields.isValidPassword && fields.isTouchedPassword ? true : false
+						}
+						onChange={handleChange}
+						onBlur={handleChange}
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<IconButton
+										aria-label="toggle password visibility"
+										onClick={() => { setVisibleField('password') }}
+									>
+										{isPassVisible ? <VisibilityIcon color="primary" /> : <VisibilityOffIcon />}
+									</IconButton>
+								</InputAdornment>
+							)
+						}}
+					/>
+					<Tooltip sx={{ position: 'relative', bottom: '50px', left: '110%', width: '50px', m: 0 }} color="primary" title={<React.Fragment>
+						<List sx={{ p: 0 }}>
+							<ListItem sx={{ p: 0 }}>
+								{
+									passWordInfo.hasCapitalLetter ?
+										<CheckCircleIcon sx={{ mr: 1, fontSize: '14px' }} color="success" /> :
+										<DoNotDisturbOnIcon color='error' sx={{ mr: 1, fontSize: '14px' }} />
+								}
+								Contain capital letter.
+							</ListItem>
+							<ListItem sx={{ p: 0 }}>
+								{
+									passWordInfo.hasSmallLetter ?
+										<CheckCircleIcon sx={{ mr: 1, fontSize: '14px' }} color="success" /> :
+										<DoNotDisturbOnIcon color='error' sx={{ mr: 1, fontSize: '14px' }} />
+								}
+								Contain small letter.
+							</ListItem>
+							<ListItem sx={{ p: 0 }}>
+								{
+									passWordInfo.hasNumber ?
+										<CheckCircleIcon sx={{ mr: 1, fontSize: '14px' }} color="success" /> :
+										<DoNotDisturbOnIcon color='error' sx={{ mr: 1, fontSize: '14px' }} />
+								}
+								Contain number.
+							</ListItem>
+							<ListItem sx={{ p: 0, }}>
+								{
+									passWordInfo.hasSpecialSymbol ?
+										<CheckCircleIcon sx={{ mr: 1, fontSize: '14px' }} color="success" /> :
+										<DoNotDisturbOnIcon color='error' sx={{ mr: 1, fontSize: '14px' }} />
+								}
+								Contain special symbol.
+							</ListItem>
+							<ListItem sx={{ p: 0 }}>
+								{
+									passWordInfo.isLongEnough ?
+										<CheckCircleIcon sx={{ mr: 1, fontSize: '14px' }} color="success" /> :
+										<DoNotDisturbOnIcon color='error' sx={{ mr: 1, fontSize: '14px' }} />
+								}
+								Length is at least 8 characters long.
+							</ListItem>
+						</List>
+					</React.Fragment>}>
+						{!fields.isValidPassword ? <InfoIcon /> : <CheckCircleIcon color="success" />}
+					</Tooltip>
+				</FormControl>
 				<TextField
-					type="password"
-					name="password"
-					label="Password"
-					sx={{ m: 1 }}
-					error={!fields.isValidPassword && fields.isTouchedPassword}
-					color={
-						fields.isValidPassword && fields.isTouchedPassword
-							? "success"
-							: "primary"
-					}
-					focused={
-						fields.isValidPassword && fields.isTouchedPassword ? true : false
-					}
-					onChange={handleChange}
-					onBlur={handleChange}
-				/>
-				<TextField
-					type="password"
+					type={isConfirmPassVisible ? 'text' : "password"}
 					name="confirmPassword"
 					label="ConfirmPassword"
 					sx={{ m: 1 }}
@@ -399,8 +497,21 @@ const Register = () => {
 							? true
 							: false
 					}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<IconButton
+									aria-label="toggle password visibility"
+									onClick={() => { setVisibleField('confirmPassword') }}
+								>
+									{isConfirmPassVisible ? <VisibilityIcon color="primary" /> : <VisibilityOffIcon />}
+								</IconButton>
+							</InputAdornment>
+						)
+					}}
 					onChange={handleChange}
 					onBlur={handleChange}
+					helperText={!fields.isValidConfirmPassword && fields.isTouchedConfirmPassword && "Passwords don't match."}
 				/>
 				<TextField
 					type="text"
@@ -422,31 +533,38 @@ const Register = () => {
 					}
 					onChange={handleChange}
 					onBlur={handleChange}
+					helperText={!fields.isValidOrganization && fields.isTouchedOrganization && "Length must be between 2 and 50 characters long"}
 				/>
-				<Tooltip sx={{ position: 'relative', bottom: '50px', left: '110%', p:0, width:'50px' }} color="warning" title="This is the name of your organization. It will be created for you automatically once the registration is succesful.">
+				<Tooltip sx={{ position: 'relative', bottom: '50px', left: '110%', p: 0, width: '50px' }} color="warning" title="This is the name of your organization. It will be created for you automatically once the registration is succesful.">
 					<IconButton>
 						<LightbulbIcon />
 					</IconButton>
 				</Tooltip>
-				<Select
-					name="currency"
-					title="Currency"
-					label="Currency"
-					sx={{width:'99%'}}
-					error={
-						!fields.isValidCurrency && fields.isTouchedCurrency
-					}
-					color={
-						fields.isValidCurrency && fields.isTouchedCurrency
-							? "success"
-							: "primary"
-					}
-					onChange={handleChange}
-					onBlur={handleChange}
-				>
-					{currencies.map(x => <MenuItem className="d-flex" value={x.currency}>{x.currency} </MenuItem>)}
-				</Select>
-				<Tooltip sx={{ position: 'relative', bottom: '50px', left: '110%', width:'50px' }} color="warning" title="Please choose any currency. This Currency will be used for all of your transactions and you will not be able to change it!">
+				<FormControl sx={{ marginLeft: '5px' }} error={(!fields.isValidCurrency && fields.isTouchedCurrency) && true}>
+					<InputLabel id="currency-label">Currency</InputLabel>
+					<Select
+						name="currency"
+						title="Currency"
+						labelId="currency-label" label="Currency"
+						sx={{ width: '99%' }}
+
+						error={
+							!fields.isValidCurrency && fields.isTouchedCurrency
+						}
+						color={
+							fields.isValidCurrency && fields.isTouchedCurrency
+								? "success"
+								: "primary"
+						}
+						onChange={handleChange}
+						onBlur={handleChange}
+
+					>
+						{currencies.map(x => <MenuItem className="d-flex" value={x.currency}>{x.currency} </MenuItem>)}
+					</Select>
+					{(!fields.isValidCurrency && fields.isTouchedCurrency) && <FormHelperText color='error'>Currency is required</FormHelperText>}
+				</FormControl>
+				<Tooltip sx={{ position: 'relative', bottom: '50px', left: '110%', width: '50px' }} color="warning" title="Please choose any currency. This Currency will be used for all of your transactions and you will not be able to change it!">
 					<IconButton>
 						<LightbulbIcon />
 					</IconButton>
