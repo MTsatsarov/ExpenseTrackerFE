@@ -1,5 +1,6 @@
 import { Card, CardContent, TextField, FormControl } from "@mui/material"
 import { useState, useEffect } from "react"
+import { useAppSelector } from "../../../../../app/hooks"
 import { IStorage } from "../Storage"
 
 interface IEditStorageProps {
@@ -10,7 +11,7 @@ interface IEditStorageProps {
 
 const EditStorage = (props: IEditStorageProps) => {
 	const [editedModel, setEditedModel] = useState<IStorage>(props.model)
-
+	var mode = useAppSelector(store => store.user.themeMode)
 	const onChangeModel = (e: any) => {
 		var quantity = editedModel.quantity;
 		switch (e.target.name) {
@@ -26,7 +27,14 @@ const EditStorage = (props: IEditStorageProps) => {
 
 	return (
 		<>
-			<Card style={{ width: '31.2%', height: '3.5rem', marginRight: '0.4Rem', marginTop: '1rem', background: props.canEdit ? "#bee6fa" : 'white' }}>
+			<Card
+				style={{
+					width: '31.2%',
+					height: '3.5rem',
+					marginRight: '0.4Rem',
+					marginTop: '1rem',
+					background: props.canEdit ?  `${mode}` === 'light' ? '#bee6fa' : '#212121' : `${mode}` === 'light' ? 'white' : '#464646'
+				}}>
 				<CardContent className='d-flex flex-row align-items-center p-0 w-100' >
 					<span className="flex-2 mx-2">
 						<FormControl className="w-400">
@@ -40,7 +48,14 @@ const EditStorage = (props: IEditStorageProps) => {
 					</span>
 				</CardContent>
 			</Card>
-			<Card style={{ width: '21.1%', height: '3.5rem', marginRight: '0.4Rem', marginTop: '1rem', background: props.canEdit ? "#bee6fa" : 'white' }}>
+			<Card
+				style={{
+					width: '21.1%',
+					height: '3.5rem',
+					marginRight: '0.4Rem',
+					marginTop: '1rem',
+					background: props.canEdit ?  `${mode}` === 'light' ? '#bee6fa' : '#212121' : `${mode}` === 'light' ? 'white' : '#464646'
+				}}>
 				<CardContent className='d-flex flex-row align-items-center p-0 w-100' >
 					<span className="flex-2 mx-2">
 						<FormControl className="w-200">
@@ -53,13 +68,21 @@ const EditStorage = (props: IEditStorageProps) => {
 								error={props.canEdit ? editedModel.quantity < 0 : props.model.quantity < 0}
 								onChange={onChangeModel}
 								type="number"
-								InputProps={{ inputProps: { min: 0,step:0.01 } }}
+								InputProps={{ inputProps: { min: 0, step: 0.01 } }}
 							/>
 						</FormControl>
 					</span>
 				</CardContent>
 			</Card>
-			<Card style={{ width: '21.1%', height: "3.5rem", marginRight: '0.4Rem', marginTop: '1rem', background: props.canEdit ? "#bee6fa" : 'white' }}>
+			<Card
+				style={{
+					width: '21.1%',
+					height: "3.5rem",
+					marginRight: '0.4Rem',
+					marginTop: '1rem',
+					background: props.canEdit ?  `${mode}` === 'light' ? '#bee6fa' : '#212121' : `${mode}` === 'light' ? 'white' : '#464646'
+
+				}}>
 				<CardContent className='d-flex flex-row align-items-center p-0 w-100' >
 					<span className="flex-2 mx-2">
 						<FormControl className="w-200">
@@ -74,7 +97,14 @@ const EditStorage = (props: IEditStorageProps) => {
 					</span>
 				</CardContent>
 			</Card>
-			<Card style={{ width: '21.1%', height: "3.5rem", marginRight: '0.4Rem', marginTop: '1rem', background: props.canEdit ? "#bee6fa" : 'white' }}>
+			<Card
+				style={{
+					width: '21.1%',
+					height: "3.5rem",
+					marginRight: '0.4Rem',
+					marginTop: '1rem',
+					background: props.canEdit ?  `${mode}` === 'light' ? '#bee6fa' : '#212121' : `${mode}` === 'light' ? 'white' : '#464646'
+				}}>
 				<CardContent className='d-flex flex-row align-items-center p-0 w-400' >
 					<span className="mx-2">
 						<FormControl className="w-300" >

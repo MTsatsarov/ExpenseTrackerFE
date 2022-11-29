@@ -11,6 +11,7 @@ const apiRoutes = {
 	updateUser: 'account/updateUser',
 	getCurrentUser: 'account/current',
 	refreshToken:'account/refreshToken',
+	changeThemeMode:'account/changeThemeMode',
 	
 	//Store
 	getStores: 'store/getStores',
@@ -24,6 +25,10 @@ const apiRoutes = {
 	getTrransactionsByUser: 'transaction/getUserTransactions',
 	getDashboard: 'transaction/getDashboardTransactions',
 	getTransactionDetails: 'transaction/details',
+	getCurrentDateTransactions:'transactions/today',
+	getMonthlyTransactions:'transactions/monthly',
+	getTransactionsByStore:'transactions/byStore',
+
 
 	//Organization
 	addEmployee: 'organization/addEmployee',

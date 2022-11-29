@@ -14,14 +14,13 @@ import { CssBaseline } from "@mui/material";
 const persistor = persistStore(store);
 const container = document.getElementById("root")!;
 const root = createRoot(container);
+
+
 root.render(
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
 				<BrowserRouter>
-					<ThemeProvider theme={appTheme}>
-					<CssBaseline />
 						<App />
-					</ThemeProvider>
 				</BrowserRouter>
 			</PersistGate>
 		</Provider>

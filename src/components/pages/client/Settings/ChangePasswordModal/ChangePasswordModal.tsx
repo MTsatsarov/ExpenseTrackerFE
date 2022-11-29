@@ -8,6 +8,7 @@ import { apiUrl, apiRoutes } from "../../../../../apiConfig";
 import instance from "../../../../../axios/axios";
 import Toaster from "../../../../utils/Toaster/Toaster";
 import Loader from "../../../../utils/Loader/Loader";
+import { useAppSelector } from "../../../../../app/hooks";
 interface ChangePasswordModalProps {
 	show: boolean
 	onClose: Function
@@ -42,6 +43,8 @@ const ChangePasswordModal = (props: ChangePasswordModalProps) => {
 	const [confirmPassVisible, setConfirmPassVisible] = useState<boolean>(false)
 	const [showDialog, setShowDialog] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
+
+	const mode = useAppSelector(store => store.user.themeMode)
 	useEffect(() => {
 		validateForm();
 	}, [model])
@@ -148,7 +151,7 @@ const ChangePasswordModal = (props: ChangePasswordModalProps) => {
 						sx={{
 							width: "40%",
 							height: "40%",
-							background: "rgba(255,255,255,1)",
+							backgroundColor: `${mode === 'dark' ? 'black' : "white"}`,
 							borderRadius: "12px",
 							display: "flex",
 							flexDirection: "column",
@@ -283,7 +286,7 @@ const ChangePasswordModal = (props: ChangePasswordModalProps) => {
 			</Dialog>
 			{
 				loading &&
-				<Loader/>
+				<Loader />
 			}
 		</>
 	)

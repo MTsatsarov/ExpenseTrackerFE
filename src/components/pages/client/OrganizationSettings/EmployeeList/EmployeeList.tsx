@@ -100,7 +100,8 @@ const EmployeeList = () => {
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		setItemsPerPage(parseInt(event.target.value,));
-		await getUsers(page, parseInt(event.target.value,))
+		await getUsers(1, parseInt(event.target.value,))
+		setPage(1);
 	};
 
 	return (
@@ -123,7 +124,7 @@ const EmployeeList = () => {
 						borderRadius: 2,
 					}}>
 						<Table stickyHeader={true}>
-							<TableHead sx={{ "& .MuiTableCell-stickyHeader": { backgroundColor: appTheme.palette.primary.main } }}>
+							<TableHead>
 								<TableRow>
 									<TableCell scope='head' variant='head' sx={{ color: 'white' }}>Employee Email</TableCell>
 									<TableCell scope='head' variant='head' sx={{ color: 'white' }}>UserName</TableCell>

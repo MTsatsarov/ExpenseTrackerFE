@@ -28,6 +28,7 @@ import { apiRoutes, apiUrl } from "../../../apiConfig";
 import Toaster from "../Toaster/Toaster";
 import Loader from "../Loader/Loader";
 import { useAppSelector } from "../../../app/hooks";
+import { appTheme } from "../AppTheme/AppTheme";
 
 interface ICreateTransactionModalProps {
 	showModal: boolean;
@@ -54,6 +55,8 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	const [storeSuggestions, setStoreSuggestions] = useState<Array<iStore>>([])
 	const [loading, setLoading] = useState<boolean>(false);
 	var user = useAppSelector((state) => state.user);
+	var mode = useAppSelector(store => store.user.themeMode)
+
 	useEffect(() => {
 		instance.get(`${apiUrl}/${apiRoutes.getStores}`).then((response) => {
 			setStoreSuggestions(response.data);
@@ -81,7 +84,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	const createExpense = async () => {
 		if (products.length > 0 && selectedStore.name.length > 0) {
 			setLoading(true)
-			await instance.post(`${apiUrl}/${apiRoutes.createExpense}`, { products: products, storeName: selectedStore.name, storeId: selectedStore.storeId, type:"product" })
+			await instance.post(`${apiUrl}/${apiRoutes.createExpense}`, { products: products, storeName: selectedStore.name, storeId: selectedStore.storeId, type: "product" })
 				.then((response) => {
 					if (response.status === 200 || response.status === 201) {
 						Toaster.show("success", "", response.data);
@@ -98,8 +101,8 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 						});
 					}
 				});
-				setLoading(false)
-			
+			setLoading(false)
+
 		}
 	}
 
@@ -145,7 +148,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 					sx={{
 						width: "70%",
 						height: "70%",
-						background: "rgba(255,255,255,1)",
+						backgroundColor: `${mode === 'dark' ? 'black' : "white"}`,
 						borderRadius: "12px",
 						display: "flex",
 						flexDirection: "column",
@@ -158,7 +161,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 						transform: "translate(-50%, -50%)",
 					}}
 				>
-					<Typography sx={{ p: 1 }} variant="h3">
+					<Typography sx={{ p: 1,my:3 }} variant="h3">
 						Create new transaction
 					</Typography>
 					<Box
@@ -173,18 +176,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 					>
 						<CloseIcon />
 					</Box>
-					<Box>
-						<Autocomplete
-							sx={{ minWidth: '300px' }}
-							freeSolo
-							disableClearable
-							onChange={(e: any, v: any) => onStoreChange(v)}
-							options={storeSuggestions.map((option) => option.name)}
-							renderInput={(params) =>
 
-								<TextField value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store" />}
-						/>
-					</Box>
 					<Box
 						sx={{
 							display: "flex",
@@ -261,12 +253,26 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 									</TableBody>
 								</Table>
 							</TableContainer>
-							<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong>Total price of the transaction is: {totalPrice.toFixed(2)} {user.currencySymbol}</strong></Box>
-							<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "center", mt: 5 }}>Create expense</Button>
+
+							<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong style={{ color: appTheme.palette.primary.main, marginRight: '0.5rem' }}>Total price of the transaction is:</strong> {totalPrice.toFixed(2)} {user.currencySymbol}</Box>
+							<Box sx={{display:'flex', mt: 10,alignItems:'center',justifyContent:'space-between',width:"100%",height:"2.5rem"}}>
+								<Autocomplete
+									sx={{ width: '300px', textAlign: 'center', }}
+									freeSolo
+									disableClearable
+									onChange={(e: any, v: any) => onStoreChange(v)}
+									options={storeSuggestions.map((option) => option.name)}
+									renderInput={(params) =>
+
+										<TextField value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store" />}
+								/>
+							
+							<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "flex-end" }}>Create expense</Button>
+							</Box>
 						</Box>
 					</Box>
-					{loading && 
-					<Loader/>}
+					{loading &&
+						<Loader />}
 				</Box>
 			</Fade >
 

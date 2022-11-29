@@ -45,9 +45,9 @@ const Storage = () => {
 
 	useEffect(() => {
 
-		getStorage(defaultPage,rowsPerPage);
+		getStorage(defaultPage, rowsPerPage);
 	}, [])
-	const getStorage = async (page:number,rowsPerPage:number) => {
+	const getStorage = async (page: number, rowsPerPage: number) => {
 		setLoading(true)
 		instance.get(`${apiUrl}/${apiRoutes.getStorage}?page=${page}&itemsPerPage=${rowsPerPage}`).then((response) => {
 			setStorage(response.data.products as Array<IStorage>)
@@ -89,7 +89,7 @@ const Storage = () => {
 
 	const editStorage = async () => {
 		await instance.patch(`${apiUrl}/${apiRoutes.updateStorage}`, editModel).then((response) => {
-			getStorage(1,rowsPerPage);
+			getStorage(1, rowsPerPage);
 			onCancelAction();
 		}).catch(function (error) {
 			if (error.response) {
@@ -136,7 +136,7 @@ const Storage = () => {
 		}
 		await instance.post(`${apiUrl}/${apiRoutes.addNewStore}`, model).then((response) => {
 			setLoading(true)
-			getStorage(1,rowsPerPage);
+			getStorage(1, rowsPerPage);
 			onCancelAction();
 			Toaster.show("success", "", `Succesfully added ${model.product}`);
 		}).catch(function (error) {
@@ -158,20 +158,21 @@ const Storage = () => {
 		event: React.MouseEvent<HTMLButtonElement> | null,
 		newPage: number,
 	) => {
-		setPage(newPage+1);
-		await getStorage(newPage+1,rowsPerPage)
+		setPage(newPage + 1);
+		await getStorage(newPage + 1, rowsPerPage)
 	};
 	const handleChangeRowsPerPage = async (
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		setRowsPerPage(parseInt(event.target.value,));
-		await getStorage(page,parseInt(event.target.value,))
+		await getStorage(1, parseInt(event.target.value,))
+		setPage(1);
 	};
 	return (
 		<>
 			{loading ? <Loader /> :
 				<Slide direction="left" in mountOnEnter unmountOnExit timeout={400}>
-					<Box sx={{ padding: '2rem', width: '99%', margin: 'auto', mt: 4, background: appTheme.palette.primary.light, boxShadow: 3, }} >
+					<Box sx={{ display: 'flex', flexDirection: 'column', padding: '2rem', width: '99%', margin: 'auto', mt: 4, boxShadow: 3, }} >
 						<Box className="d-flex justify-content-around text-capitalize" sx={{ maxWidth: '18%', marginLeft: '3rem' }}>
 							{(!canEdit && !isNew) ?
 								<>
@@ -227,7 +228,7 @@ const Storage = () => {
 								className="mt-4 d-flex flex-row align-items-center w-100 text-uppercase text-center">
 								<span style={{ width: '3.5rem' }} className="'px=1 mr-4 text-center"></span>
 							</div>
-							<Box style={{ background: appTheme.palette.primary.main, color: 'white', width: '31.2%', paddingRight: '1rem', borderRadius: '5px 5px 0 0', padding: '0.4rem' }} sx={{ boxShadow: 1 }}>
+							<Box className="sticky-header" style={{ background: appTheme.palette.primary.main, color: 'white', width: '31.2%', paddingRight: '1rem', borderRadius: '5px 5px 0 0', padding: '0.4rem' }} sx={{ boxShadow: 1 }}>
 								<strong>Product</strong>
 							</Box>
 							<Box style={{ background: appTheme.palette.primary.main, color: 'white', position: 'relative', width: '21.1%', borderRadius: '5px 5px 0 0', padding: '0.4rem' }} className="mx-2">
@@ -259,7 +260,7 @@ const Storage = () => {
 						<TablePagination
 							component="div"
 							count={count}
-							page={page-1}
+							page={page - 1}
 							onPageChange={handleChangePage}
 							rowsPerPage={rowsPerPage}
 							rowsPerPageOptions={[5, 10, 25]}

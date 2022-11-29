@@ -1,10 +1,12 @@
-import { Box, Button, Dialog, Modal, TextField, Typography } from "@mui/material"
+import { Box, Button, Dialog, Modal, PaletteMode, TextField, Typography } from "@mui/material"
 import { useState, useEffect } from "react"
 import { apiRoutes, apiUrl } from "../../../apiConfig";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import instance from "../../../axios/axios";
 import { IBaseRegistrationFields } from "../../landing/Registration";
 import Loader from "../Loader/Loader";
 import Toaster from "../Toaster/Toaster";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface INewEmployeeFormProps {
 	onCloseModal: any,
@@ -33,7 +35,9 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 		isTouchedEmail: false,
 		isTouchedConfirmPassword: false,
 	});
-
+	var dispatch = useAppDispatch()
+	var mode = useAppSelector(store => store.user.themeMode)
+	
 	useEffect(() => {
 		validateForm();
 	}, [fields]);
@@ -42,7 +46,6 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 		let { name, value } = event.target;
 		validateField(name, value);
 	};
-
 	const validateField = (field: any, value: string) => {
 		var validUsername = fields.isValidUsername;
 		var validFirstName = fields.isValidFirstName;
@@ -183,6 +186,7 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 				});
 		}
 	}
+
 	return (
 		<Modal
 			open={true}
@@ -196,8 +200,8 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 				sx={{
 					width: "40%",
 					height: "60%",
-					background: "rgba(255,255,255,1)",
 					borderRadius: "12px",
+					backgroundColor: `${mode === 'dark' ? 'black' : "white"}`,
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",
@@ -208,6 +212,18 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 					transform: "translate(-50%, -50%)",
 				}}
 			>
+				<Box
+						sx={{
+							position: "absolute",
+							top: "0%",
+							right: "0%",
+							p: 2,
+							cursor: "pointer",
+						}}
+						onClick={props.onCloseModal}
+					>
+						<CloseIcon />
+					</Box>
 				<Typography className="mb-4 mt-4" variant="h4">Create new employee</Typography>
 				<form
 					style={{
