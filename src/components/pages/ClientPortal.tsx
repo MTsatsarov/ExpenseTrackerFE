@@ -148,6 +148,7 @@ const ClientPortal = (props: IClientPortalProps) => {
 			}
 		});
 	}
+
 	return (
 
 		<Box sx={{ display: 'flex' }}>
