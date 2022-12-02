@@ -29,6 +29,7 @@ import Toaster from "../Toaster/Toaster";
 import Loader from "../Loader/Loader";
 import { useAppSelector } from "../../../app/hooks";
 import { appTheme } from "../AppTheme/AppTheme";
+import GoogleMaps from "../GoogleMap/GoogleMaps";
 
 interface ICreateTransactionModalProps {
 	showModal: boolean;
@@ -107,7 +108,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	}
 
 	const onStoreChange = (storeName: string) => {
-		var store = storeSuggestions.find(x => x.name === storeName);
+		var store = storeSuggestions.find(x => x.name === storeName.toString());
 		if (store) {
 			setSelectedStore(prevStore => ({
 				...prevStore,
@@ -116,11 +117,14 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 			}))
 		}
 		else {
-			setSelectedStore(prevStore => ({
+			setTimeout(() => setSelectedStore(prevStore => ({
 				...prevStore,
-				name: storeName,
+				name: storeName.toString(),
 				storeId: null
-			}))
+			})), 100)
+
+			console.log(selectedStore)
+
 		}
 	}
 
@@ -131,7 +135,6 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 		newProducts.map(p => total += (p.price * p.quantity))
 		setTotalPrice(total)
 	}
-
 	return (
 		<Modal
 
@@ -161,7 +164,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 						transform: "translate(-50%, -50%)",
 					}}
 				>
-					<Typography sx={{ p: 1,my:3 }} variant="h3">
+					<Typography sx={{ p: 1, my: 3 }} variant="h3">
 						Create new transaction
 					</Typography>
 					<Box
@@ -255,20 +258,23 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 							</TableContainer>
 
 							<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong style={{ color: appTheme.palette.primary.main, marginRight: '0.5rem' }}>Total price of the transaction is:</strong> {totalPrice.toFixed(2)} {user.currencySymbol}</Box>
-							<Box sx={{display:'flex', mt: 10,alignItems:'center',justifyContent:'space-between',width:"100%",height:"2.5rem"}}>
+							<Box sx={{ display: 'flex', mt: 10, alignItems: 'center', justifyContent: 'space-between', width: "100%", height: "2.5rem" }}>
 								<Autocomplete
 									sx={{ width: '300px', textAlign: 'center', }}
 									freeSolo
 									disableClearable
 									onChange={(e: any, v: any) => onStoreChange(v)}
 									options={storeSuggestions.map((option) => option.name)}
+									value={selectedStore.name}
 									renderInput={(params) =>
 
-										<TextField value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store" />}
+										<TextField focused={selectedStore.name !== null && true} value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store" />}
 								/>
-							
-							<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "flex-end" }}>Create expense</Button>
+
+								<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "flex-end" }}>Create expense</Button>
 							</Box>
+
+							<Box sx={{ mt: 2 }}><GoogleMaps getStore={onStoreChange} /></Box>
 						</Box>
 					</Box>
 					{loading &&
