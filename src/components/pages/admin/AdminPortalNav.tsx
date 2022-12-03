@@ -35,7 +35,7 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
 						button
 						onClick={() => onClick('/portal/admin/clients')}
-						selected={currSection === '/portal/admin/clients'}
+						selected={currSection.includes('/portal/admin/clients')}
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<PeopleAltIcon sx={{ color: 'white' }} />
@@ -56,7 +56,8 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
 						button
 						onClick={() => onClick('/portal/admin/transactions')}
-						selected={currSection === '/portal/admin/transactions'}
+						selected={currSection.includes('/portal/admin/transactions')}
+
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<PaidIcon sx={{ color: 'white' }} />
@@ -76,7 +77,8 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
 						button
 						onClick={() => onClick('/portal/admin/organizations')}
-						selected={currSection === '/portal/admin/organizations'}
+						selected={currSection.includes('/portal/admin/organizations')}
+
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<CorporateFareIcon sx={{ color: 'white' }} />
@@ -98,7 +100,8 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
 						button
 						onClick={() => onClick('/portal/admin/stores')}
-						selected={currSection === '/portal/admin/stores'}
+						selected={currSection.includes('/portal/admin/stores')}
+
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<StoreMallDirectoryIcon sx={{ color: 'white' }} />
@@ -120,7 +123,7 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
 						button
 						onClick={() => onClick('/portal/admin/products')}
-						selected={currSection === '/portal/admin/products'}
+						selected={currSection.includes('/portal/admin/products')}
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<ShoppingCartIcon sx={{ color: 'white' }} />

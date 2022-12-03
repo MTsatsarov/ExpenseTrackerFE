@@ -44,7 +44,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						sx={{ alignSelf: 'flex-start', justifySelf: 'flex-end', cursor: 'pointer' }}
 						button
 						onClick={() => onClick('/portal/user/dashboard')}
-						selected={currSection === '/portal/user/dashboard'}
+						selected={currSection.includes('/portal/user/dashboard')}
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<DashboardIcon sx={{ color: 'white' }} />
@@ -63,7 +63,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						button
 
 						onClick={() => onClick('/portal/user/history')}
-						selected={currSection === '/portal/user/history'}
+						selected={currSection.includes('/portal/user/history')}
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<HistoryIcon sx={{ color: 'white' }} />
@@ -82,7 +82,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						button
 
 						onClick={() => onClick('/portal/user/MyOrganization')}
-						selected={currSection === '/portal/user/MyOrganization'}
+						selected={currSection.includes('/portal/user/MyOrganization')}
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<CorporateFareRoundedIcon sx={{ color: 'white' }} />
@@ -100,7 +100,8 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						button
 
 						onClick={() => onClick('/portal/user/Storage')}
-						selected={currSection === '/portal/user/Storage'}
+						selected={currSection.includes('/portal/user/Storage')}
+
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<WarehouseIcon sx={{ color: 'white' }} />
@@ -118,7 +119,8 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						button
 
 						onClick={() => onClick('/portal/user/settings')}
-						selected={currSection === '/portal/user/settings'}
+						selected={currSection.includes('/portal/user/settings')}
+
 					>
 						<ListItemIcon sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
 							<ManageAccountsIcon sx={{ color: 'white' }} />
