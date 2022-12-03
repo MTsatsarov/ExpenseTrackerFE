@@ -1,49 +1,43 @@
-import { Drawer, styled, Divider, AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, SpeedDial, SpeedDialAction, Switch } from "@mui/material";
-import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
-import BroadcastOnHomeIcon from '@mui/icons-material/BroadcastOnHome';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Box } from "@mui/system";
-import ClientRoutes from "./client/ClientRoutes";
-import ClientPortalNav from "./client/ClientPortalNav";
-import AddIcon from "@mui/icons-material/Add";
-import { useState, useEffect } from "react";
-import CreateTransactionModal from "../utils/CreateTransactionModal/CreateTransactionModal";
-import { useDispatch } from "react-redux";
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import { apiRoutes, apiUrl } from "../../apiConfig";
-import Toaster from "../utils/Toaster/Toaster";
-import instance from "../../axios/axios";
-import { logOutUser, setCurrentUser } from "../../features/User/userSlice";
-import { useNavigate } from "react-router-dom";
+import { AppBar, Box, Divider, Drawer, IconButton, Menu, MenuItem, styled, Switch, Toolbar, Typography } from "@mui/material"
 import LightModeTwoToneIcon from '@mui/icons-material/LightModeTwoTone';
 import DarkModeTwoToneIcon from '@mui/icons-material/DarkModeTwoTone';
-import { useAppSelector } from "../../app/hooks";
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useState,useEffect } from "react";
+import { apiRoutes, apiUrl } from "../../../apiConfig";
+import instance from "../../../axios/axios";
+import Toaster from "../../utils/Toaster/Toaster";
+import { logOutUser, setCurrentUser } from "../../../features/User/userSlice";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { useNavigate } from "react-router-dom";
+import AdminPortalNav from "./AdminPortalNav";
+import AdminRoutes from "./AdminRoutes";
 
-interface IClientPortalProps {
+interface IAdminPortalProps {
 	getTheme: Function
 }
+const AdminPortal = (props: IAdminPortalProps) => {
+	var mode = useAppSelector(store=>store.user.themeMode);
+	const [toggleSideNav, setToggleSideNav] = useState<boolean>(false)
+	const [theme, setTheme] = useState<string>()
+	const [showMenu, setShowMenu] = useState<boolean>(false)
+	const [anchorEl, setAnchorEL] = useState<any>()
+	const [displaySideNav, setDisplaySideNav] = useState<boolean>(false)
+	const [sectionName, setSectionName] = useState<string>(mode)
 
-const ClientPortal = (props: IClientPortalProps) => {
+	var dispatch = useAppDispatch();
+	var navigate = useNavigate();
+	
+	const mobileBreak = 1300;
+	const drawerWidth = 220;
+
 	const DrawerHeader = styled("div")(() => ({
 		display: "flex",
 		alignItems: "center",
 		padding: "5px",
 		justifyContent: "flex-start",
 	}));
-	
-	var mode = useAppSelector(x => x.user.themeMode)
-	const [displayModal, setDisplayModel] = useState<boolean>(false);
-	const [displaySideNav, setDisplaySideNav] = useState<boolean>(false)
-	const [toggleSideNav, setToggleSideNav] = useState<boolean>(false)
-	const [showMenu, setShowMenu] = useState<boolean>(false)
-	const [anchorEl, setAnchorEL] = useState<any>()
-	const [sectionName, setSectionName] = useState<string>(mode)
-	const [theme, setTheme] = useState<string>()
-	const mobileBreak = 1300
-	const drawerWidth = 220;
 
-	var dispatch = useDispatch();
-	var navigate = useNavigate();
 	useEffect(() => {
 		getCurrentUser();
 		window.addEventListener('resize', handleResize)
@@ -52,13 +46,6 @@ const ClientPortal = (props: IClientPortalProps) => {
 		}
 	}, [])
 
-	const onCLick = () => {
-		setDisplayModel(!displayModal);
-	};
-
-	const handleResize = () => {
-		setDisplaySideNav(window.innerWidth < mobileBreak ? true : false)
-	}
 	const toggle = () => {
 		setToggleSideNav(!toggleSideNav)
 	}
@@ -68,11 +55,19 @@ const ClientPortal = (props: IClientPortalProps) => {
 		setAnchorEL(e.target);
 	}
 
-	const logoutUser = () => {
-		instance.post(`${apiUrl}/${apiRoutes.logOut}`).then((response) => {
+	const handleResize = () => {
+		setDisplaySideNav(window.innerWidth < mobileBreak ? true : false)
+	}
+
+	const changeTheme = async () => {
+		var newMode = theme === 'light' ? 'dark' : 'light'
+
+		await instance.post(`${apiUrl}/${apiRoutes.changeThemeMode}`, newMode).then((response) => {
 			if (response.status === 200 || response.status === 201) {
-				dispatch(logOutUser(null))
-				navigate("/signIn", { replace: true });
+				props.getTheme(newMode)
+				getCurrentUser();
+				setTheme(newMode)
+
 			}
 		}).catch(function (error) {
 			if (error.response) {
@@ -92,10 +87,6 @@ const ClientPortal = (props: IClientPortalProps) => {
 		setSectionName(section)
 	}
 
-	const actions = [
-		{ icon: <LocalGroceryStoreIcon color="primary" fontSize="medium" onClick={onCLick} />, name: 'Groceries' },
-		{ icon: <BroadcastOnHomeIcon color="primary" fontSize="medium" />, name: 'Services' },
-	];
 
 	const getCurrentUser = async () => {
 		instance.get(`${apiUrl}/${apiRoutes.getCurrentUser}`).then((response) => {
@@ -127,15 +118,11 @@ const ClientPortal = (props: IClientPortalProps) => {
 			}
 		});
 	}
-	const changeTheme = async () => {
-		var newMode = theme === 'light' ? 'dark' : 'light'
-
-		await instance.post(`${apiUrl}/${apiRoutes.changeThemeMode}`,newMode).then((response) => {
+	const logoutUser = () => {
+		instance.post(`${apiUrl}/${apiRoutes.logOut}`).then((response) => {
 			if (response.status === 200 || response.status === 201) {
-				props.getTheme(newMode)
-				getCurrentUser();
-				setTheme(newMode)
-
+				dispatch(logOutUser(null))
+				navigate("/signIn", { replace: true });
 			}
 		}).catch(function (error) {
 			if (error.response) {
@@ -150,9 +137,7 @@ const ClientPortal = (props: IClientPortalProps) => {
 			}
 		});
 	}
-
 	return (
-
 		<Box sx={{ display: 'flex' }}>
 			<AppBar position="fixed" color="secondary"
 				sx={{
@@ -228,7 +213,7 @@ const ClientPortal = (props: IClientPortalProps) => {
 				>
 					<DrawerHeader>MY logo will be here</DrawerHeader>
 					<Divider sx={{ background: "#A2A0A0" }} />
-					<ClientPortalNav changeSection={changeSection} />
+					<AdminPortalNav changeSection={changeSection} />
 				</Drawer>
 				{
 					displaySideNav &&
@@ -252,7 +237,7 @@ const ClientPortal = (props: IClientPortalProps) => {
 						<DrawerHeader>MY logo will be here</DrawerHeader>
 
 						<Divider sx={{ background: "#A2A0A0" }} />
-						<ClientPortalNav changeSection={changeSection} />
+						<AdminPortalNav changeSection={changeSection} />
 
 					</Drawer>
 				}
@@ -266,35 +251,11 @@ const ClientPortal = (props: IClientPortalProps) => {
 					minHeight: '1080px',
 				}}
 			>
-				{displayModal ? (
-					<CreateTransactionModal
-						showModal={displayModal}
-						handleClose={onCLick}
-					/>
-				) : (
-					""
-				)}
+				{<AdminRoutes/>}
 
-				<ClientRoutes />
-				<SpeedDial
-					sx={{ position: "absolute", top: "80%", left: "96%" }}
-					color="primary"
-					ariaLabel="SpeedDial tooltip example"
-
-					icon={<AddIcon />}>
-
-					{actions.map((action) => (
-						<SpeedDialAction
-							key={action.name}
-							icon={action.icon}
-							tooltipTitle={action.name}
-							tooltipOpen
-						/>
-					))}
-				</SpeedDial>
 			</Box>
 		</Box>
-	);
-};
+	)
+}
 
-export default ClientPortal;
+export default AdminPortal

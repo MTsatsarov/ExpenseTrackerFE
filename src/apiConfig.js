@@ -12,6 +12,11 @@ const apiRoutes = {
 	getCurrentUser: 'account/current',
 	refreshToken:'account/refreshToken',
 	changeThemeMode:'account/changeThemeMode',
+	confirmUserMail:"account/confirmUserEmail",
+
+	//Clients
+	getAllClients: 'client/all',
+	getClient:'client/byId',
 	
 	//Store
 	getStores: 'store/getStores',

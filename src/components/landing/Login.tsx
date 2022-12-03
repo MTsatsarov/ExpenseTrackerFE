@@ -105,9 +105,18 @@ const Login = () => {
 										roles: response.data.roles,
 										email: response.data.email,
 										currencySymbol: response.data.currencySymbol,
-										mode:response.data.mode
+										mode: response.data.mode
 									})
 								)
+								var roles = response.data.roles as Array<string>
+								if (roles.find(x => x === 'ADMIN')) {
+									navigate("/portal/admin/clients", { replace: true });
+								}
+								else {
+									navigate("/portal/user/dashboard", { replace: true });
+
+								}
+
 							}
 						}).catch(function (error) {
 							if (error.response) {
@@ -120,11 +129,11 @@ const Login = () => {
 									Toaster.show("error", "", message);
 								});
 							}
+						}).finally(() => {
+							setLoading(false)
+
 						});
 
-						setLoading(false)
-
-						navigate("/portal/user/dashboard", { replace: true });
 					}
 				})
 				.catch(function (error) {
