@@ -29,6 +29,8 @@ import Toaster from "../Toaster/Toaster";
 import Loader from "../Loader/Loader";
 import { useAppSelector } from "../../../app/hooks";
 import { appTheme } from "../AppTheme/AppTheme";
+import GoogleMaps from "../GoogleMap/GoogleMaps";
+
 
 interface ICreateTransactionModalProps {
 	showModal: boolean;
@@ -107,7 +109,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 	}
 
 	const onStoreChange = (storeName: string) => {
-		var store = storeSuggestions.find(x => x.name === storeName);
+		var store = storeSuggestions.find(x => x.name === storeName.toString());
 		if (store) {
 			setSelectedStore(prevStore => ({
 				...prevStore,
@@ -116,11 +118,14 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 			}))
 		}
 		else {
-			setSelectedStore(prevStore => ({
+			setTimeout(() => setSelectedStore(prevStore => ({
 				...prevStore,
-				name: storeName,
+				name: storeName.toString(),
 				storeId: null
-			}))
+			})), 100)
+
+			console.log(selectedStore)
+
 		}
 	}
 
@@ -132,6 +137,52 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 		setTotalPrice(total)
 	}
 
+	const uploadImg = (e: any) => {
+
+		var receiptOcrEndpoint = 'https://ocr.asprise.com/api/v1/receipt';
+		var imageFile = e.target.files[0]; // Modify this to use your own file if necessary
+
+		var fd = new FormData();
+		fd.append('file', imageFile, "img")
+		fd.append('api_key', 'TEST')
+		fd.append('recognizer', 'auto')
+		setLoading(true)
+
+		instance.post(receiptOcrEndpoint, fd).then((response) => {
+
+			readReceiptResponse(response.data.receipts)
+		}).catch(function (error) {
+			if (error.response) {
+				console.log(error.response) // Receipt OCR result in JSON
+			}
+		}).finally(() => {
+			setLoading(false)
+		});
+	}
+
+	const readReceiptResponse = (receipts: Array<any>) => {
+		var currProducts = [] as Array<IProductList>
+
+		receipts.forEach(x => {
+			var items = x.items as Array<any>;
+
+			console.log(items)
+			items.forEach(element => {
+
+				currProducts.push({
+					name: element.description,
+					quantity: element.qty,
+					price: element.amount,
+					total: Number(element.qty) * Number(element.amount)
+				} as IProductList)
+			});
+		})
+
+		currProducts = currProducts.concat(products);
+		console.log(currProducts)
+
+		setProducts(currProducts)
+	}
 	return (
 		<Modal
 
@@ -161,7 +212,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 						transform: "translate(-50%, -50%)",
 					}}
 				>
-					<Typography sx={{ p: 1,my:3 }} variant="h3">
+					<Typography sx={{ p: 1, my: 3 }} variant="h3">
 						Create new transaction
 					</Typography>
 					<Box
@@ -197,7 +248,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 								<Box>
 									<Tooltip title="Upload your receipt.">
 										<IconButton sx={{ border: 1, color: "#2196F3" }} aria-label="upload picture" component="label">
-											<input hidden accept="image/*" type="file" />
+											<input hidden accept="image/*" type="file" onChange={uploadImg} />
 											<PhotoCamera sx={{ fontSize: 32 }} />
 										</IconButton>
 									</Tooltip>
@@ -255,20 +306,23 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 							</TableContainer>
 
 							<Box sx={{ mt: 3, alignSelf: 'flex-end' }}><strong style={{ color: appTheme.palette.primary.main, marginRight: '0.5rem' }}>Total price of the transaction is:</strong> {totalPrice.toFixed(2)} {user.currencySymbol}</Box>
-							<Box sx={{display:'flex', mt: 10,alignItems:'center',justifyContent:'space-between',width:"100%",height:"2.5rem"}}>
+							<Box sx={{ display: 'flex', mt: 10, alignItems: 'center', justifyContent: 'space-between', width: "100%", height: "2.5rem" }}>
 								<Autocomplete
 									sx={{ width: '300px', textAlign: 'center', }}
 									freeSolo
 									disableClearable
 									onChange={(e: any, v: any) => onStoreChange(v)}
 									options={storeSuggestions.map((option) => option.name)}
+									value={selectedStore.name}
 									renderInput={(params) =>
 
-										<TextField value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store" />}
+										<TextField focused={selectedStore.name !== null && true} value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store" />}
 								/>
-							
-							<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "flex-end" }}>Create expense</Button>
+
+								<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "flex-end" }}>Create expense</Button>
 							</Box>
+
+							<Box sx={{ mt: 2 }}><GoogleMaps getStore={onStoreChange} /></Box>
 						</Box>
 					</Box>
 					{loading &&
@@ -279,5 +333,4 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 		</Modal>
 	);
 };
-
 export default CreateTransactionModal;
