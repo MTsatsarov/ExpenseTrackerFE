@@ -31,6 +31,7 @@ import { useAppSelector } from "../../../app/hooks";
 import { appTheme } from "../AppTheme/AppTheme";
 import GoogleMaps from "../GoogleMap/GoogleMaps";
 
+
 interface ICreateTransactionModalProps {
 	showModal: boolean;
 	handleClose: any;
@@ -135,6 +136,53 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 		newProducts.map(p => total += (p.price * p.quantity))
 		setTotalPrice(total)
 	}
+
+	const uploadImg = (e: any) => {
+
+		var receiptOcrEndpoint = 'https://ocr.asprise.com/api/v1/receipt';
+		var imageFile = e.target.files[0]; // Modify this to use your own file if necessary
+
+		var fd = new FormData();
+		fd.append('file', imageFile, "img")
+		fd.append('api_key', 'TEST')
+		fd.append('recognizer', 'auto')
+		setLoading(true)
+
+		instance.post(receiptOcrEndpoint, fd).then((response) => {
+
+			readReceiptResponse(response.data.receipts)
+		}).catch(function (error) {
+			if (error.response) {
+				console.log(error.response) // Receipt OCR result in JSON
+			}
+		}).finally(() => {
+			setLoading(false)
+		});
+	}
+
+	const readReceiptResponse = (receipts: Array<any>) => {
+		var currProducts = [] as Array<IProductList>
+
+		receipts.forEach(x => {
+			var items = x.items as Array<any>;
+
+			console.log(items)
+			items.forEach(element => {
+
+				currProducts.push({
+					name: element.description,
+					quantity: element.qty,
+					price: element.amount,
+					total: Number(element.qty) * Number(element.amount)
+				} as IProductList)
+			});
+		})
+
+		currProducts = currProducts.concat(products);
+		console.log(currProducts)
+
+		setProducts(currProducts)
+	}
 	return (
 		<Modal
 
@@ -200,7 +248,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 								<Box>
 									<Tooltip title="Upload your receipt.">
 										<IconButton sx={{ border: 1, color: "#2196F3" }} aria-label="upload picture" component="label">
-											<input hidden accept="image/*" type="file" />
+											<input hidden accept="image/*" type="file" onChange={uploadImg} />
 											<PhotoCamera sx={{ fontSize: 32 }} />
 										</IconButton>
 									</Tooltip>
@@ -285,5 +333,4 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 		</Modal>
 	);
 };
-
 export default CreateTransactionModal;
