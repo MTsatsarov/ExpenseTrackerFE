@@ -8,6 +8,7 @@ import { getDesignTokens } from "./components/utils/AppTheme/AppTheme";
 import { createTheme } from "@mui/material/styles";
 import React, { useState } from "react";
 import {useAppSelector } from "./app/hooks";
+import AdminPortal from "./components/pages/admin/AdminPortal"
 function App() {
 
 	var mode = useAppSelector(store => store.user.themeMode)
@@ -16,6 +17,7 @@ function App() {
 	const getTheme = (theme: PaletteMode) => {
 		setMyMode(theme)
 	}
+
 	const theme = React.useMemo(() => createTheme(getDesignTokens(myMode)), [myMode]);
 	return (
 		<ThemeProvider theme={theme}>
@@ -23,6 +25,7 @@ function App() {
 			<div className="App">
 				<Routes>
 					<Route path="/portal/user/*" element={<ClientPortal getTheme={getTheme} />} />
+					<Route path="/portal/admin/*" element={<AdminPortal getTheme={getTheme}  />} />
 					<Route path="/*" element={<Landing />} />
 				</Routes>
 			</div>
