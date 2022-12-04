@@ -15,11 +15,12 @@ const persistor = persistStore(store);
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
+var basename=document.baseURI.substring(document.baseURI.indexOf(window.location.origin) + window.location.origin.length, document.baseURI.lastIndexOf('/'))
 
 root.render(
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
-				<BrowserRouter basename={""}>
+				<BrowserRouter basename={basename}>
 						<App />
 				</BrowserRouter>
 			</PersistGate>
