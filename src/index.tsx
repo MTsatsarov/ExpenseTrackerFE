@@ -19,7 +19,7 @@ const root = createRoot(container);
 root.render(
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
-				<BrowserRouter basename={"https://mtsatsarov.github.io/ExpenseTrackerFE" || ''}>
+				<BrowserRouter basename={""}>
 						<App />
 				</BrowserRouter>
 			</PersistGate>
