@@ -15,13 +15,13 @@ const persistor = persistStore(store);
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
-var basename=document.baseURI.substring(document.baseURI.indexOf(window.location.origin) + window.location.origin.length, document.baseURI.indexOf('/'))
+var basename=document.baseURI.substring(document.baseURI.indexOf(window.location.origin) + window.location.origin.length, document.baseURI.lastIndexOf('/'))
 console.log(basename)
 
 root.render(
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
-				<BrowserRouter basename={basename}>
+				<BrowserRouter basename={"ExpenseTrackerFE"}>
 						<App />
 				</BrowserRouter>
 			</PersistGate>
