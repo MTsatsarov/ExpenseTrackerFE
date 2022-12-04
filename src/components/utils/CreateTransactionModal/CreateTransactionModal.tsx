@@ -150,6 +150,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 
 		instance.post(receiptOcrEndpoint, fd).then((response) => {
 
+
 			readReceiptResponse(response.data.receipts)
 		}).catch(function (error) {
 			if (error.response) {
@@ -168,7 +169,9 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 
 			console.log(items)
 			items.forEach(element => {
-
+				if (!element.qty) {
+					element.qty = 1;
+				}
 				currProducts.push({
 					name: element.description,
 					quantity: element.qty,

@@ -19,7 +19,7 @@ const root = createRoot(container);
 root.render(
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
-				<BrowserRouter basename={window.location.pathname || ''}>
+				<BrowserRouter basename={''}>
 						<App />
 				</BrowserRouter>
 			</PersistGate>

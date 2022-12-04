@@ -52,6 +52,9 @@ const Dashboard = () => {
 	const [day, setDay] = useState<string>('')
 	const [displayMenu, setDisplayMenu] = useState<boolean>(false)
 	const [selectedRow, SetSelectedRow] = useState<any>({})
+	const [showMonthlyModal, setShowMonthlyModal] = useState<boolean>(false)
+	const [currentMonthTransactions, setCurrentMonthTransactions] = useState<Array<ITransactionHistoryModel>>([])
+	const [month, setMonth] = useState<string>('')
 	let mode = useAppSelector(store => store.user.themeMode)
 	useEffect(() => {
 		const getDashboard = async () => {
@@ -83,13 +86,24 @@ const Dashboard = () => {
 
 	const getTransactionWrapper = (e: any) => {
 		setDay(e);
-		currentDateTransactions(e, page, rowsPerPage)
+		currentDateTransactions(e, page, rowsPerPage, null)
 	}
-	const currentDateTransactions = async (e: any, page: number, itemsPerPage: number) => {
-		await instance.get(`${apiUrl}/${apiRoutes.getTransactions}?page=${page}&itemsPerPage=${itemsPerPage}&day=${e.name}`).then((response) => {
-			setShowDailyTransactionModal(true);
+	const currentDateTransactions = async (e: any | null, page: number, itemsPerPage: number, month: string | null) => {
+
+		let queryParams = e !== null ? `&day=${e.name}` : '';
+		queryParams += month !== null ? `&month=${month}` : '';
+		await instance.get(`${apiUrl}/${apiRoutes.getTransactions}?page=${page}&itemsPerPage=${itemsPerPage}${queryParams}`).then((response) => {
+			if (month) {
+				setShowMonthlyModal(true)
+				setCurrentMonthTransactions(response.data.transactions)
+				setMonth(month);
+			}
+			else {
+				setShowDailyTransactionModal(true);
+				setDailyTransactionsHistory(response.data.transactions)
+
+			}
 			setCount(response.data.count)
-			setDailyTransactionsHistory(response.data.transactions)
 
 		}).catch(function (error) {
 			if (error.response) {
@@ -105,11 +119,17 @@ const Dashboard = () => {
 		});
 	}
 
+	const closeModals = () => {
+		setShowMonthlyModal(false)
+		setPage(1)
+		setShowDailyTransactionModal(false)
+	}
+
 	const handleChangeRowsPerPage = async (
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		setRowsPerPage(parseInt(event.target.value,));
-		await currentDateTransactions(day, page, parseInt(event.target.value,))
+		await currentDateTransactions(day, page, parseInt(event.target.value), null)
 		setPage(1);
 	};
 
@@ -118,7 +138,7 @@ const Dashboard = () => {
 		newPage: number,
 	) => {
 		setPage(newPage + 1);
-		await currentDateTransactions(day, newPage + 1, rowsPerPage)
+		await currentDateTransactions(day, newPage + 1, rowsPerPage, null)
 	};
 
 	const toggleMenu = (event: any, data: any) => {
@@ -157,11 +177,29 @@ const Dashboard = () => {
 	const handleClose = () => {
 		setDisplayMenu(!displayMenu)
 	};
+
+	const getMonthlyTransactions = async (e: any) => {
+		await currentDateTransactions(null, page, rowsPerPage, e.activeLabel)
+	}
+	const handleMonthTransactionsPageChange = async (event: React.MouseEvent<HTMLButtonElement> | null,
+		newPage: number) => {
+		setPage(newPage + 1);
+		await currentDateTransactions(null, newPage + 1, rowsPerPage, month)
+	}
+
+	const handleMonthChangeRows = async (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+
+		console.log(event)
+		setRowsPerPage(parseInt(event.target.value,));
+		await currentDateTransactions(null, page, parseInt(event.target.value), month)
+		setPage(1);
+	}
 	return (
-		<>{
-			loading &&
-			<Loader />
-		}
+		<>
+			{
+				loading &&
+				<Loader />
+			}
 			<Slide direction="left" in mountOnEnter unmountOnExit timeout={400} >
 				<Box className={styles.box}
 					sx={{
@@ -211,14 +249,14 @@ const Dashboard = () => {
 							<Box sx={{ width: "50%", p: 0 }}>
 								<ExpensesByStore transactions={transactionsByStore} />
 							</Box>
-							<Box sx={{ width: "50%", m: 4 }}><ExpensesCountByMonths transactions={monthlyTransactions} /> </Box>
+							<Box sx={{ width: "50%", m: 4 }}><ExpensesCountByMonths onClick={getMonthlyTransactions} transactions={monthlyTransactions} /> </Box>
 						</Box>
 					</Box>
 					{
 						showDailyTransactionModal &&
 						<Modal
 							open={true}
-							onClose={() => setShowDailyTransactionModal(false)}
+							onClose={closeModals}
 							sx={{
 								position: "absolute",
 								width: "100%",
@@ -240,6 +278,7 @@ const Dashboard = () => {
 									left: "50%",
 									transform: "translate(-50%, -50%)",
 								}}
+								style={{}}
 							>
 								<Box
 									sx={{
@@ -249,7 +288,7 @@ const Dashboard = () => {
 										p: 2,
 										cursor: "pointer",
 									}}
-									onClick={() => setShowDailyTransactionModal(false)}
+									onClick={closeModals}
 								>
 									<CloseIcon />
 								</Box>
@@ -262,6 +301,63 @@ const Dashboard = () => {
 									displayMenu={displayMenu}
 									transactions={dailyTransactionsHistory}
 									handleChangePage={handleChangePage}
+									toggleMenu={toggleMenu}
+									toggleDetails={toggleDetails}
+									handleClose={handleClose}
+									selectedRow={selectedRow}
+								/>
+							</Box>
+						</Modal>
+					}
+					{
+						showMonthlyModal &&
+						<Modal
+							open={true}
+							onClose={closeModals}
+							sx={{
+								position: "absolute",
+								width: "100%",
+								height: "100%",
+							}}>
+							<Box
+								sx={{
+									width: "70%",
+									height: "70%",
+									backgroundColor: `${mode === 'dark' ? 'black' : "white"}`,
+									borderRadius: "12px",
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									overflowY: "scroll",
+									boxShadow: " 0px 0px 67px 9px rgba(0,0,0,0.85)",
+									position: "absolute",
+									top: "50%",
+									left: "50%",
+									transform: "translate(-50%, -50%)",
+								}}
+								style={{}}
+							>
+								<Box
+									sx={{
+										position: "absolute",
+										top: "0%",
+										right: "0%",
+										p: 2,
+										cursor: "pointer",
+									}}
+									onClick={closeModals}
+								>
+									<CloseIcon />
+								</Box>
+								<TransactionHistoryBox
+									handleChangeRowsPerPage={handleMonthChangeRows}
+									page={page}
+									count={count}
+									rowsPerPage={rowsPerPage}
+									loading={loading}
+									displayMenu={displayMenu}
+									transactions={currentMonthTransactions}
+									handleChangePage={handleMonthTransactionsPageChange}
 									toggleMenu={toggleMenu}
 									toggleDetails={toggleDetails}
 									handleClose={handleClose}
