@@ -1,4 +1,4 @@
-const apiUrl = "https://localhost:44305/api"
+const apiUrl = `${process.env.REACT_APP_API_URL}/api`
 
 
 const apiRoutes = {
@@ -39,6 +39,7 @@ const apiRoutes = {
 	addEmployee: 'organization/addEmployee',
 	getEmployees:'organization/getEmployees',
 	getCurrencies:'organization/currencies',
+	getEmployeesWithRoles:'organization/employeesWithRoles',
 
 	//Storage
 	getStorage:'storage/storage',
