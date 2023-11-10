@@ -17,7 +17,7 @@ const apiRoutes = {
 	//Clients
 	getAllClients: 'client/all',
 	getClient:'client/byId',
-	
+	 
 	//Store
 	getStores: 'store/getStores',
 
