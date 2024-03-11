@@ -1,4 +1,4 @@
-const apiUrl = `${process.env.REACT_APP_API_URL}/api`
+const apiUrl = `http://192.168.0.110:8082/api`
 
 
 const apiRoutes = {
