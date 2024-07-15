@@ -1,4 +1,4 @@
-const apiUrl = `http://192.168.0.110:8082/api`
+const apiUrl = `https://localhost:44305/api`
 
 
 const apiRoutes = {
@@ -17,7 +17,7 @@ const apiRoutes = {
 	//Clients
 	getAllClients: 'client/all',
 	getClient:'client/byId',
-	
+
 	//Store
 	getStores: 'store/getStores',
 

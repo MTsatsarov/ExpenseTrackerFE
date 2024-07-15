@@ -5,6 +5,7 @@ import { apiRoutes, apiUrl } from "../../../../apiConfig";
 import instance from "../../../../axios/axios";
 import Toaster from "../../../utils/Toaster/Toaster";
 import UserInfo from "./UserInfo/UserInfo";
+import CustomDatagrid from "../../../guidlines/datagrid/CustomDatagrid";
 
 interface IClientList {
 	id: string,
@@ -153,14 +154,12 @@ const showUserInfo = (userId:string) => {
 	}
 	return (
 		<Box sx={{ mt: 10, height: 800, p: 8 }}>
-			<DataGrid
+			<CustomDatagrid
 				rows={clients}
 				columns={columns}
-				pageSize={itemsPerPage}
-				rowsPerPageOptions={[5, 10, 25]}
-				onPageSizeChange={pageSizeChange}
+				itemsPerPage={itemsPerPage}
+				handlePageSizeChange={pageSizeChange}
 				disableSelectionOnClick
-				experimentalFeatures={{ newEditingApi: true }}
 			/>
 			{showUserInfoModal && <UserInfo id={selectedUser} onClose={closeModal} />}
 		</Box>
