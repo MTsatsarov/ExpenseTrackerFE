@@ -1,6 +1,5 @@
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Slide, Menu, MenuItem, TablePagination } from "@mui/material"
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Slide, Menu, MenuItem, TablePagination } from "@mui/material"
 import { Box } from "@mui/system"
-import { appTheme } from "../../../../utils/AppTheme/AppTheme"
 import { useState, useEffect } from "react"
 import NewEmployeeForm from "../../../../utils/NewEmployeeForm/NewEmployeeForm"
 import instance from "../../../../../axios/axios"
@@ -8,6 +7,7 @@ import { apiRoutes, apiUrl } from "../../../../../apiConfig"
 import Toaster from "../../../../utils/Toaster/Toaster"
 import Loader from "../../../../utils/Loader/Loader"
 import { useAppSelector } from "../../../../../app/hooks"
+import AppButton from "../../../../guidlines/button/AppButton"
 
 interface EmployeeList {
 	id: string,
@@ -115,7 +115,7 @@ const EmployeeList = () => {
 					flexDirection: 'column'
 				}} >
 					<Box className='mt-2' sx={{ alignSelf: 'flex-start' }} >
-						<Button color="secondary" variant="contained" onClick={onOpenModal}>Add Employee</Button>
+						<AppButton color="secondary" variant="contained" onClick={onOpenModal}>Add Employee</AppButton>
 					</Box>
 					<TableContainer className='mt-1' sx={{
 						border: "1px solid rgba(128,128,128,0.4)",
@@ -147,7 +147,7 @@ const EmployeeList = () => {
 										<TableCell scope='row'>{x.totalSum}</TableCell>
 										<TableCell scope='row'>{x.lastTransaction}</TableCell>
 										<TableCell scope='row'>
-											<Button disabled={!user.roles.includes("OWNER") && true} variant='contained' onClick={(e) => toggleMenu(e, x)}>Actions</Button>
+											<AppButton disabled={!user.roles.includes("OWNER") && true} variant='contained' onClick={(e) => toggleMenu(e, x)}>Actions</AppButton>
 										</TableCell>
 									</TableRow>)}
 							</TableBody>

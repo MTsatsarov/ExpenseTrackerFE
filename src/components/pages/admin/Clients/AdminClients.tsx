@@ -1,4 +1,4 @@
-import { Box, Button, Menu, MenuItem } from "@mui/material"
+import { AppBar, Box, Button, Menu, MenuItem } from "@mui/material"
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { useEffect, useState } from "react";
 import { apiRoutes, apiUrl } from "../../../../apiConfig";
@@ -6,6 +6,7 @@ import instance from "../../../../axios/axios";
 import Toaster from "../../../utils/Toaster/Toaster";
 import UserInfo from "./UserInfo/UserInfo";
 import CustomDatagrid from "../../../guidlines/datagrid/CustomDatagrid";
+import AppButton from "../../../guidlines/button/AppButton";
 
 interface IClientList {
 	id: string,
@@ -56,13 +57,13 @@ const showUserInfo = (userId:string) => {
 		let clientData = params.row;
 		let action = (
 			<div key={clientData?.id}>
-				<Button
+				<AppButton
 					variant="contained"
-					sx={{ width: "100px", }}
+					inlineCss={{ width: "100px", }}
 					onClick={(e) => handleClick(e, clientData.id)}
 				>
 					Actions
-				</Button>
+				</AppButton>
 
 				<Menu
 					anchorEl={clientData?.anchorEl}

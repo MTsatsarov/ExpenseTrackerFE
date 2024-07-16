@@ -11,7 +11,6 @@ import {
 	TableCell,
 	Tooltip,
 	IconButton,
-	Button,
 	TextField,
 	Fade,
 	Autocomplete,
@@ -30,6 +29,7 @@ import Loader from "../Loader/Loader";
 import { useAppSelector } from "../../../app/hooks";
 import { appTheme } from "../AppTheme/AppTheme";
 import GoogleMaps from "../GoogleMap/GoogleMaps";
+import AppButton from "../../guidlines/button/AppButton";
 
 
 interface ICreateTransactionModalProps {
@@ -322,7 +322,7 @@ const CreateTransactionModal = (props: ICreateTransactionModalProps) => {
 										<TextField focused={selectedStore.name !== null && true} value={selectedStore.name} onChange={(e: any,) => onStoreChange(e.target.value)} {...params} label="Store" />}
 								/>
 
-								<Button onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" sx={{ width: '50%', alignSelf: "flex-end" }}>Create expense</Button>
+								<AppButton onClick={createExpense} disabled={products.length === 0 || selectedStore.name.length === 0} variant="contained" inlineCss={{ width: '50%', alignSelf: "flex-end" }}>Create expense</AppButton>
 							</Box>
 
 							<Box sx={{ mt: 2 }}><GoogleMaps getStore={onStoreChange} /></Box>

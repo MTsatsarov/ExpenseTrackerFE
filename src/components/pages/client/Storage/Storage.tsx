@@ -1,4 +1,4 @@
-import { Box, Radio, Slide, Button, TablePagination } from "@mui/material"
+import { Box, Radio, Slide, TablePagination } from "@mui/material"
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from "react"
 import { apiRoutes, apiUrl } from "../../../../apiConfig"
@@ -13,6 +13,7 @@ import Loader from "../../../utils/Loader/Loader";
 import NewStorage from "./NewStorage/NewStorage";
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import { useAppSelector } from "../../../../app/hooks";
+import AppButton from "../../../guidlines/button/AppButton";
 
 interface IBaseStorage {
 	page: number,
@@ -177,47 +178,47 @@ const Storage = () => {
 							{(!canEdit && !isNew) ?
 								<>
 									<span>
-										<Button
+										<AppButton
 											onClick={editRow}
-											sx={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }}
+											inlineCss={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }}
 											variant="contained"
 											disabled={!selectedRow.id}>
 											Edit
-										</Button>
+										</AppButton>
 									</span>
 									<span>
-										<Button onClick={showNewStorage}
-											sx={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }}
+										<AppButton onClick={showNewStorage}
+											inlineCss={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }}
 											variant="contained" >
 											<AddBoxIcon fontSize="small" />
 											Add
-										</Button>
+										</AppButton>
 									</span>
 									<span>
-										<Button sx={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }} color='error' variant="contained" disabled={!selectedRow.id}><DeleteIcon fontSize="small" />Delete</Button>
+										<AppButton inlineCss={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }} color='error' variant="contained" disabled={!selectedRow.id}><DeleteIcon fontSize="small" />Delete</AppButton>
 									</span>
 								</>
 								:
 								<div>
 									<span>
-										<Button
-											sx={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }}
+										<AppButton
+											inlineCss={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }}
 											color="error"
 											variant="contained"
 											disabled={!selectedRow}
 											onClick={onCancelAction}>
 											<CloseIcon fontSize="small" />
 											Cancel
-										</Button>
+										</AppButton>
 									</span>
 									<span>
-										<Button
-											sx={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }}
+										<AppButton
+											inlineCss={{ height: '2.2rem', borderRadius: '2rem', fontSize: '0.9rem' }}
 											variant="contained"
 											color="success" onClick={canEdit ? editStorage : add}>
 											<CheckIcon fontSize="small" />
 											Confirm
-										</Button>
+										</AppButton>
 									</span>
 								</div>
 							}

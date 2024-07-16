@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography, Fade } from "@mui/material";
+import { Box, TextField, Typography, Fade } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiRoutes, apiUrl } from "../../apiConfig";
@@ -8,6 +8,7 @@ import { setTokens, setCurrentUser } from "../../features/User/userSlice";
 import { useAppDispatch } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
 import Loader from "../utils/Loader/Loader"
+import AppButton, { ButtonSizes } from "../guidlines/button/AppButton";
 
 interface ILoginState {
 	email: string;
@@ -17,6 +18,7 @@ interface ILoginState {
 	isEmailValid: boolean;
 	isPasswordValid: boolean;
 }
+
 const Login = () => {
 	var dispatch = useAppDispatch();
 	var navigate = useNavigate();
@@ -221,13 +223,14 @@ const Login = () => {
 							sx={{ width: "30%" }}
 						/>
 					</Box>
-					<Button
+					<AppButton
 						variant="outlined"
-						size="large"
+						size={ButtonSizes.Large}
 						color="primary"
-						sx={{
+						className="submit-button"
+						inlineCss={{
 							m: 3,
-							borderRadius: "15px",
+							borderRadius: "8px",
 							minWidth: "300px",
 							fontWeight: "bolder",
 						}}
@@ -235,7 +238,7 @@ const Login = () => {
 						disabled={!isValid}
 					>
 						Login
-					</Button>
+					</AppButton>
 				</form>
 			</Fade>
 			<Link to="/signup">Create new account</Link>

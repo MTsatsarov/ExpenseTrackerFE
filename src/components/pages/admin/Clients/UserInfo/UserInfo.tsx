@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormGroup, Modal, Switch, TextField, Typography } from "@mui/material"
+import { Box, FormControl, FormGroup, Modal, Switch, TextField, Typography } from "@mui/material"
 import { useAppSelector } from "../../../../../app/hooks"
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import instance from "../../../../../axios/axios";
 import { apiRoutes, apiUrl } from "../../../../../apiConfig";
 import Toaster from "../../../../utils/Toaster/Toaster";
 import Loader from "../../../../utils/Loader/Loader";
+import AppButton from "../../../../guidlines/button/AppButton";
 
 interface IUserInfoProps {
 	id: string,
@@ -315,7 +316,7 @@ const UserInfo = (props: IUserInfoProps) => {
 								color={
 									validation.lastNameValid && validation.lastNameTouched ? "success" : "primary"
 								}
-								focused={validation.lastNameValid && validation.lastNameTouched ? true : false} 
+								focused={validation.lastNameValid && validation.lastNameTouched ? true : false}
 								helperText={!validation.lastNameValid && validation.lastNameTouched && 'Last name must be maximum 20 characters long and minimum 2 characters long.'}
 								/>
 						</FormControl>
@@ -352,8 +353,8 @@ const UserInfo = (props: IUserInfoProps) => {
 						<Typography fontSize={16} color='primary' variant="caption">Email confirmed</Typography>
 					</Box>
 					<Box sx={{ display: 'flex', justifyContent: "flex-end", mt: 2, width: '100%' }}>
-						<Button sx={{ mx: 4 }} color="error" variant="contained" onClick={resetForm} >Reset</Button>
-						<Button disabled={!isValidForm || !validation.isFormTouched} variant="contained" onClick={update} >Update</Button>
+						<AppButton inlineCss={{ mx: 4 }} color="error" variant="contained" onClick={resetForm} >Reset</AppButton>
+						<AppButton disabled={!isValidForm || !validation.isFormTouched} variant="contained" onClick={update} >Update</AppButton>
 					</Box>
 				</Box>
 			</Box>

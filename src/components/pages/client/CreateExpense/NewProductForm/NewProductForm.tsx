@@ -2,7 +2,6 @@ import { IProductList } from "../../../../utils/CreateTransactionModal/CreateTra
 import { useState, useEffect } from "react";
 import {
 	Box,
-	Button,
 	FormLabel,
 	TextField,
 	Fade,
@@ -13,6 +12,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import instance from "../../../../../axios/axios";
 import { apiRoutes, apiUrl } from "../../../../../apiConfig";
 import Toaster from "../../../../utils/Toaster/Toaster";
+import AppButton from "../../../../guidlines/button/AppButton";
 interface NewProductFormInterface {
 	addProduct: Function
 }
@@ -168,18 +168,18 @@ const NewProductForm = (props: NewProductFormInterface) => {
 							alignSelf: "center",
 						}}
 					>
-						<Button
+						<AppButton
 							type='submit'
 							variant="outlined"
 							disabled={!valid}
-							sx={{
+							inlineCss={{
 								color: "green",
 								borderColor: "green",
 							}}
 							onClick={(e) => addProduct(e)}
 						>
 							<DoneIcon sx={{ fontSize: 32 }} />
-						</Button>
+						</AppButton>
 					</Box>
 				</form>
 			</Box>

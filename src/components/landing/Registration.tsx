@@ -1,4 +1,4 @@
-import { Typography, TextField, Button, Select, MenuItem, FormControl, Tooltip, IconButton, InputAdornment, InputLabel, ListItem, List, FormHelperText } from "@mui/material";
+import { Typography, TextField, Select, MenuItem, FormControl, Tooltip, IconButton, InputAdornment, InputLabel, ListItem, List, FormHelperText } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -15,6 +15,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 
 import React from "react";
+import AppButton from "../guidlines/button/AppButton";
 export interface IBaseRegistrationFields {
 	username: string;
 	firstName: string;
@@ -570,14 +571,14 @@ const Register = () => {
 					</IconButton>
 				</Tooltip>
 
-				<Button
+				<AppButton
 					type="submit"
 					disabled={!canRegister}
-					sx={{ m: 1, borderRadius: "14px", fontSize: "18px" }}
+					inlineCss={{ m: 1, borderRadius: "14px", fontSize: "18px" }}
 					variant="outlined"
 				>
 					Sign up
-				</Button>
+				</AppButton>
 			</form>
 			<Link to="/signIn">Already have an account</Link>
 			{

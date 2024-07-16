@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, Modal, PaletteMode, TextField, Typography } from "@mui/material"
+import { Box, Modal, TextField, Typography } from "@mui/material"
 import { useState, useEffect } from "react"
 import { apiRoutes, apiUrl } from "../../../apiConfig";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
@@ -7,6 +7,7 @@ import { IBaseRegistrationFields } from "../../landing/Registration";
 import Loader from "../Loader/Loader";
 import Toaster from "../Toaster/Toaster";
 import CloseIcon from "@mui/icons-material/Close";
+import AppButton from "../../guidlines/button/AppButton";
 
 interface INewEmployeeFormProps {
 	onCloseModal: any,
@@ -37,7 +38,7 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 	});
 	var dispatch = useAppDispatch()
 	var mode = useAppSelector(store => store.user.themeMode)
-	
+
 	useEffect(() => {
 		validateForm();
 	}, [fields]);
@@ -338,14 +339,14 @@ const NewEmployeeForm = (props: INewEmployeeFormProps) => {
 						onBlur={handleChange}
 					/>
 
-					<Button
+					<AppButton
 						type="submit"
 						disabled={!canRegister}
-						sx={{ m: 1, borderRadius: "14px", fontSize: "18px" }}
+						inlineCss={{ m: 1, borderRadius: "14px", fontSize: "18px" }}
 						variant="outlined"
 					>
 						Submit
-					</Button>
+					</AppButton>
 
 				</form>
 				{
