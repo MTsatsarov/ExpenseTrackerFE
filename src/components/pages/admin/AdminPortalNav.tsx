@@ -1,4 +1,4 @@
-import { Divider, List, ListItem, ListItemIcon, ListItemText } from "@mui/material"
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material"
 import { useState,useEffect } from "react"
 import { Link } from "react-router-dom"
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -6,6 +6,7 @@ import PaidIcon from '@mui/icons-material/Paid';
 import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+import AppDivider from "../../guidlines/divider/AppDivider";
 interface IAdminPortalNavProps {
 	changeSection: Function
 }
@@ -46,7 +47,7 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 					</ListItem>
 				</Link>
 
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 
 				<Link
 					to={"/portal/admin/transactions"}
@@ -68,7 +69,7 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 					</ListItem>
 				</Link>
 
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 				<Link
 					to={"/portal/admin/organizations"}
 					style={{ cursor: "pointer", textDecoration: "none", }}
@@ -89,7 +90,7 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 					</ListItem>
 				</Link>
 
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 
 				<Link
 					to={"/portal/admin/stores"}
@@ -112,7 +113,7 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 					</ListItem>
 				</Link>
 
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 
 				<Link
 					to={"/portal/admin/products"}
@@ -134,7 +135,7 @@ const AdminPortalNav = (props: IAdminPortalNavProps) => {
 					</ListItem>
 				</Link>
 
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 			</List>
 		</>
 	)

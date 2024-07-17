@@ -3,7 +3,6 @@ import {
 	ListItem,
 	ListItemIcon,
 	ListItemText,
-	Divider,
 } from "@mui/material";
 import HistoryIcon from '@mui/icons-material/History';
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -12,6 +11,7 @@ import CorporateFareRoundedIcon from '@mui/icons-material/CorporateFareRounded';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react'
+import AppDivider from "../../guidlines/divider/AppDivider";
 
 interface ClientPortalNav {
 	changeSection: Function
@@ -55,7 +55,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 					</ListItem>
 				</Link>
 
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 
 				<Link to={'/portal/user/history'} style={{ textDecoration: 'none' }}>
 					<ListItem
@@ -74,7 +74,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 					</ListItem>
 				</Link>
 
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 
 				<Link to={'/portal/user/MyOrganization'} style={{ textDecoration: 'none' }}>
 					<ListItem
@@ -92,7 +92,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						</ListItemText>
 					</ListItem>
 				</Link>
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 
 				<Link to={'/portal/user/Storage'} style={{ textDecoration: 'none' }}>
 					<ListItem
@@ -111,7 +111,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 						</ListItemText>
 					</ListItem>
 				</Link>
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 
 				<Link to={'/portal/user/settings'} style={{ textDecoration: 'none' }}>
 					<ListItem
@@ -131,7 +131,7 @@ const ClientPortalNav = (props: ClientPortalNav) => {
 					</ListItem>
 				</Link>
 
-				<Divider sx={{ background: "#A2A0A0" }} />
+				<AppDivider style={{ background: "#A2A0A0" }} />
 			</List>
 		</>
 	);

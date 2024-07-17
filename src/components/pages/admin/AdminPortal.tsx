@@ -1,4 +1,4 @@
-import { AppBar, Box, Divider, Drawer, IconButton, Menu, MenuItem, styled, Switch, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Drawer, IconButton, Menu, MenuItem, styled, Switch, Toolbar, Typography } from "@mui/material"
 import LightModeTwoToneIcon from '@mui/icons-material/LightModeTwoTone';
 import DarkModeTwoToneIcon from '@mui/icons-material/DarkModeTwoTone';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { useNavigate } from "react-router-dom";
 import AdminPortalNav from "./AdminPortalNav";
 import AdminRoutes from "./AdminRoutes";
+import AppDivider from "../../guidlines/divider/AppDivider";
 
 interface IAdminPortalProps {
 	getTheme: Function
@@ -27,7 +28,7 @@ const AdminPortal = (props: IAdminPortalProps) => {
 
 	var dispatch = useAppDispatch();
 	var navigate = useNavigate();
-	
+
 	const mobileBreak = 1300;
 	const drawerWidth = 220;
 
@@ -212,7 +213,7 @@ const AdminPortal = (props: IAdminPortalProps) => {
 					open={true}
 				>
 					<DrawerHeader>MY logo will be here</DrawerHeader>
-					<Divider sx={{ background: "#A2A0A0" }} />
+					<AppDivider style={{ background: "#A2A0A0" }} />
 					<AdminPortalNav changeSection={changeSection} />
 				</Drawer>
 				{
@@ -236,7 +237,7 @@ const AdminPortal = (props: IAdminPortalProps) => {
 					>
 						<DrawerHeader>MY logo will be here</DrawerHeader>
 
-						<Divider sx={{ background: "#A2A0A0" }} />
+						<AppDivider style={{ background: "#A2A0A0" }} />
 						<AdminPortalNav changeSection={changeSection} />
 
 					</Drawer>

@@ -1,4 +1,4 @@
-import { Drawer, styled, Divider, AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, SpeedDial, SpeedDialAction, Switch } from "@mui/material";
+import { Drawer, styled, AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, SpeedDial, SpeedDialAction, Switch } from "@mui/material";
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import BroadcastOnHomeIcon from '@mui/icons-material/BroadcastOnHome';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import LightModeTwoToneIcon from '@mui/icons-material/LightModeTwoTone';
 import DarkModeTwoToneIcon from '@mui/icons-material/DarkModeTwoTone';
 import { useAppSelector } from "../../app/hooks";
+import AppDivider from "../guidlines/divider/AppDivider";
 
 interface IClientPortalProps {
 	getTheme: Function
@@ -30,7 +31,7 @@ const ClientPortal = (props: IClientPortalProps) => {
 		padding: "5px",
 		justifyContent: "flex-start",
 	}));
-	
+
 	var mode = useAppSelector(x => x.user.themeMode)
 	const [displayModal, setDisplayModel] = useState<boolean>(false);
 	const [displaySideNav, setDisplaySideNav] = useState<boolean>(false)
@@ -227,7 +228,7 @@ const ClientPortal = (props: IClientPortalProps) => {
 					open={true}
 				>
 					<DrawerHeader>MY logo will be here</DrawerHeader>
-					<Divider sx={{ background: "#A2A0A0" }} />
+					<AppDivider style={{ background: "#A2A0A0" }} />
 					<ClientPortalNav changeSection={changeSection} />
 				</Drawer>
 				{
@@ -251,7 +252,7 @@ const ClientPortal = (props: IClientPortalProps) => {
 					>
 						<DrawerHeader>MY logo will be here</DrawerHeader>
 
-						<Divider sx={{ background: "#A2A0A0" }} />
+						<AppDivider style={{ background: "#A2A0A0" }} />
 						<ClientPortalNav changeSection={changeSection} />
 
 					</Drawer>
